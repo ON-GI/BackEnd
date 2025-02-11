@@ -2,7 +2,7 @@ name: DOCKER CI IN PRODUCTION SERVER  # 워크플로우의 이름 설정
 
 on:
   push:
-    branches: ["main", "feature/cicd"]  # main 브랜치에 푸시될 때 워크플로우 실행
+    branches: ["main"]  # main 브랜치에 푸시될 때 워크플로우 실행
 
 permissions:
   contents: read  # 워크플로우의 권한 설정 (read-only)
