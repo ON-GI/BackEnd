@@ -34,10 +34,10 @@ public class WorkConditionResponseDto {
                 .minHourPay(workCondition.getMinHourPay())
                 .maxHourPay(workCondition.getMaxHourPay())
                 .workRegions(workCondition.getRegions().stream()
-                        .map(WorkRegionResponseDto::fromEntity) // 엔티티 -> ResponseDto 변환
+                        .map(WorkRegionResponseDto::fromEntity)
                         .collect(Collectors.toList()))
                 .workTimes(workCondition.getWorkTimes().stream()
-                        .map(WorkTimeResponseDto::fromEntity) // 엔티티 -> ResponseDto 변환
+                        .map(WorkTimeResponseDto::fromEntity)
                         .collect(Collectors.toList()))
                 .build();
     }

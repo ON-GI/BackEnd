@@ -21,11 +21,7 @@ public class CaregiverService {
 
     private final CaregiverLicenseRepository caregiverLicenseRepository;
 
-    private final CaregiverWorkConditionRepository caregiverWorkConditionRepository;
-
-    private final WorkRegionRepository workRegionRepository;
-
-    private final WorkTimeRepository workTimeRepository;
+    private final CaregiverWorkService caregiverWorkService;
 
     @Transactional
     public Long registerCaregiver(CaregiverRequestDto requestDto) {
@@ -35,8 +31,7 @@ public class CaregiverService {
         // CaregiverLicense 저장
         saveCaregiverLicenses(requestDto.getLicenses(), caregiver);
 
-        // CaregiverWorkCondition 저장 (WorkRegion, WorkTime 포함)
-        saveCaregiverWorkCondition(requestDto.getWorkCondition(), caregiver);
+        caregiverWorkService.registerWork(requestDto.getWorkCondition(), caregiver);
 
         return caregiver.getId();
     }
@@ -59,48 +54,5 @@ public class CaregiverService {
                 .collect(Collectors.toList());
 
         caregiverLicenseRepository.saveAll(licenses);
-    }
-
-    /**
-     * 근무 조건(CaregiverWorkCondition) 저장 및 관련 정보 저장
-     */
-    private void saveCaregiverWorkCondition(WorkConditionRequestDto workConditionDto, Caregiver caregiver) {
-        if (workConditionDto == null) return;
-
-        // CaregiverWorkCondition 저장
-        CaregiverWorkCondition workCondition = workConditionDto.toEntity(caregiver);
-        caregiverWorkConditionRepository.save(workCondition);
-
-        // WorkRegion 저장
-        saveWorkRegions(workConditionDto.getWorkRegions(), workCondition);
-
-        // WorkTime 저장
-        saveWorkTimes(workConditionDto.getWorkTimes(), workCondition);
-    }
-
-    /**
-     * 근무 가능 지역(WorkRegion) 저장
-     */
-    private void saveWorkRegions(List<WorkRegionRequestDto> workRegionRequestDtos, CaregiverWorkCondition workCondition) {
-        if (workRegionRequestDtos == null || workRegionRequestDtos.isEmpty()) return;
-
-        List<WorkRegion> regions = workRegionRequestDtos.stream()
-                .map(dto -> dto.toEntity(workCondition))
-                .collect(Collectors.toList());
-
-        workRegionRepository.saveAll(regions);
-    }
-
-    /**
-     * 근무 가능 시간(WorkTime) 저장
-     */
-    private void saveWorkTimes(List<WorkTimeRequestDto> workTimeRequestDtos, CaregiverWorkCondition workCondition) {
-        if (workTimeRequestDtos == null || workTimeRequestDtos.isEmpty()) return;
-
-        List<WorkTime> times = workTimeRequestDtos.stream()
-                .map(dto -> dto.toEntity(workCondition))
-                .collect(Collectors.toList());
-
-        workTimeRepository.saveAll(times);
     }
 }
