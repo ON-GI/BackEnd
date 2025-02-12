@@ -1,4 +1,4 @@
-package com.ongi.backend.repository.Caregiver;
+package com.ongi.backend.repository.caregiver;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

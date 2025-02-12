@@ -1,4 +1,4 @@
-package com.ongi.backend.entity.Caregiver;
+package com.ongi.backend.entity.caregiver;
 
 import jakarta.persistence.*;
 import lombok.Getter;

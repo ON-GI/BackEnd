@@ -1,4 +1,4 @@
-package com.ongi.backend.repository.Caregiver;
+package com.ongi.backend.repository.caregiver;
 
 public interface CaregiverRepositoryCustom {
 }
