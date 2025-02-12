@@ -21,13 +21,15 @@ public class CaregiverRequestDto {
     private boolean hasCar;
     private boolean hasDementiaTraining;
     private String career;  // 문자열로 받음 (Enum 변환 예정)
+
     private CaregiverWorkConditionDto workCondition;
+
     private List<CaregiverLicenseDto> licenses;
 
-    public Caregiver toEntity(String encodedPassword) {
+    public Caregiver toEntity() {
         return Caregiver.builder()
                 .loginId(this.loginId)
-                .password(encodedPassword) // 암호화된 비밀번호 적용
+                .password(this.password) // 암호화된 비밀번호 적용
                 .name(this.name)
                 .phoneNumber(this.phoneNumber)
                 .address(this.address)

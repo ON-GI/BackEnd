@@ -14,8 +14,8 @@ public class CaregiverController {
 
     private final CaregiverService caregiverService;
 
-//    @PostMapping("/user/signup")
-//    public void registerCaregiver(@RequestBody CaregiverRequestDto caregiverRequestDto) {
-//        caregiverService.registerCaregiver(caregiverRequestDto);
-//    }
+    @PostMapping("/user/signup")
+    public void registerCaregiver(@RequestBody CaregiverRequestDto caregiverRequestDto) {
+        caregiverService.registerCaregiver(caregiverRequestDto);
+    }
 }
