@@ -1,6 +1,5 @@
 package com.ongi.backend.common.exception;
 
-import com.ongi.backend.common.error.ErrorCase;
 import lombok.Getter;
 
 @Getter
