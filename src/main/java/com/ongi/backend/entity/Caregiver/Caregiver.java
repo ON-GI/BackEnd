@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -46,4 +48,7 @@ public class Caregiver extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CaregiverCareer career;  // 경력 기간
+
+    @OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CaregiverLicense> licenses;    // 자격증
 }
