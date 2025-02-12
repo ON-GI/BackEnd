@@ -5,12 +5,16 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE caregiver SET deleted_at = now() WHERE id = ?")  // soft delete
+@SQLRestriction("deleted_at IS NULL")
 public class CaregiverWorkCondition extends BaseEntity {
 
     @Id

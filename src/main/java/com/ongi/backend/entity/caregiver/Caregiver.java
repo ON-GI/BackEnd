@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE caregiver SET deleted_at = now() WHERE id = ?")  // soft delete
 @SQLRestriction("deleted_at IS NULL")
+@Table(name = "caregiver")
 public class Caregiver extends BaseEntity {
 
     @Id
