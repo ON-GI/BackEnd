@@ -11,14 +11,14 @@ import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
-public class WorkTimeDto {
+public class WorkTimeRequestDto {
 
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
 
     @Builder
-    public WorkTimeDto(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
+    public WorkTimeRequestDto(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
         this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;

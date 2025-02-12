@@ -1,6 +1,5 @@
 package com.ongi.backend.dto.caregiver;
 
-import com.ongi.backend.entity.caregiver.Caregiver;
 import com.ongi.backend.entity.caregiver.CaregiverLicense;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,25 +9,24 @@ import lombok.ToString;
 @ToString
 @Getter
 @NoArgsConstructor
-public class CaregiverLicenseDto {
+public class LicenseResponseDto {
 
     private String licenseName;
     private String licenseNumber;
     private String licenseGrade;
 
     @Builder
-    public CaregiverLicenseDto(String licenseName, String licenseNumber, String licenseGrade) {
+    public LicenseResponseDto(String licenseName, String licenseNumber, String licenseGrade) {
         this.licenseName = licenseName;
         this.licenseNumber = licenseNumber;
         this.licenseGrade = licenseGrade;
     }
 
-    public CaregiverLicense toEntity(Caregiver caregiver) {
-        return CaregiverLicense.builder()
-                .caregiver(caregiver)
-                .licenseName(this.licenseName)
-                .licenseNumber(this.licenseNumber)
-                .licenseGrade(this.licenseGrade)
+    public static LicenseResponseDto fromEntity(CaregiverLicense license) {
+        return LicenseResponseDto.builder()
+                .licenseName(license.getLicenseName())
+                .licenseNumber(license.getLicenseNumber())
+                .licenseGrade(license.getLicenseGrade())
                 .build();
     }
 }
