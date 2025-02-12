@@ -21,10 +21,10 @@ public class CaregiverWorkCondition extends BaseEntity {
     private Caregiver caregiver;  // 1:1 관계
 
     @Column(nullable = false)
-    private int minHourPage;  // 시급 하한선
+    private int minHourPay;  // 시급 하한선
 
     @Column(nullable = false)
-    private int maxHourPage;  // 시급 상한선
+    private int maxHourPay;  // 시급 상한선
 
     @OneToMany(mappedBy = "workCondition", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkRegion> regions;  // 근무 가능 지역
