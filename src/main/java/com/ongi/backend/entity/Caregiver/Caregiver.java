@@ -35,9 +35,15 @@ public class Caregiver extends BaseEntity {
 
     private String profileImageUrl; // 프로필 사진 경로
 
+    private String description;     // 한 줄 소개
+
     @Column(nullable = false)
     private boolean hasCar; // 차량 소유 여부
 
     @Column(nullable = false)
     private boolean hasDementiaTraining;    // 치매 교육 이수 여부
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CaregiverCareer career;  // 경력 기간
 }
