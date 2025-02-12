@@ -1,7 +1,7 @@
 package com.ongi.backend.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ongi.backend.common.error.ErrorCase;
+import com.ongi.backend.common.exception.ErrorCase;
 import lombok.Builder;
 import lombok.Getter;
 
