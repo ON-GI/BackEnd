@@ -1,6 +1,7 @@
 package com.ongi.backend.entity.caregiver;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,12 @@ public class WorkTime {
 
     @Column(nullable = false)
     private LocalTime endTime;  // 근무 종료 시간
+
+    @Builder
+    public WorkTime(CaregiverWorkCondition workCondition, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
+        this.workCondition = workCondition;
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

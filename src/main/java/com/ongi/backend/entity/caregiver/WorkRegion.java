@@ -1,6 +1,7 @@
 package com.ongi.backend.entity.caregiver;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,12 @@ public class WorkRegion {
     private String district;  // 구/군
 
     private String town;  // 동
+
+    @Builder
+    public WorkRegion(CaregiverWorkCondition workCondition, String city, String district, String town) {
+        this.workCondition = workCondition;
+        this.city = city;
+        this.district = district;
+        this.town = town;
+    }
 }

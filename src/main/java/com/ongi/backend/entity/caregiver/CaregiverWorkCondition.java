@@ -2,6 +2,7 @@ package com.ongi.backend.entity.caregiver;
 
 import com.ongi.backend.entity.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,14 @@ public class CaregiverWorkCondition extends BaseEntity {
 
     @OneToMany(mappedBy = "workCondition", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkTime> workTimes;  // 근무 가능 시간
+
+    @Builder
+    public CaregiverWorkCondition(Caregiver caregiver, int minHourPay, int maxHourPay,
+                                  List<WorkRegion> regions, List<WorkTime> workTimes) {
+        this.caregiver = caregiver;
+        this.minHourPay = minHourPay;
+        this.maxHourPay = maxHourPay;
+        this.regions = regions;
+        this.workTimes = workTimes;
+    }
 }

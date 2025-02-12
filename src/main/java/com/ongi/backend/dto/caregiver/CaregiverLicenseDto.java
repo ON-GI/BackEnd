@@ -1,5 +1,7 @@
 package com.ongi.backend.dto.caregiver;
 
+import com.ongi.backend.entity.caregiver.Caregiver;
+import com.ongi.backend.entity.caregiver.CaregiverLicense;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +21,14 @@ public class CaregiverLicenseDto {
         this.licenseName = licenseName;
         this.licenseNumber = licenseNumber;
         this.licenseGrade = licenseGrade;
+    }
+
+    public CaregiverLicense toEntity(Caregiver caregiver) {
+        return CaregiverLicense.builder()
+                .caregiver(caregiver)
+                .licenseName(this.licenseName)
+                .licenseNumber(this.licenseNumber)
+                .licenseGrade(this.licenseGrade)
+                .build();
     }
 }

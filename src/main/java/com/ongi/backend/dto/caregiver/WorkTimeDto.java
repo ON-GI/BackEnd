@@ -1,5 +1,7 @@
 package com.ongi.backend.dto.caregiver;
 
+import com.ongi.backend.entity.caregiver.CaregiverWorkCondition;
+import com.ongi.backend.entity.caregiver.WorkTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +22,14 @@ public class WorkTimeDto {
         this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public WorkTime toEntity(CaregiverWorkCondition workCondition) {
+        return WorkTime.builder()
+                .workCondition(workCondition)
+                .dayOfWeek(this.dayOfWeek)
+                .startTime(this.startTime)
+                .endTime(this.endTime)
+                .build();
     }
 }

@@ -1,5 +1,7 @@
 package com.ongi.backend.dto.caregiver;
 
+import com.ongi.backend.entity.caregiver.Caregiver;
+import com.ongi.backend.entity.caregiver.CaregiverCareer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -21,4 +23,18 @@ public class CaregiverRequestDto {
     private String career;  // 문자열로 받음 (Enum 변환 예정)
     private CaregiverWorkConditionDto workCondition;
     private List<CaregiverLicenseDto> licenses;
+
+    public Caregiver toEntity(String encodedPassword) {
+        return Caregiver.builder()
+                .loginId(this.loginId)
+                .password(encodedPassword) // 암호화된 비밀번호 적용
+                .name(this.name)
+                .phoneNumber(this.phoneNumber)
+                .address(this.address)
+                .description(this.description)
+                .hasCar(this.hasCar)
+                .hasDementiaTraining(this.hasDementiaTraining)
+                .career(CaregiverCareer.valueOf(this.career))
+                .build();
+    }
 }

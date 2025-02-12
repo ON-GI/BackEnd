@@ -1,6 +1,7 @@
 package com.ongi.backend.entity.caregiver;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,12 @@ public class CaregiverLicense {
     private String licenseNumber; // 자격증 번호
 
     private String licenseGrade; // 자격증 등급
+
+    @Builder
+    public CaregiverLicense(Caregiver caregiver, String licenseName, String licenseNumber, String licenseGrade) {
+        this.caregiver = caregiver;
+        this.licenseName = licenseName;
+        this.licenseNumber = licenseNumber;
+        this.licenseGrade = licenseGrade;
+    }
 }

@@ -2,6 +2,8 @@ package com.ongi.backend.entity.caregiver;
 
 import com.ongi.backend.entity.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -11,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE caregiver SET deleted_at = now() WHERE id = ?")  // soft delete
 @SQLRestriction("deleted_at IS NULL")
 public class Caregiver extends BaseEntity {
@@ -54,4 +56,21 @@ public class Caregiver extends BaseEntity {
 
     @OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CaregiverLicense> licenses;    // 자격증
+
+    @Builder
+    public Caregiver(String loginId, String password, String name, String phoneNumber,
+                     String address, String description, boolean hasCar, boolean hasDementiaTraining,
+                     CaregiverCareer career, CaregiverWorkCondition workCondition, List<CaregiverLicense> licenses) {
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.description = description;
+        this.hasCar = hasCar;
+        this.hasDementiaTraining = hasDementiaTraining;
+        this.career = career;
+        this.workCondition = workCondition;
+        this.licenses = licenses;
+    }
 }
