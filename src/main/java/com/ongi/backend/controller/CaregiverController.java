@@ -18,4 +18,9 @@ public class CaregiverController {
     public void registerCaregiver(@RequestBody CaregiverRequestDto caregiverRequestDto) {
         caregiverService.registerCaregiver(caregiverRequestDto);
     }
+
+    @GetMapping("/{caregiverId}/work-condition")
+    public void getCaregiverWorkCondition(@PathVariable Long caregiverId) {
+
+    }
 }

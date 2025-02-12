@@ -51,7 +51,7 @@ public class CaregiverService {
     /**
      * 요양보호사 자격증(CaregiverLicense) 저장
      */
-    private void saveCaregiverLicenses(List<CaregiverLicenseDto> licenseDtos, Caregiver caregiver) {
+    private void saveCaregiverLicenses(List<LicenseRequestDto> licenseDtos, Caregiver caregiver) {
         if (licenseDtos == null || licenseDtos.isEmpty()) return;
 
         List<CaregiverLicense> licenses = licenseDtos.stream()
@@ -64,7 +64,7 @@ public class CaregiverService {
     /**
      * 근무 조건(CaregiverWorkCondition) 저장 및 관련 정보 저장
      */
-    private void saveCaregiverWorkCondition(CaregiverWorkConditionDto workConditionDto, Caregiver caregiver) {
+    private void saveCaregiverWorkCondition(WorkConditionRequestDto workConditionDto, Caregiver caregiver) {
         if (workConditionDto == null) return;
 
         // CaregiverWorkCondition 저장
@@ -81,10 +81,10 @@ public class CaregiverService {
     /**
      * 근무 가능 지역(WorkRegion) 저장
      */
-    private void saveWorkRegions(List<WorkRegionDto> workRegionDtos, CaregiverWorkCondition workCondition) {
-        if (workRegionDtos == null || workRegionDtos.isEmpty()) return;
+    private void saveWorkRegions(List<WorkRegionRequestDto> workRegionRequestDtos, CaregiverWorkCondition workCondition) {
+        if (workRegionRequestDtos == null || workRegionRequestDtos.isEmpty()) return;
 
-        List<WorkRegion> regions = workRegionDtos.stream()
+        List<WorkRegion> regions = workRegionRequestDtos.stream()
                 .map(dto -> dto.toEntity(workCondition))
                 .collect(Collectors.toList());
 
@@ -94,10 +94,10 @@ public class CaregiverService {
     /**
      * 근무 가능 시간(WorkTime) 저장
      */
-    private void saveWorkTimes(List<WorkTimeDto> workTimeDtos, CaregiverWorkCondition workCondition) {
-        if (workTimeDtos == null || workTimeDtos.isEmpty()) return;
+    private void saveWorkTimes(List<WorkTimeRequestDto> workTimeRequestDtos, CaregiverWorkCondition workCondition) {
+        if (workTimeRequestDtos == null || workTimeRequestDtos.isEmpty()) return;
 
-        List<WorkTime> times = workTimeDtos.stream()
+        List<WorkTime> times = workTimeRequestDtos.stream()
                 .map(dto -> dto.toEntity(workCondition))
                 .collect(Collectors.toList());
 

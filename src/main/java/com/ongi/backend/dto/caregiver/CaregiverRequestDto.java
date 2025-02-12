@@ -22,9 +22,9 @@ public class CaregiverRequestDto {
     private boolean hasDementiaTraining;
     private String career;  // 문자열로 받음 (Enum 변환 예정)
 
-    private CaregiverWorkConditionDto workCondition;
+    private WorkConditionRequestDto workCondition;
 
-    private List<CaregiverLicenseDto> licenses;
+    private List<LicenseRequestDto> licenses;
 
     public Caregiver toEntity() {
         return Caregiver.builder()
