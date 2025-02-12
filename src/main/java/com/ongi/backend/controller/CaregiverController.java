@@ -28,13 +28,13 @@ public class CaregiverController {
     }
 
     @GetMapping("/{caregiverId}/work-condition")
-    public CommonResponse<WorkConditionResponseDto> getCaregiverWorkCondition(@PathVariable("caregiverId") Long caregiverId) {
-        log.info("wow");
+    public CommonResponse<WorkConditionResponseDto> updateCaregiverWorkCondition(@PathVariable("caregiverId") Long caregiverId) {
         return CommonResponse.success(caregiverWorkService.getWorkConditionByCaregiverId(caregiverId));
     }
 
     @PostMapping("/{caregiverId}/work-condition")
-    public CommonResponse<String> getCaregiverWorkCondition(@PathVariable Long caregiverId, @RequestBody WorkConditionRequestDto workConditionRequestDto) {
+    public CommonResponse<String> updateCaregiverWorkCondition(@PathVariable("caregiverId") Long caregiverId, @RequestBody WorkConditionRequestDto workConditionRequestDto) {
+        caregiverWorkService.updateWorkCondition(workConditionRequestDto, caregiverId);
         return CommonResponse.success("근무 조건 업데이트 완료했습니다.");
     }
 }

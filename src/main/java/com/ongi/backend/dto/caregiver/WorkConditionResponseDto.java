@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class WorkConditionResponseDto {
 
-    private int minHourPay;
-    private int maxHourPay;
+    private Integer minHourPay;
+    private Integer maxHourPay;
     private List<WorkRegionResponseDto> workRegions;
     private List<WorkTimeResponseDto> workTimes;
 
     @Builder
-    public WorkConditionResponseDto(int minHourPay, int maxHourPay,
+    public WorkConditionResponseDto(Integer minHourPay, Integer maxHourPay,
                                     List<WorkRegionResponseDto> workRegions, List<WorkTimeResponseDto> workTimes) {
         this.minHourPay = minHourPay;
         this.maxHourPay = maxHourPay;

@@ -51,18 +51,20 @@ public class CaregiverWorkService {
     }
 
     @Transactional
-    public void updateWorkCondition(Long caregiverId, WorkConditionRequestDto workConditionRequestDto) {
-        // 기존 CaregiverWorkCondition 조회 (없으면 새로 생성)
+    public void updateWorkCondition(WorkConditionRequestDto workConditionRequestDto, Long caregiverId) {
+
+        log.info(workConditionRequestDto.toString());
+
         CaregiverWorkCondition workCondition = caregiverWorkConditionRepository.findByCaregiverId(caregiverId)
-                .orElseGet(() -> new CaregiverWorkCondition());
+                .orElseThrow(() -> new IllegalArgumentException("근무 조건을 수정할 수 없습니다: caregiverId=" + caregiverId));
 
         workCondition.updatePay(workConditionRequestDto.getMinHourPay(), workConditionRequestDto.getMaxHourPay());
 
         caregiverWorkConditionRepository.save(workCondition);
 
         // 기존 WorkRegion 및 WorkTime 삭제 후 새로 저장
-        //workRegionRepository.deleteByWorkCondition(workCondition);
-        //workTimeRepository.deleteByWorkCondition(workCondition);
+        workRegionRepository.deleteByWorkCondition(workCondition);
+        workTimeRepository.deleteByWorkCondition(workCondition);
 
         saveWorkRegions(workConditionRequestDto.getWorkRegions(), workCondition);
         saveWorkTimes(workConditionRequestDto.getWorkTimes(), workCondition);
@@ -71,10 +73,10 @@ public class CaregiverWorkService {
     /**
      * 근무 가능 지역(WorkRegion) 저장
      */
-    private void saveWorkRegions(List<WorkRegionRequestDto> workRegionRequestDtos, CaregiverWorkCondition workCondition) {
-        if (workRegionRequestDtos == null || workRegionRequestDtos.isEmpty()) return;
+    private void saveWorkRegions(List<WorkRegionRequestDto> workRegionRequestDto, CaregiverWorkCondition workCondition) {
+        if (workRegionRequestDto == null || workRegionRequestDto.isEmpty()) return;
 
-        List<WorkRegion> regions = workRegionRequestDtos.stream()
+        List<WorkRegion> regions = workRegionRequestDto.stream()
                 .map(dto -> dto.toEntity(workCondition))
                 .collect(Collectors.toList());
 

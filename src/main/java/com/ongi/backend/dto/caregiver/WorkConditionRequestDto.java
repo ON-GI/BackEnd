@@ -14,13 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 public class WorkConditionRequestDto {
 
-    private int minHourPay;
-    private int maxHourPay;
+    private Integer minHourPay;
+    private Integer maxHourPay;
     private List<WorkRegionRequestDto> workRegions;
     private List<WorkTimeRequestDto> workTimes;
 
     @Builder
-    public WorkConditionRequestDto(int minHourPay, int maxHourPay,
+    public WorkConditionRequestDto(Integer minHourPay, Integer maxHourPay,
                                    List<WorkRegionRequestDto> workRegions, List<WorkTimeRequestDto> workTimes) {
         this.minHourPay = minHourPay;
         this.maxHourPay = maxHourPay;
