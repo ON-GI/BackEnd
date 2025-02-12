@@ -1,4 +1,4 @@
-package com.ongi.backend.entity;
+package com.ongi.backend.entity.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
