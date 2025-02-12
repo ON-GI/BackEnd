@@ -1,8 +1,6 @@
 package com.ongi.backend.service;
 
-import com.ongi.backend.dto.caregiver.WorkConditionRequestDto;
-import com.ongi.backend.dto.caregiver.WorkRegionRequestDto;
-import com.ongi.backend.dto.caregiver.WorkTimeRequestDto;
+import com.ongi.backend.dto.caregiver.*;
 import com.ongi.backend.entity.caregiver.Caregiver;
 import com.ongi.backend.entity.caregiver.CaregiverWorkCondition;
 import com.ongi.backend.entity.caregiver.WorkRegion;
@@ -29,8 +27,16 @@ public class CaregiverWorkService {
 
     private final WorkTimeRepository workTimeRepository;
 
+    @Transactional(readOnly = true)
+    public WorkConditionResponseDto getWorkConditionByCaregiverId(Long caregiverId) {
+        CaregiverWorkCondition workCondition = caregiverWorkConditionRepository.findByCaregiverId(caregiverId)
+                .orElseThrow(() -> new IllegalArgumentException("근무 조건을 찾을 수 없습니다: caregiverId=" + caregiverId));
+
+        return WorkConditionResponseDto.fromEntity(workCondition);
+    }
+
     @Transactional
-    public void registerWork(WorkConditionRequestDto workConditionRequestDto, Caregiver caregiver) {
+    public void registerWorkCondition(WorkConditionRequestDto workConditionRequestDto, Caregiver caregiver) {
         if (workConditionRequestDto == null) return;
 
         // CaregiverWorkCondition 저장
@@ -41,6 +47,24 @@ public class CaregiverWorkService {
         saveWorkRegions(workConditionRequestDto.getWorkRegions(), workCondition);
 
         // WorkTime 저장
+        saveWorkTimes(workConditionRequestDto.getWorkTimes(), workCondition);
+    }
+
+    @Transactional
+    public void updateWorkCondition(Long caregiverId, WorkConditionRequestDto workConditionRequestDto) {
+        // 기존 CaregiverWorkCondition 조회 (없으면 새로 생성)
+        CaregiverWorkCondition workCondition = caregiverWorkConditionRepository.findByCaregiverId(caregiverId)
+                .orElseGet(() -> new CaregiverWorkCondition());
+
+        workCondition.updatePay(workConditionRequestDto.getMinHourPay(), workConditionRequestDto.getMaxHourPay());
+
+        caregiverWorkConditionRepository.save(workCondition);
+
+        // 기존 WorkRegion 및 WorkTime 삭제 후 새로 저장
+        //workRegionRepository.deleteByWorkCondition(workCondition);
+        //workTimeRepository.deleteByWorkCondition(workCondition);
+
+        saveWorkRegions(workConditionRequestDto.getWorkRegions(), workCondition);
         saveWorkTimes(workConditionRequestDto.getWorkTimes(), workCondition);
     }
 

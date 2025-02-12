@@ -1,6 +1,5 @@
 package com.ongi.backend.dto.caregiver;
 
-import com.ongi.backend.entity.caregiver.Caregiver;
 import com.ongi.backend.entity.caregiver.CaregiverWorkCondition;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,7 +32,7 @@ public class WorkConditionResponseDto {
         return WorkConditionResponseDto.builder()
                 .minHourPay(workCondition.getMinHourPay())
                 .maxHourPay(workCondition.getMaxHourPay())
-                .workRegions(workCondition.getRegions().stream()
+                .workRegions(workCondition.getWorkRegions().stream()
                         .map(WorkRegionResponseDto::fromEntity)
                         .collect(Collectors.toList()))
                 .workTimes(workCondition.getWorkTimes().stream()

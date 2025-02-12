@@ -15,9 +15,9 @@ public class WorkRegionResponseDto {
 
     @Builder
     public WorkRegionResponseDto(String city, String district, String town) {
-        this.city = city;
-        this.district = district;
-        this.town = town;
+        this.city = city != null ? city : "전체";
+        this.district = district != null ? district : "전체";
+        this.town = town != null ? town : "전체";
     }
 
     public static WorkRegionResponseDto fromEntity(WorkRegion workRegion) {

@@ -31,7 +31,7 @@ public class CaregiverService {
         // CaregiverLicense 저장
         saveCaregiverLicenses(requestDto.getLicenses(), caregiver);
 
-        caregiverWorkService.registerWork(requestDto.getWorkCondition(), caregiver);
+        caregiverWorkService.registerWorkCondition(requestDto.getWorkCondition(), caregiver);
 
         return caregiver.getId();
     }
