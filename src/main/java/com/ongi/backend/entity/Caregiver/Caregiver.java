@@ -45,6 +45,9 @@ public class Caregiver extends BaseEntity {
     @Column(nullable = false)
     private boolean hasDementiaTraining;    // 치매 교육 이수 여부
 
+    @OneToOne(mappedBy = "caregiver", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private CaregiverWorkCondition workCondition;  // 근무 조건
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CaregiverCareer career;  // 경력 기간
