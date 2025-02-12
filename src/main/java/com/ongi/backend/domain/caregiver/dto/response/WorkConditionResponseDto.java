@@ -1,6 +1,7 @@
 package com.ongi.backend.domain.caregiver.dto.response;
 
 import com.ongi.backend.domain.caregiver.entity.CaregiverWorkCondition;
+import com.ongi.backend.domain.caregiver.entity.CaregiverWorkConditionPayType;
 import lombok.*;
 
 import java.util.List;
@@ -11,24 +12,24 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class WorkConditionResponseDto {
 
-    private Integer minHourPay;
-    private Integer maxHourPay;
+    private CaregiverWorkConditionPayType payType;
+    private Integer payAmount;
     private List<WorkRegionResponseDto> workRegions;
     private List<WorkTimeResponseDto> workTimes;
 
-    @Builder(access= AccessLevel.PRIVATE)
-    public WorkConditionResponseDto(Integer minHourPay, Integer maxHourPay,
+    @Builder(access = AccessLevel.PRIVATE)
+    public WorkConditionResponseDto(CaregiverWorkConditionPayType payType, Integer payAmount,
                                     List<WorkRegionResponseDto> workRegions, List<WorkTimeResponseDto> workTimes) {
-        this.minHourPay = minHourPay;
-        this.maxHourPay = maxHourPay;
+        this.payType = payType;
+        this.payAmount = payAmount;
         this.workRegions = workRegions;
         this.workTimes = workTimes;
     }
 
     public static WorkConditionResponseDto fromEntity(CaregiverWorkCondition workCondition) {
         return WorkConditionResponseDto.builder()
-                .minHourPay(workCondition.getMinHourPay())
-                .maxHourPay(workCondition.getMaxHourPay())
+                .payType(workCondition.getPayType())
+                .payAmount(workCondition.getPayAmount())
                 .workRegions(workCondition.getCaregiverWorkRegions().stream()
                         .map(WorkRegionResponseDto::fromEntity)
                         .collect(Collectors.toList()))

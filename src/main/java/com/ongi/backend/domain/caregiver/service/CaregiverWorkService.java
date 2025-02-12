@@ -61,7 +61,7 @@ public class CaregiverWorkService {
         CaregiverWorkCondition workCondition = caregiverWorkConditionRepository.findByCaregiverId(caregiverId)
                 .orElseThrow(() -> new IllegalArgumentException("근무 조건을 수정할 수 없습니다: caregiverId=" + caregiverId));
 
-        workCondition.updatePay(workConditionRequestDto.getMinHourPay(), workConditionRequestDto.getMaxHourPay());
+        workCondition.updatePay(workConditionRequestDto.getPayType(), workConditionRequestDto.getPayAmount());
 
         caregiverWorkConditionRepository.save(workCondition);
 

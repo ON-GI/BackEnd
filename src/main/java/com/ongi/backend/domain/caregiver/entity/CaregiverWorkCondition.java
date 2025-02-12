@@ -26,11 +26,12 @@ public class CaregiverWorkCondition extends BaseEntity {
     @JoinColumn(name = "caregiver_id", nullable = false)
     private Caregiver caregiver;  // 1:1 관계
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Integer minHourPay;  // 시급 하한선
+    private CaregiverWorkConditionPayType payType;  // 시급, 일급, 월급 중 선택
 
     @Column(nullable = false)
-    private Integer maxHourPay;  // 시급 상한선
+    private Integer payAmount;  // 원하는 급여 금액
 
     @OneToMany(mappedBy = "workCondition", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CaregiverWorkRegion> caregiverWorkRegions;  // 근무 가능 지역
@@ -41,17 +42,17 @@ public class CaregiverWorkCondition extends BaseEntity {
     public static CaregiverWorkCondition from(WorkConditionRequestDto workConditionRequestDto, Caregiver caregiver) {
         return CaregiverWorkCondition.builder()
                 .caregiver(caregiver)
-                .minHourPay(workConditionRequestDto.getMinHourPay())
-                .maxHourPay(workConditionRequestDto.getMaxHourPay())
+                .payType(workConditionRequestDto.getPayType())
+                .payAmount(workConditionRequestDto.getPayAmount())
                 .build();
     }
 
-    public void updatePay(Integer minHourPay, Integer maxHourPay) {
-        if (minHourPay != null) {
-            this.minHourPay = minHourPay;
+    public void updatePay(CaregiverWorkConditionPayType payType, Integer payAmount) {
+        if (payType != null) {
+            this.payType = payType;
         }
-        if (maxHourPay != null) {
-            this.maxHourPay = maxHourPay;
+        if (payAmount != null) {
+            this.payAmount = payAmount;
         }
     }
 }
