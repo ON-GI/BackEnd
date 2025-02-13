@@ -8,6 +8,9 @@ import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.entity.CaregiverWorkCondition;
 import com.ongi.backend.domain.caregiver.entity.CaregiverWorkRegion;
 import com.ongi.backend.domain.caregiver.entity.CaregiverWorkTime;
+import com.ongi.backend.domain.caregiver.exception.CaregiverNotFoundException;
+import com.ongi.backend.domain.caregiver.exception.WorkConditionNotFoundException;
+import com.ongi.backend.domain.caregiver.repository.CaregiverRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverWorkConditionRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverWorkRegionRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverWorkTimeRepository;
@@ -17,12 +20,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CaregiverWorkService {
+
+    private final CaregiverRepository caregiverRepository;
 
     private final CaregiverWorkConditionRepository caregiverWorkConditionRepository;
 
@@ -33,14 +39,16 @@ public class CaregiverWorkService {
     @Transactional(readOnly = true)
     public WorkConditionResponseDto getWorkConditionByCaregiverId(Long caregiverId) {
         CaregiverWorkCondition workCondition = caregiverWorkConditionRepository.findByCaregiverId(caregiverId)
-                .orElseThrow(() -> new IllegalArgumentException("근무 조건을 찾을 수 없습니다: caregiverId=" + caregiverId));
+                .orElseThrow(WorkConditionNotFoundException::new);
 
         return WorkConditionResponseDto.fromEntity(workCondition);
     }
 
-    @Transactional
-    public void registerWorkCondition(WorkConditionRequestDto workConditionRequestDto, Caregiver caregiver) {
+    private void registerWorkCondition(WorkConditionRequestDto workConditionRequestDto, Long caregiverId) {
         if (workConditionRequestDto == null) return;
+
+        Caregiver caregiver = caregiverRepository.findById(caregiverId)
+                .orElseThrow(CaregiverNotFoundException::new);
 
         // CaregiverWorkCondition 저장
         CaregiverWorkCondition workCondition = CaregiverWorkCondition.from(workConditionRequestDto, caregiver);
@@ -56,21 +64,23 @@ public class CaregiverWorkService {
     @Transactional
     public void updateWorkCondition(WorkConditionRequestDto workConditionRequestDto, Long caregiverId) {
 
-        log.info(workConditionRequestDto.toString());
+        Optional<CaregiverWorkCondition> optionalWorkCondition = caregiverWorkConditionRepository.findByCaregiverId(caregiverId);
 
-        CaregiverWorkCondition workCondition = caregiverWorkConditionRepository.findByCaregiverId(caregiverId)
-                .orElseThrow(() -> new IllegalArgumentException("근무 조건을 수정할 수 없습니다: caregiverId=" + caregiverId));
+        if (optionalWorkCondition.isPresent()) {
+            CaregiverWorkCondition workCondition = optionalWorkCondition.get();
+            workCondition.updatePay(workConditionRequestDto.getPayType(), workConditionRequestDto.getPayAmount());
 
-        workCondition.updatePay(workConditionRequestDto.getMinHourPay(), workConditionRequestDto.getMaxHourPay());
+            caregiverWorkConditionRepository.save(workCondition);
 
-        caregiverWorkConditionRepository.save(workCondition);
+            // 기존 WorkRegion 및 WorkTime 삭제 후 새로 저장
+            caregiverWorkRegionRepository.deleteByWorkCondition(workCondition);
+            caregiverWorkTimeRepository.deleteByWorkCondition(workCondition);
 
-        // 기존 WorkRegion 및 WorkTime 삭제 후 새로 저장
-        caregiverWorkRegionRepository.deleteByWorkCondition(workCondition);
-        caregiverWorkTimeRepository.deleteByWorkCondition(workCondition);
-
-        saveWorkRegions(workConditionRequestDto.getWorkRegions(), workCondition);
-        saveWorkTimes(workConditionRequestDto.getWorkTimes(), workCondition);
+            saveWorkRegions(workConditionRequestDto.getWorkRegions(), workCondition);
+            saveWorkTimes(workConditionRequestDto.getWorkTimes(), workCondition);
+        } else{
+            registerWorkCondition(workConditionRequestDto, caregiverId);
+        }
     }
 
     /**
@@ -97,5 +107,15 @@ public class CaregiverWorkService {
                 .collect(Collectors.toList());
 
         caregiverWorkTimeRepository.saveAll(times);
+    }
+
+    public void deleteWorkCondition(Long caregiverId) {
+        CaregiverWorkCondition workCondition = caregiverWorkConditionRepository.findByCaregiverId(caregiverId)
+                .orElseThrow(WorkConditionNotFoundException::new);
+
+        caregiverWorkRegionRepository.deleteByWorkCondition(workCondition);
+        caregiverWorkTimeRepository.deleteByWorkCondition(workCondition);
+
+        caregiverWorkConditionRepository.delete(workCondition);
     }
 }

@@ -1,5 +1,6 @@
 package com.ongi.backend.domain.caregiver.service;
 
+import com.ongi.backend.domain.caregiver.dto.request.WorkConditionRequestDto;
 import com.ongi.backend.domain.caregiver.repository.CaregiverLicenseRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverRepository;
 import com.ongi.backend.domain.caregiver.dto.request.CaregiverRequestDto;
@@ -33,8 +34,6 @@ public class CaregiverService {
 
         // CaregiverLicense 저장
         saveCaregiverLicenses(requestDto.getLicenses(), caregiver);
-
-        caregiverWorkService.registerWorkCondition(requestDto.getWorkCondition(), caregiver);
 
         return caregiver.getId();
     }

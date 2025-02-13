@@ -28,7 +28,7 @@ public class CaregiverController {
     }
 
     @GetMapping("/{caregiverId}/work-condition")
-    public CommonResponse<WorkConditionResponseDto> updateCaregiverWorkCondition(@PathVariable("caregiverId") Long caregiverId) {
+    public CommonResponse<WorkConditionResponseDto> getCaregiverWorkCondition(@PathVariable("caregiverId") Long caregiverId) {
         return CommonResponse.success(caregiverWorkService.getWorkConditionByCaregiverId(caregiverId));
     }
 

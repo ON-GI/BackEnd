@@ -1,5 +1,6 @@
 package com.ongi.backend.domain.caregiver.dto.request;
 
+import com.ongi.backend.domain.caregiver.entity.CaregiverWorkConditionPayType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,16 +13,20 @@ import java.util.List;
 @NoArgsConstructor
 public class WorkConditionRequestDto {
 
-    private Integer minHourPay;
-    private Integer maxHourPay;
+    private CaregiverWorkConditionPayType payType;
+
+    private Integer payAmount;
+
+    private Boolean negotiable;
     private List<WorkRegionRequestDto> workRegions;
     private List<WorkTimeRequestDto> workTimes;
 
     @Builder
-    public WorkConditionRequestDto(Integer minHourPay, Integer maxHourPay,
+    public WorkConditionRequestDto(CaregiverWorkConditionPayType payType, Integer payAmount, Boolean negotiable,
                                    List<WorkRegionRequestDto> workRegions, List<WorkTimeRequestDto> workTimes) {
-        this.minHourPay = minHourPay;
-        this.maxHourPay = maxHourPay;
+        this.payType = payType;
+        this.payAmount = payAmount;
+        this.negotiable = negotiable;
         this.workRegions = workRegions;
         this.workTimes = workTimes;
     }
