@@ -16,14 +16,17 @@ public class WorkConditionRequestDto {
     private CaregiverWorkConditionPayType payType;
 
     private Integer payAmount;
+
+    private Boolean negotiable;
     private List<WorkRegionRequestDto> workRegions;
     private List<WorkTimeRequestDto> workTimes;
 
     @Builder
-    public WorkConditionRequestDto(CaregiverWorkConditionPayType payType, Integer payAmount,
+    public WorkConditionRequestDto(CaregiverWorkConditionPayType payType, Integer payAmount, Boolean negotiable,
                                    List<WorkRegionRequestDto> workRegions, List<WorkTimeRequestDto> workTimes) {
         this.payType = payType;
         this.payAmount = payAmount;
+        this.negotiable = negotiable;
         this.workRegions = workRegions;
         this.workTimes = workTimes;
     }

@@ -14,14 +14,17 @@ public class WorkConditionResponseDto {
 
     private CaregiverWorkConditionPayType payType;
     private Integer payAmount;
+
+    private Boolean negotiable;
     private List<WorkRegionResponseDto> workRegions;
     private List<WorkTimeResponseDto> workTimes;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public WorkConditionResponseDto(CaregiverWorkConditionPayType payType, Integer payAmount,
+    public WorkConditionResponseDto(CaregiverWorkConditionPayType payType, Integer payAmount, Boolean negotiable,
                                     List<WorkRegionResponseDto> workRegions, List<WorkTimeResponseDto> workTimes) {
         this.payType = payType;
         this.payAmount = payAmount;
+        this.negotiable = negotiable;
         this.workRegions = workRegions;
         this.workTimes = workTimes;
     }
@@ -30,6 +33,7 @@ public class WorkConditionResponseDto {
         return WorkConditionResponseDto.builder()
                 .payType(workCondition.getPayType())
                 .payAmount(workCondition.getPayAmount())
+                .negotiable(workCondition.getNegotiable())
                 .workRegions(workCondition.getCaregiverWorkRegions().stream()
                         .map(WorkRegionResponseDto::fromEntity)
                         .collect(Collectors.toList()))

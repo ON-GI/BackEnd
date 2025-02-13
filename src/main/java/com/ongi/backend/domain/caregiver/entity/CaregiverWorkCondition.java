@@ -33,6 +33,9 @@ public class CaregiverWorkCondition extends BaseEntity {
     @Column(nullable = false)
     private Integer payAmount;  // 원하는 급여 금액
 
+    @Column(nullable = false)
+    private Boolean negotiable;
+
     @OneToMany(mappedBy = "workCondition", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CaregiverWorkRegion> caregiverWorkRegions;  // 근무 가능 지역
 
@@ -44,6 +47,7 @@ public class CaregiverWorkCondition extends BaseEntity {
                 .caregiver(caregiver)
                 .payType(workConditionRequestDto.getPayType())
                 .payAmount(workConditionRequestDto.getPayAmount())
+                .negotiable(workConditionRequestDto.getNegotiable())
                 .build();
     }
 
