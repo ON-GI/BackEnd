@@ -108,4 +108,14 @@ public class CaregiverWorkService {
 
         caregiverWorkTimeRepository.saveAll(times);
     }
+
+    public void deleteWorkCondition(Long caregiverId) {
+        CaregiverWorkCondition workCondition = caregiverWorkConditionRepository.findByCaregiverId(caregiverId)
+                .orElseThrow(WorkConditionNotFoundException::new);
+
+        caregiverWorkRegionRepository.deleteByWorkCondition(workCondition);
+        caregiverWorkTimeRepository.deleteByWorkCondition(workCondition);
+
+        caregiverWorkConditionRepository.delete(workCondition);
+    }
 }
