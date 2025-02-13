@@ -32,6 +32,12 @@ public class Center extends BaseEntity {
 
     private LocalDate establishmentDate;
 
+    private CenterGrade centerGrade;
+
+    private String phoneNumber;
+
+    private String description;
+
     public static Center from(CenterInitializerRequestDto centerInitializerRequestDto) {
         return Center.builder()
                 .name(centerInitializerRequestDto.getName())
