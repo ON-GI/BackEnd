@@ -20,7 +20,5 @@ public class CaregiverRequestDto {
     private Boolean hasDementiaTraining;
     private String career;  // 문자열로 받음 (Enum 변환 예정)
 
-    private WorkConditionRequestDto workCondition;
-
     private List<LicenseRequestDto> licenses;
 }
