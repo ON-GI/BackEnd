@@ -8,6 +8,8 @@ import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.entity.CaregiverWorkCondition;
 import com.ongi.backend.domain.caregiver.entity.CaregiverWorkRegion;
 import com.ongi.backend.domain.caregiver.entity.CaregiverWorkTime;
+import com.ongi.backend.domain.caregiver.exception.CaregiverNotFoundException;
+import com.ongi.backend.domain.caregiver.exception.WorkConditionNotFoundException;
 import com.ongi.backend.domain.caregiver.repository.CaregiverRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverWorkConditionRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverWorkRegionRepository;
@@ -37,7 +39,7 @@ public class CaregiverWorkService {
     @Transactional(readOnly = true)
     public WorkConditionResponseDto getWorkConditionByCaregiverId(Long caregiverId) {
         CaregiverWorkCondition workCondition = caregiverWorkConditionRepository.findByCaregiverId(caregiverId)
-                .orElseThrow(() -> new IllegalArgumentException("근무 조건을 찾을 수 없습니다: caregiverId=" + caregiverId));
+                .orElseThrow(WorkConditionNotFoundException::new);
 
         return WorkConditionResponseDto.fromEntity(workCondition);
     }
@@ -46,7 +48,7 @@ public class CaregiverWorkService {
         if (workConditionRequestDto == null) return;
 
         Caregiver caregiver = caregiverRepository.findById(caregiverId)
-                .orElseThrow(() -> new IllegalArgumentException("요양 보호사를 찾을 수 없습니다: caregiverId=" + caregiverId));
+                .orElseThrow(CaregiverNotFoundException::new);
 
         // CaregiverWorkCondition 저장
         CaregiverWorkCondition workCondition = CaregiverWorkCondition.from(workConditionRequestDto, caregiver);
