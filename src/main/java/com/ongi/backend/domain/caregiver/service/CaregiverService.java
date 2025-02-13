@@ -1,6 +1,7 @@
 package com.ongi.backend.domain.caregiver.service;
 
-import com.ongi.backend.domain.caregiver.dto.request.WorkConditionRequestDto;
+import com.ongi.backend.common.service.FileUploadService;
+import com.ongi.backend.domain.caregiver.exception.CaregiverNotFoundException;
 import com.ongi.backend.domain.caregiver.repository.CaregiverLicenseRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverRepository;
 import com.ongi.backend.domain.caregiver.dto.request.CaregiverRequestDto;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +28,8 @@ public class CaregiverService {
     private final CaregiverLicenseRepository caregiverLicenseRepository;
 
     private final CaregiverWorkService caregiverWorkService;
+
+    private final FileUploadService fileUploadService;
 
     @Transactional
     public Long registerCaregiver(CaregiverRequestDto requestDto) {
@@ -56,5 +60,19 @@ public class CaregiverService {
                 .collect(Collectors.toList());
 
         caregiverLicenseRepository.saveAll(licenses);
+    }
+
+    @Transactional
+    public void updateCaregiverProfileImage(MultipartFile profileImage, Long caregiverId) {
+        Caregiver caregiver = caregiverRepository.findById(caregiverId)
+                .orElseThrow(CaregiverNotFoundException::new);
+
+        String oldProfileImageUrl = caregiver.getProfileImageUrl();
+        if (oldProfileImageUrl != null) {
+            fileUploadService.deleteImage(oldProfileImageUrl);
+        }
+
+        String imageUrl = fileUploadService.uploadFileToS3(profileImage);
+        caregiver.updateProfileImageUrl(imageUrl);
     }
 }

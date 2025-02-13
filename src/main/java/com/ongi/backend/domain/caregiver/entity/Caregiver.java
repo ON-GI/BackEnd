@@ -71,4 +71,8 @@ public class Caregiver extends BaseEntity {
                 .career(CaregiverCareer.valueOf(caregiverRequestDto.getCareer()))
                 .build();
     }
+
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 }
