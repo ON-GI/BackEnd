@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface CaregiverRepository extends JpaRepository<Caregiver, Long>, CaregiverRepositoryCustom {
     Optional<Caregiver> findById(Long caregiverId);
+
+    boolean existsByLoginId(String loginId);
 }

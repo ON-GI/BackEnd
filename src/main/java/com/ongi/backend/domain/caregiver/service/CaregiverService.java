@@ -1,13 +1,16 @@
 package com.ongi.backend.domain.caregiver.service;
 
+import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.service.FileUploadService;
+import com.ongi.backend.domain.caregiver.dto.request.CaregiverRequestDto;
+import com.ongi.backend.domain.caregiver.dto.request.LicenseRequestDto;
+import com.ongi.backend.domain.caregiver.dto.request.ValidateIdRequestDto;
+import com.ongi.backend.domain.caregiver.entity.Caregiver;
+import com.ongi.backend.domain.caregiver.entity.CaregiverLicense;
+import com.ongi.backend.domain.caregiver.exception.CaregiverErrorCase;
 import com.ongi.backend.domain.caregiver.exception.CaregiverNotFoundException;
 import com.ongi.backend.domain.caregiver.repository.CaregiverLicenseRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverRepository;
-import com.ongi.backend.domain.caregiver.dto.request.CaregiverRequestDto;
-import com.ongi.backend.domain.caregiver.dto.request.LicenseRequestDto;
-import com.ongi.backend.domain.caregiver.entity.Caregiver;
-import com.ongi.backend.domain.caregiver.entity.CaregiverLicense;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,11 +27,7 @@ import java.util.stream.Collectors;
 public class CaregiverService {
 
     private final CaregiverRepository caregiverRepository;
-
     private final CaregiverLicenseRepository caregiverLicenseRepository;
-
-    private final CaregiverWorkService caregiverWorkService;
-
     private final FileUploadService fileUploadService;
 
     @Transactional
@@ -60,6 +59,16 @@ public class CaregiverService {
                 .collect(Collectors.toList());
 
         caregiverLicenseRepository.saveAll(licenses);
+    }
+
+    public void validateId(ValidateIdRequestDto requestDto) {
+        if(existDuplicateId(requestDto.getLoginId())) {
+            throw new ApplicationException(CaregiverErrorCase.DUPLICATE_LOGIN_ID);
+        }
+    }
+
+    private boolean existDuplicateId(String loginId) {
+        return caregiverRepository.existsByLoginId(loginId);
     }
 
     @Transactional
