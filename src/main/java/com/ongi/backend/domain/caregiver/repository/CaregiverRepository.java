@@ -9,4 +9,6 @@ public interface CaregiverRepository extends JpaRepository<Caregiver, Long>, Car
     Optional<Caregiver> findById(Long caregiverId);
 
     boolean existsByLoginId(String loginId);
+
+    Optional<Caregiver> findByLoginId(String loginId);
 }
