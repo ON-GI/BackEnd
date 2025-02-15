@@ -1,7 +1,7 @@
 package com.ongi.backend.domain.caregiver.dto.response;
 
 import com.ongi.backend.domain.caregiver.entity.CaregiverWorkCondition;
-import com.ongi.backend.domain.caregiver.entity.CaregiverWorkConditionPayType;
+import com.ongi.backend.domain.caregiver.entity.enums.CaregiverWorkConditionPayType;
 import lombok.*;
 
 import java.util.List;

@@ -2,10 +2,13 @@ package com.ongi.backend.domain.caregiver.entity;
 
 import com.ongi.backend.domain.caregiver.dto.request.CaregiverRequestDto;
 import com.ongi.backend.common.entity.BaseEntity;
+import com.ongi.backend.domain.caregiver.entity.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 
@@ -48,28 +51,51 @@ public class Caregiver extends BaseEntity {
     @Column(nullable = false)
     private boolean hasDementiaTraining;    // 치매 교육 이수 여부
 
-    @OneToOne(mappedBy = "caregiver", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private CaregiverWorkCondition workCondition;  // 근무 조건
-
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private CaregiverCareer career;  // 경력 기간
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "json")
+    private List<ToiletingAssistanceType> toiletingAssistance;  // 베변보조 경험
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "json")
+    private List<FeedingAssistanceType> feedingAssistance;  // 식사보조 경험
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "json")
+    private List<MobilityAssistanceType> mobilityAssistance;    // 이동보조 경험
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "json")
+    private List<DailyLivingAssistanceType> dailyLivingAssistance;  // 일상생활보조 경험
 
     @OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CaregiverLicense> licenses;    // 자격증
 
-    public static Caregiver from(CaregiverRequestDto caregiverRequestDto) {
+    @OneToOne(mappedBy = "caregiver", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private CaregiverWorkCondition workCondition;  // 근무 조건
+
+    public static Caregiver from(CaregiverRequestDto request, String encodedPassword) {
         return Caregiver.builder()
-                .loginId(caregiverRequestDto.getLoginId())
-                .password(caregiverRequestDto.getPassword()) // 암호화된 비밀번호 적용
-                .name(caregiverRequestDto.getName())
-                .phoneNumber(caregiverRequestDto.getPhoneNumber())
-                .address(caregiverRequestDto.getAddress())
-                .description(caregiverRequestDto.getDescription())
-                .hasCar(caregiverRequestDto.getHasCar())
-                .hasDementiaTraining(caregiverRequestDto.getHasDementiaTraining())
-                .career(CaregiverCareer.valueOf(caregiverRequestDto.getCareer()))
+                .loginId(request.loginId())
+                .password(encodedPassword)
+                .name(request.name())
+                .phoneNumber(request.phoneNumber())
+                .address(request.address())
+                .description(request.description())
+                .hasCar(request.hasCar())
+                .hasDementiaTraining(request.hasDementiaTraining())
+                .career(request.career() == null ? null : CaregiverCareer.fromString(request.career()))
+                .toiletingAssistance(request.getToiletingAssistanceEnum())
+                .feedingAssistance(request.getFeedingAssistanceEnum())
+                .mobilityAssistance(request.getMobilityAssistanceEnum())
+                .dailyLivingAssistance(request.getDailyLivingAssistanceEnum())
                 .build();
+    }
+
+    public void setLicenses(List<CaregiverLicense> licenses) {
+        this.licenses = licenses;
     }
 
     public void updateProfileImageUrl(String profileImageUrl) {

@@ -2,6 +2,7 @@ package com.ongi.backend.domain.caregiver.entity;
 
 import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.domain.caregiver.dto.request.WorkConditionRequestDto;
+import com.ongi.backend.domain.caregiver.entity.enums.CaregiverWorkConditionPayType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;

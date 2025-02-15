@@ -22,14 +22,15 @@ public class CaregiverController {
     private final CaregiverService caregiverService;
     private final CaregiverWorkService caregiverWorkService;
 
-    @PostMapping("/signup")
-    public void registerCaregiver(@RequestBody CaregiverRequestDto caregiverRequestDto) {
-        caregiverService.registerCaregiver(caregiverRequestDto);
-    }
-
     @PostMapping("/validate-id")
     public CommonResponse<Object> validateId(@Valid @RequestBody ValidateIdRequestDto requestDto) {
         caregiverService.validateId(requestDto);
+        return CommonResponse.success();
+    }
+
+    @PostMapping("/signup")
+    public CommonResponse<Object> registerCaregiver(@Valid @RequestBody CaregiverRequestDto caregiverRequestDto) {
+        caregiverService.registerCaregiver(caregiverRequestDto);
         return CommonResponse.success();
     }
 
