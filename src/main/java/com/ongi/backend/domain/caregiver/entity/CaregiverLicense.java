@@ -1,6 +1,7 @@
 package com.ongi.backend.domain.caregiver.entity;
 
 import com.ongi.backend.domain.caregiver.dto.request.LicenseRequestDto;
+import com.ongi.backend.domain.caregiver.entity.enums.LicenseType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,24 +16,24 @@ public class CaregiverLicense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "caregiver_id", nullable = false)
-    private Caregiver caregiver;
-
     @Column(nullable = false)
-    private String licenseName; // 자격증 이름
+    private LicenseType licenseName; // 자격증 이름
 
     @Column(nullable = false)
     private String licenseNumber; // 자격증 번호
 
     private String licenseGrade; // 자격증 등급
 
-    public static CaregiverLicense from(LicenseRequestDto licenseRequestDto, Caregiver caregiver) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "caregiver_id", nullable = false)
+    private Caregiver caregiver;
+
+    public static CaregiverLicense from(LicenseRequestDto request, Caregiver caregiver) {
         return CaregiverLicense.builder()
                 .caregiver(caregiver)
-                .licenseName(licenseRequestDto.getLicenseName())
-                .licenseNumber(licenseRequestDto.getLicenseNumber())
-                .licenseGrade(licenseRequestDto.getLicenseGrade())
+                .licenseName(LicenseType.fromString(request.licenseName()))
+                .licenseNumber(request.licenseNumber())
+                .licenseGrade(request.licenseGrade())
                 .build();
     }
 

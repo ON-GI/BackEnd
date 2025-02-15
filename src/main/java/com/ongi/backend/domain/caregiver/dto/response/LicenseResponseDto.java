@@ -21,7 +21,7 @@ public class LicenseResponseDto {
 
     public static LicenseResponseDto fromEntity(CaregiverLicense license) {
         return LicenseResponseDto.builder()
-                .licenseName(license.getLicenseName())
+                .licenseName(license.getLicenseName().toString())
                 .licenseNumber(license.getLicenseNumber())
                 .licenseGrade(license.getLicenseGrade())
                 .build();

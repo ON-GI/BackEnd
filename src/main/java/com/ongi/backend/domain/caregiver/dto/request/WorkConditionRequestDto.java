@@ -1,6 +1,6 @@
 package com.ongi.backend.domain.caregiver.dto.request;
 
-import com.ongi.backend.domain.caregiver.entity.CaregiverWorkConditionPayType;
+import com.ongi.backend.domain.caregiver.entity.enums.CaregiverWorkConditionPayType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
