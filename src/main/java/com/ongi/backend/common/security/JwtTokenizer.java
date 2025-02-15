@@ -1,6 +1,5 @@
 package com.ongi.backend.common.security;
 
-import com.ongi.backend.domain.auth.entity.enums.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,7 +16,7 @@ import java.util.Map;
 @Component
 public class JwtTokenizer {
 
-    public static String BEARER_PREFIX = "Bearer";
+    public static String BEARER_PREFIX = "Bearer ";
     public static long REFRESH_TOKEN_EXPIRATION;
 
     private final long accessTokenExpiration;

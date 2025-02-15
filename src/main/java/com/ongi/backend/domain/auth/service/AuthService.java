@@ -32,8 +32,8 @@ public class AuthService {
         validatePassword(request.password(), caregiver.getPassword());
 
         String subject = String.valueOf(caregiver.getId());
-        String accessToken = jwtTokenizer.createAccessToken(subject, Map.of("role", "CARE_GIVER"));
-        String refreshToken = jwtTokenizer.createRefreshToken(subject, Map.of("role", "CARE_GIVER"));
+        String accessToken = jwtTokenizer.createAccessToken(subject, Map.of("role", Authority.ROLE_CAREGIVER));
+        String refreshToken = jwtTokenizer.createRefreshToken(subject, Map.of("role", Authority.ROLE_CAREGIVER));
 
         saveRefreshToken(caregiver.getId(), Authority.ROLE_CAREGIVER, refreshToken);
 

@@ -2,6 +2,7 @@ package com.ongi.backend.common.security;
 
 import com.ongi.backend.domain.auth.entity.enums.Authority;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ import static com.ongi.backend.common.security.JwtTokenizer.BEARER_PREFIX;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     private final JwtTokenizer jwtTokenizer;
 
     @Override
@@ -35,18 +36,24 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         if(accessToken != null) {
-            jwtTokenizer.validateAccessToken(accessToken);
+            try {
+                jwtTokenizer.validateAccessToken(accessToken);
 
-            Claims claims = jwtTokenizer.getClaimsFromAccessToken(accessToken);
-            Long userId = Long.valueOf(claims.getSubject());
-            Authority authority = Authority.valueOf(claims.get("role", String.class));
+                Claims claims = jwtTokenizer.getClaimsFromAccessToken(accessToken);
+                Long userId = Long.valueOf(claims.getSubject());
+                Authority authority = Authority.valueOf(claims.get("role", String.class));
 
-            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(authority.name()));
+                List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(authority.name()));
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userId, null, authorities);
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userId, null, authorities);
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (ExpiredJwtException e) {
+                request.setAttribute("errorMessage", "토큰이 만료되었습니다.");
+            } catch (Exception e) {
+                request.setAttribute("errorMessage", "인증이 실패했습니다.");
+            }
         }
 
         filterChain.doFilter(request, response);
