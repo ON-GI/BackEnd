@@ -1,10 +1,8 @@
 package com.ongi.backend.domain.auth.entity;
 
-import com.ongi.backend.domain.auth.entity.enums.UserType;
+import com.ongi.backend.domain.auth.entity.enums.Authority;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,15 +19,15 @@ public class RefreshToken {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserType userType;
+    private Authority authority;
 
     @Column(nullable = false)
     private String refreshToken;
 
-    public static RefreshToken from(Long userId, UserType userType, String refreshToken) {
+    public static RefreshToken from(Long userId, Authority userType, String refreshToken) {
         return RefreshToken.builder()
                 .userId(userId)
-                .userType(userType)
+                .authority(userType)
                 .refreshToken(refreshToken)
                 .build();
     }
