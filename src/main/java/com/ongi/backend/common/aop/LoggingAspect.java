@@ -15,7 +15,7 @@ class LoggingAspect {
     private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
     // 예외 발생 시 로깅
-    @AfterThrowing(pointcut = "execution(* com.ongi.*.service.*.*(..))",
+    @AfterThrowing(pointcut = "execution(* com.ongi..service..*(..))",
             throwing = "ex")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable ex) {
         String methodName = joinPoint.getSignature().getName();
@@ -25,7 +25,7 @@ class LoggingAspect {
     }
 
     // 메서드 실행 이전 로깅
-    @Before("execution(* com.ongi.*.service.*.*(..))")
+    @Before("execution(* com.ongi..service..*(..))")
     public void logBefore(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getSignature().getDeclaringTypeName();
@@ -34,7 +34,7 @@ class LoggingAspect {
     }
 
     // 메서드 실행 이후 로깅
-    @After("execution(* com.ongi.*.service.*.*(..))")
+    @After("execution(* com.ongi..service..*(..))")
     public void logAfter(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getSignature().getDeclaringTypeName();
