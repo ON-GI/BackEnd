@@ -10,6 +10,7 @@ import com.ongi.backend.domain.caregiver.service.CaregiverWorkService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,22 +35,22 @@ public class CaregiverController {
         return CommonResponse.success();
     }
 
-    @GetMapping("/{caregiverId}/work-condition")
-    public CommonResponse<WorkConditionResponseDto> getCaregiverWorkCondition(@PathVariable("caregiverId") Long caregiverId) {
+    @GetMapping("/work-condition")
+    public CommonResponse<WorkConditionResponseDto> getCaregiverWorkCondition() {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return CommonResponse.success(caregiverWorkService.getWorkConditionByCaregiverId(caregiverId));
     }
 
-    @PostMapping("/{caregiverId}/work-condition")
-    public CommonResponse<String> updateCaregiverWorkCondition(@PathVariable("caregiverId") Long caregiverId, @RequestBody WorkConditionRequestDto workConditionRequestDto) {
+    @PostMapping("/work-condition")
+    public CommonResponse<String> updateCaregiverWorkCondition(@RequestBody WorkConditionRequestDto workConditionRequestDto) {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         caregiverWorkService.updateWorkCondition(workConditionRequestDto, caregiverId);
         return CommonResponse.success("근무 조건 업데이트 완료했습니다.");
     }
 
     @PostMapping("/{caregiverId}/profile")
-    public CommonResponse<String> registerProfileImage(
-            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
-            @PathVariable("caregiverId") Long caregiverId
-    ) {
+    public CommonResponse<String> registerProfileImage(@RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+                                                       @PathVariable("caregiverId") Long caregiverId) {
         caregiverService.updateCaregiverProfileImage(profileImage, caregiverId);
         return CommonResponse.success("프로필 이미지 등록 완료했습니다.");
     }
