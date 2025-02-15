@@ -59,6 +59,11 @@ public class CaregiverService {
         caregiver.updateProfileImageUrl(imageUrl);
     }
 
+    public Caregiver findByLoginId(String loginId) {
+        return caregiverRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.CAREGIVER_NOT_FOUND));
+    }
+
     private boolean existsDuplicateId(String loginId) {
         return caregiverRepository.existsByLoginId(loginId);
     }

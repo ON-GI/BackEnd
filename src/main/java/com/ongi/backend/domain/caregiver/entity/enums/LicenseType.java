@@ -19,6 +19,6 @@ public enum LicenseType {
         return Arrays.stream(LicenseType.values())
                 .filter(type -> type.name().equals(value))
                 .findFirst()
-                .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.INVALID_LICNESE_TYPE));
+                .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.INVALID_LICENSE_TYPE));
     }
 }
