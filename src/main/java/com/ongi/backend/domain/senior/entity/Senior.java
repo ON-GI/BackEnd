@@ -3,6 +3,7 @@ package com.ongi.backend.domain.senior.entity;
 import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.common.entity.Gender;
 import com.ongi.backend.domain.center.entity.Center;
+import com.ongi.backend.domain.senior.dto.request.SeniorRequestDto;
 import com.ongi.backend.domain.senior.entity.enums.Residence;
 import com.ongi.backend.domain.senior.entity.enums.ResidenceType;
 import jakarta.persistence.*;
@@ -58,4 +59,20 @@ public class Senior extends BaseEntity {
 
     @OneToOne(mappedBy = "senior", cascade = CascadeType.ALL, orphanRemoval = true)
     private SeniorDisease seniorDisease;
+
+    public static Senior from(SeniorRequestDto requestDto, Center center) {
+        return Senior.builder()
+                .name(requestDto.name())
+                .birthDate(requestDto.birthDate())
+                .age(requestDto.age())
+                .gender(requestDto.gender())
+                .residence(requestDto.residence().toEntity())
+                .residenceType(requestDto.residenceType())
+                .center(center)
+                .build();
+    }
+
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 }

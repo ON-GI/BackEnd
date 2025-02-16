@@ -1,6 +1,8 @@
 package com.ongi.backend.domain.senior.entity;
 
 import com.ongi.backend.common.entity.BaseEntity;
+import com.ongi.backend.domain.senior.dto.request.SeniorCareConditionRequestDto;
+import com.ongi.backend.domain.senior.entity.enums.SeniorCareDetail;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -32,4 +34,32 @@ public class SeniorCareCondition extends BaseEntity {
 
     @OneToMany(mappedBy = "careCondition", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeniorCareTime> seniorCareTimes;   // 캐어 필요 시간
+
+    public static SeniorCareCondition from(SeniorCareConditionRequestDto requestDto, Senior senior) {
+
+        SeniorCareCondition seniorCareCondition = SeniorCareCondition.builder()
+                .senior(senior)
+                .careTypes(new ArrayList<>())  // 초기화
+                .seniorCareTimes(new ArrayList<>()) // 초기화
+                .build();
+
+        // CareDetails를 SeniorCareDetail Enum으로 변환 후 SeniorCareTypeMapping 테이블에 저장
+        List<SeniorCareTypeMapping> careTypeMappings = requestDto.careDetails().stream()
+                .map(detail -> SeniorCareTypeMapping.builder()
+                        .seniorCareCondition(seniorCareCondition)
+                        .seniorCareDetail(SeniorCareDetail.valueOf(detail))  // String → Enum 변환
+                        .build())
+                .toList();
+
+        seniorCareCondition.getCareTypes().addAll(careTypeMappings);
+
+        // CareTimes를 SeniorCareTime 엔티티로 변환하여 저장
+        List<SeniorCareTime> careTimes = requestDto.careTimes().stream()
+                .map(careTimeRequestDto -> SeniorCareTime.from(careTimeRequestDto, seniorCareCondition))
+                .toList();
+
+        seniorCareCondition.getSeniorCareTimes().addAll(careTimes);
+
+        return seniorCareCondition;
+    }
 }

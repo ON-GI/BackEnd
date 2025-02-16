@@ -1,5 +1,6 @@
 package com.ongi.backend.domain.senior.entity;
 
+import com.ongi.backend.domain.senior.dto.request.SeniorCareConditionRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,4 +31,13 @@ public class SeniorCareTime {
 
     @Column(nullable = false)
     private LocalTime endTime;  // 캐어 종료 시간
+
+    public static SeniorCareTime from(SeniorCareConditionRequestDto.SeniorCareTimeRequestDto requestDto, SeniorCareCondition careCondition) {
+        return SeniorCareTime.builder()
+                .careCondition(careCondition)
+                .dayOfWeek(requestDto.dayOfWeek())
+                .startTime(requestDto.startTime())
+                .endTime(requestDto.endTime())
+                .build();
+    }
 }
