@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum UserType {
-    CareGiver("요양 보호사"),
-    Center("센터 관리자");
+public enum Authority {
+    ROLE_CAREGIVER("요양 보호사"),
+    ROLE_CENTER("센터 관리자");
 
     private final String description;
 }

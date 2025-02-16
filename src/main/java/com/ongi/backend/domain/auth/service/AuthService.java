@@ -5,7 +5,7 @@ import com.ongi.backend.common.security.JwtTokenizer;
 import com.ongi.backend.domain.auth.dto.LoginTokensDto;
 import com.ongi.backend.domain.auth.dto.request.CaregiverLoginRequest;
 import com.ongi.backend.domain.auth.entity.RefreshToken;
-import com.ongi.backend.domain.auth.entity.enums.UserType;
+import com.ongi.backend.domain.auth.entity.enums.Authority;
 import com.ongi.backend.domain.auth.exception.AuthErrorCase;
 import com.ongi.backend.domain.auth.repository.RefreshTokenRepository;
 import com.ongi.backend.domain.caregiver.entity.Caregiver;
@@ -32,10 +32,10 @@ public class AuthService {
         validatePassword(request.password(), caregiver.getPassword());
 
         String subject = String.valueOf(caregiver.getId());
-        String accessToken = jwtTokenizer.createAccessToken(subject, Map.of("role", "CARE_GIVER"));
-        String refreshToken = jwtTokenizer.createRefreshToken(subject, Map.of("role", "CARE_GIVER"));
+        String accessToken = jwtTokenizer.createAccessToken(subject, Map.of("role", Authority.ROLE_CAREGIVER));
+        String refreshToken = jwtTokenizer.createRefreshToken(subject, Map.of("role", Authority.ROLE_CAREGIVER));
 
-        saveRefreshToken(caregiver.getId(), UserType.CareGiver, refreshToken);
+        saveRefreshToken(caregiver.getId(), Authority.ROLE_CAREGIVER, refreshToken);
 
         return new LoginTokensDto(accessToken, refreshToken);
     }
@@ -46,9 +46,9 @@ public class AuthService {
         }
     }
 
-    private void saveRefreshToken(Long userId, UserType userType, String refreshToken) {
-        refreshTokenRepository.deleteByUserIdAndUserType(userId, userType);
-        refreshTokenRepository.save(RefreshToken.from(userId, userType, refreshToken));
+    private void saveRefreshToken(Long userId, Authority authority, String refreshToken) {
+        refreshTokenRepository.deleteByUserIdAndAuthority(userId, authority);
+        refreshTokenRepository.save(RefreshToken.from(userId, authority, refreshToken));
     }
 
 }
