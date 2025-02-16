@@ -75,8 +75,8 @@ public class CaregiverService {
     private Caregiver saveCaregiver(CaregiverRequestDto requestDto, String encodedPassword) {
         Caregiver caregiver = caregiverRepository.save(Caregiver.from(requestDto, encodedPassword));
 
-        CaregiverInformation information = saveCaregiverInformation(requestDto.informationRequestDto(), caregiver);
-        CaregiverOptional optional = saveCaregiverOptional(requestDto.optionalRequestDto(), caregiver);
+        CaregiverInformation information = saveCaregiverInformation(requestDto.information(), caregiver);
+        CaregiverOptional optional = saveCaregiverOptional(requestDto.optional(), caregiver);
 
         caregiver.updateCaregiverInformation(information);
         caregiver.updateCaregiverOptional(optional);
