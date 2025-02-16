@@ -2,12 +2,14 @@ package com.ongi.backend.domain.center.entity;
 
 import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.domain.center.dto.request.CenterInitializerRequestDto;
+import com.ongi.backend.domain.senior.entity.Senior;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,6 +39,9 @@ public class Center extends BaseEntity {
     private String phoneNumber;
 
     private String description;
+
+    @OneToMany(mappedBy = "center", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Senior> seniors;
 
     public static Center from(CenterInitializerRequestDto centerInitializerRequestDto) {
         return Center.builder()
