@@ -1,9 +1,10 @@
 package com.ongi.backend.domain.caregiver.controller;
 
 import com.ongi.backend.common.response.CommonResponse;
-import com.ongi.backend.domain.caregiver.dto.request.CaregiverRequestDto;
+import com.ongi.backend.domain.caregiver.dto.request.CaregiverSignupRequestDto;
 import com.ongi.backend.domain.caregiver.dto.request.ValidateIdRequestDto;
 import com.ongi.backend.domain.caregiver.dto.request.WorkConditionRequestDto;
+import com.ongi.backend.domain.caregiver.dto.response.CaregiverSignupResponse;
 import com.ongi.backend.domain.caregiver.dto.response.WorkConditionResponseDto;
 import com.ongi.backend.domain.caregiver.service.CaregiverService;
 import com.ongi.backend.domain.caregiver.service.CaregiverWorkService;
@@ -30,9 +31,9 @@ public class CaregiverController {
     }
 
     @PostMapping("/signup")
-    public CommonResponse<Object> registerCaregiver(@Valid @RequestBody CaregiverRequestDto caregiverRequestDto) {
-        caregiverService.registerCaregiver(caregiverRequestDto);
-        return CommonResponse.success();
+    public CommonResponse<CaregiverSignupResponse> registerCaregiver(@Valid @RequestBody CaregiverSignupRequestDto caregiverSignupRequestDto) {
+        CaregiverSignupResponse response = caregiverService.registerCaregiver(caregiverSignupRequestDto);
+        return CommonResponse.success(response);
     }
 
     @GetMapping("/work-condition")

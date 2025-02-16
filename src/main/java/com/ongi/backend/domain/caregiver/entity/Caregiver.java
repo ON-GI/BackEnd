@@ -1,7 +1,7 @@
 package com.ongi.backend.domain.caregiver.entity;
 
 import com.ongi.backend.common.entity.BaseEntity;
-import com.ongi.backend.domain.caregiver.dto.request.CaregiverRequestDto;
+import com.ongi.backend.domain.caregiver.dto.request.CaregiverSignupRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -50,7 +50,7 @@ public class Caregiver extends BaseEntity {
     @OneToOne(mappedBy = "caregiver", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private CaregiverWorkCondition workCondition;  // 근무 조건
 
-    public static Caregiver from(CaregiverRequestDto request, String encodedPassword) {
+    public static Caregiver from(CaregiverSignupRequestDto request, String encodedPassword) {
         return Caregiver.builder()
                 .loginId(request.loginId())
                 .password(encodedPassword)

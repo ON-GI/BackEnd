@@ -3,6 +3,7 @@ package com.ongi.backend.domain.caregiver.service;
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.service.FileUploadService;
 import com.ongi.backend.domain.caregiver.dto.request.*;
+import com.ongi.backend.domain.caregiver.dto.response.CaregiverSignupResponse;
 import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.entity.CaregiverInformation;
 import com.ongi.backend.domain.caregiver.entity.CaregiverLicense;
@@ -14,7 +15,6 @@ import com.ongi.backend.domain.caregiver.repository.CaregiverLicenseRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverOptionalRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class CaregiverService {
 
     private final CaregiverRepository caregiverRepository;
@@ -43,10 +41,10 @@ public class CaregiverService {
     }
 
     @Transactional
-    public Long registerCaregiver(CaregiverRequestDto requestDto) {
+    public CaregiverSignupResponse registerCaregiver(CaregiverSignupRequestDto requestDto) {
         String encodedPassword = passwordEncoder.encode(requestDto.password());
         Caregiver caregiver = saveCaregiver(requestDto, encodedPassword);
-        return caregiver.getId();
+        return new CaregiverSignupResponse(caregiver.getId());
     }
 
     @Transactional
@@ -72,7 +70,7 @@ public class CaregiverService {
         return caregiverRepository.existsByLoginId(loginId);
     }
 
-    private Caregiver saveCaregiver(CaregiverRequestDto requestDto, String encodedPassword) {
+    private Caregiver saveCaregiver(CaregiverSignupRequestDto requestDto, String encodedPassword) {
         Caregiver caregiver = caregiverRepository.save(Caregiver.from(requestDto, encodedPassword));
 
         CaregiverInformation information = saveCaregiverInformation(requestDto.information(), caregiver);

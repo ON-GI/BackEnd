@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CaregiverRequestDto (
+public record CaregiverSignupRequestDto (
 
         @NotBlank(message = "아이디를 입력하세요.")
         String loginId,
