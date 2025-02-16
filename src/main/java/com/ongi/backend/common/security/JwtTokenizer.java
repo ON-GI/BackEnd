@@ -1,5 +1,8 @@
 package com.ongi.backend.common.security;
 
+import com.ongi.backend.common.exception.ApplicationException;
+import com.ongi.backend.domain.auth.entity.enums.Authority;
+import com.ongi.backend.domain.auth.exception.AuthErrorCase;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -68,18 +71,41 @@ public class JwtTokenizer {
     }
 
     public void validateAccessToken(String token) {
-        validateToken(token, accessKey);
+        Jwts.parserBuilder().setSigningKey(accessKey).build().parseClaimsJws(token);
     }
 
-    private void validateToken(String token, Key key) {
-        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+    public void validateRefreshToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(refreshKey).build().parseClaimsJws(token);
+        } catch (Exception e) {
+            throw new ApplicationException(AuthErrorCase.INVALID_REFRESH_TOKEN);
+        }
     }
 
     public Claims getClaimsFromAccessToken(String token) {
+        return getClaimsFromToken(token, accessKey);
+    }
+
+    public Claims getClaimsFromRefreshToken(String token) {
+        return getClaimsFromToken(token, refreshKey);
+    }
+
+    private Claims getClaimsFromToken(String token, Key key) {
         return Jwts.parserBuilder()
-                .setSigningKey(accessKey)
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    public Long getUserIdFromRefreshToken(String token) {
+        Claims claims = getClaimsFromRefreshToken(token);
+        return Long.valueOf(claims.getSubject());
+    }
+
+    public Authority getAuthorityFromRefreshToken(String token) {
+        Claims claims = getClaimsFromRefreshToken(token);
+        return Authority.fromString(claims.get("role", String.class));
+    }
+
 }

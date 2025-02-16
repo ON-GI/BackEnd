@@ -33,13 +33,7 @@ public class AuthService {
         Caregiver caregiver = caregiverService.findByLoginId(request.loginId());
         validatePassword(request.password(), caregiver.getPassword());
 
-        String subject = String.valueOf(caregiver.getId());
-        String accessToken = jwtTokenizer.createAccessToken(subject, Map.of("role", Authority.ROLE_CAREGIVER));
-        String refreshToken = jwtTokenizer.createRefreshToken(subject, Map.of("role", Authority.ROLE_CAREGIVER));
-
-        saveRefreshToken(caregiver.getId(), Authority.ROLE_CAREGIVER, refreshToken);
-
-        return new LoginTokensDto(accessToken, refreshToken);
+        return generateTokens(caregiver.getId(), Authority.ROLE_CAREGIVER);
     }
 
     @Transactional
@@ -53,14 +47,48 @@ public class AuthService {
         }
     }
 
+    @Transactional
+    public LoginTokensDto refreshAccessToken(String refreshToken) {
+        jwtTokenizer.validateRefreshToken(refreshToken);
+
+        Long userId = jwtTokenizer.getUserIdFromRefreshToken(refreshToken);
+        Authority authority = jwtTokenizer.getAuthorityFromRefreshToken(refreshToken);
+
+        RefreshToken storedToken = findRefreshToken(userId, authority);
+        validateRefreshTokenMatch(storedToken, refreshToken);
+
+        return generateTokens(userId, authority);
+    }
+
     private void validatePassword(String rawPassword, String encodedPassword) {
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
             throw new ApplicationException(AuthErrorCase.WRONG_PASSWORD);
         }
     }
 
+    private LoginTokensDto generateTokens(Long userId, Authority authority) {
+        String accessToken = jwtTokenizer.createAccessToken(String.valueOf(userId), Map.of("role", authority));
+        String refreshToken = jwtTokenizer.createRefreshToken(String.valueOf(userId), Map.of("role", authority));
+
+        saveRefreshToken(userId, authority, refreshToken);
+        return new LoginTokensDto(accessToken, refreshToken);
+    }
+
     private void saveRefreshToken(Long userId, Authority authority, String refreshToken) {
         refreshTokenRepository.deleteByUserIdAndAuthority(userId, authority);
         refreshTokenRepository.save(RefreshToken.from(userId, authority, refreshToken));
     }
+
+    private void validateRefreshTokenMatch(RefreshToken storedToken, String refreshToken) {
+        if (!storedToken.getRefreshToken().equals(refreshToken)) {
+            refreshTokenRepository.deleteByUserIdAndAuthority(storedToken.getUserId(), storedToken.getAuthority());
+            throw new ApplicationException(AuthErrorCase.REFRESH_TOKEN_NOT_EQUAL);
+        }
+    }
+
+    private RefreshToken findRefreshToken(Long userId, Authority authority) {
+        return refreshTokenRepository.findByUserIdAndAuthority(userId, authority)
+                .orElseThrow(() -> new ApplicationException(AuthErrorCase.REFRESH_TOKEN_NOT_FOUND));
+    }
+
 }
