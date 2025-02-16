@@ -25,12 +25,12 @@ public class CaregiverLicense {
     private String licenseGrade; // 자격증 등급
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "caregiver_id", nullable = false)
-    private Caregiver caregiver;
+    @JoinColumn(name = "caregiver_information_id", nullable = false)
+    private CaregiverInformation caregiverInformation;
 
-    public static CaregiverLicense from(LicenseRequestDto request, Caregiver caregiver) {
+    public static CaregiverLicense from(LicenseRequestDto request, CaregiverInformation caregiverInformation) {
         return CaregiverLicense.builder()
-                .caregiver(caregiver)
+                .caregiverInformation(caregiverInformation)
                 .licenseName(LicenseType.fromString(request.licenseName()))
                 .licenseNumber(request.licenseNumber())
                 .licenseGrade(request.licenseGrade())
