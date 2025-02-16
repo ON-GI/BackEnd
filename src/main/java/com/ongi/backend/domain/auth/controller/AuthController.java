@@ -9,10 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.ongi.backend.common.security.JwtTokenizer.REFRESH_TOKEN_EXPIRATION;
 
@@ -33,6 +30,13 @@ public class AuthController {
         return CommonResponse.success(new CaregiverLoginResponse(tokens.accessToken()));
     }
 
+    @DeleteMapping("/logout")
+    public CommonResponse<Object> logout(HttpServletResponse response) {
+        authService.logout();
+        deleteRefreshTokenCookie(response);
+        return CommonResponse.success();
+    }
+
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         Cookie cookie = new Cookie("refresh_token", refreshToken);
         cookie.setHttpOnly(true);
@@ -40,6 +44,15 @@ public class AuthController {
         cookie.setPath("/");
         cookie.setMaxAge((int) (REFRESH_TOKEN_EXPIRATION / 1000));
         response.addCookie(cookie);
+    }
+
+    private void deleteRefreshTokenCookie(HttpServletResponse response) {
+        Cookie refreshTokenCookie = new Cookie("refresh_token", null);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(0); // 쿠키 만료
+        response.addCookie(refreshTokenCookie);
     }
 
 }

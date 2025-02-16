@@ -12,6 +12,8 @@ import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.service.CaregiverService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,17 @@ public class AuthService {
         return new LoginTokensDto(accessToken, refreshToken);
     }
 
+    @Transactional
+    public void logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Authority authority = Authority.valueOf(authentication.getAuthorities().iterator().next().getAuthority());
+
+            refreshTokenRepository.deleteByUserIdAndAuthority(userId, authority);
+        }
+    }
+
     private void validatePassword(String rawPassword, String encodedPassword) {
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
             throw new ApplicationException(AuthErrorCase.WRONG_PASSWORD);
@@ -50,5 +63,4 @@ public class AuthService {
         refreshTokenRepository.deleteByUserIdAndAuthority(userId, authority);
         refreshTokenRepository.save(RefreshToken.from(userId, authority, refreshToken));
     }
-
 }
