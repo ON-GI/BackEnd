@@ -28,7 +28,11 @@ public class Center extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private String centerCode;
+    private String centerId;
+
+    private String contact;
+
+    private String email;
 
     private String address;
 
@@ -36,9 +40,11 @@ public class Center extends BaseEntity {
 
     private CenterGrade centerGrade;
 
-    private String phoneNumber;
-
     private String description;
+
+    private Boolean hasVehicle;
+
+    private String centerCode;
 
     @OneToMany(mappedBy = "center", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Senior> seniors;
@@ -46,7 +52,7 @@ public class Center extends BaseEntity {
     public static Center from(CenterInitializerRequestDto centerInitializerRequestDto) {
         return Center.builder()
                 .name(centerInitializerRequestDto.getName())
-                .centerCode(centerInitializerRequestDto.getCenterCode())
+                .centerId(centerInitializerRequestDto.getCenterId())
                 .address(centerInitializerRequestDto.getAddress())
                 .establishmentDate(centerInitializerRequestDto.getEstablishmentDate())
                 .build();

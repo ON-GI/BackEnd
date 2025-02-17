@@ -69,7 +69,7 @@ public class CenterDataInitializerService {
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue; // 헤더 스킵
 
-                String centerCode = getCellValue(row.getCell(0)); // 장기요양기관코드
+                String centerId = getCellValue(row.getCell(0)); // 장기요양기관코드
                 String name = getCellValue(row.getCell(1)); // 장기요양기관이름
                 String establishmentDateStr = getCellValue(row.getCell(7)); // 지정일자
                 String address = getCellValue(row.getCell(9)); // 기관별 상세주소
@@ -78,7 +78,7 @@ public class CenterDataInitializerService {
                 LocalDate establishmentDate = LocalDate.parse(establishmentDateStr, DATE_FORMATTER);
                 CenterInitializerRequestDto centerRequestDto = CenterInitializerRequestDto.builder()
                         .name(name)
-                        .centerCode(centerCode)
+                        .centerId(centerId)
                         .address(address)
                         .establishmentDate(establishmentDate)
                         .build();
