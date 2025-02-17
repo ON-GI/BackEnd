@@ -6,7 +6,6 @@ import com.ongi.backend.common.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -41,8 +40,9 @@ class SecurityConfig {
                 .requestMatchers("/api/v1/caregiver/validate-id").permitAll()
                 .requestMatchers("/api/v1/caregiver/signup").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/api/v1/center/**").permitAll()
                 .requestMatchers("/api/v1/caregiver/**").hasRole("CAREGIVER")
-                .requestMatchers("/api/v1/center/**").hasRole("CENTER")
+                //.requestMatchers("/api/v1/center/**").hasRole("CENTER")
                 .anyRequest().authenticated()
         );
 

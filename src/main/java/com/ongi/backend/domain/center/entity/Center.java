@@ -2,6 +2,9 @@ package com.ongi.backend.domain.center.entity;
 
 import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.domain.center.dto.request.CenterInitializerRequestDto;
+import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
+import com.ongi.backend.domain.center.entity.enums.CenterGrade;
+import com.ongi.backend.domain.center.entity.enums.CenterStatus;
 import com.ongi.backend.domain.senior.entity.Senior;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,8 +30,11 @@ public class Center extends BaseEntity {
 
     private String name;
 
-    @Column(nullable = false)
-    private String centerCode;
+    private CenterStatus centerStatus;
+
+    private String contact;
+
+    private String email;
 
     private String address;
 
@@ -36,9 +42,15 @@ public class Center extends BaseEntity {
 
     private CenterGrade centerGrade;
 
-    private String phoneNumber;
-
     private String description;
+
+    private Boolean hasVehicle;
+
+    private String centerCode;
+
+    private String profileImageUrl;
+
+    private String centerDocumentUrl;
 
     @OneToMany(mappedBy = "center", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Senior> seniors;
@@ -46,9 +58,35 @@ public class Center extends BaseEntity {
     public static Center from(CenterInitializerRequestDto centerInitializerRequestDto) {
         return Center.builder()
                 .name(centerInitializerRequestDto.getName())
-                .centerCode(centerInitializerRequestDto.getCenterCode())
+                .centerStatus(CenterStatus.NOT_VERIFIED)
                 .address(centerInitializerRequestDto.getAddress())
                 .establishmentDate(centerInitializerRequestDto.getEstablishmentDate())
                 .build();
+    }
+
+    public void updateCenterInfo(
+            CenterRequestDto requestDto) {
+
+        this.contact = requestDto.contact();
+        this.email = requestDto.email();
+        this.centerGrade = requestDto.centerGrade();
+        this.description = requestDto.description();
+        this.hasVehicle = requestDto.hasVehicle();
+    }
+
+    public void updateCenterCode(String centerCode) {
+        this.centerCode = centerCode;
+    }
+
+    public void updateCenterStatus(CenterStatus centerStatus) {
+        this.centerStatus = centerStatus;
+    }
+
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public void updateCenterDocumentUrl(String centerDocumentUrl) {
+        this.centerDocumentUrl = centerDocumentUrl;
     }
 }

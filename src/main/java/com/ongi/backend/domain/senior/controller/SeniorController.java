@@ -28,14 +28,14 @@ public class SeniorController {
 
     @PostMapping()
     public CommonResponse<Object> registerSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto) {
-        Center center = centerService.findCenter(1L);
+        Center center = centerService.findCenterEntity(1L);
         seniorService.registerSenior(seniorRequestDto, center);
         return CommonResponse.success("어르신 정보를 성공적으로 등록했습니다.");
     }
 
     @PostMapping("/{seniorId}")
     public CommonResponse<Object> updateSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto, @PathVariable("seniorId") Long seniorId) {
-        Center center = centerService.findCenter(1L);
+        Center center = centerService.findCenterEntity(1L);
         seniorService.updateSenior(seniorId, seniorRequestDto, center);
         return CommonResponse.success("어르신 정보를 성공적으로 수정했습니다.");
     }

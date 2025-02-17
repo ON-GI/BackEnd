@@ -14,16 +14,13 @@ public class CenterInitializerRequestDto {
 
     private String name;
 
-    private String centerCode;
-
     private String address;
 
     private LocalDate establishmentDate;
 
     @Builder
-    public CenterInitializerRequestDto(String name, String centerCode, String address, LocalDate establishmentDate) {
+    public CenterInitializerRequestDto(String name, String address, LocalDate establishmentDate) {
         this.name = name;
-        this.centerCode = centerCode;
         this.address = address;
         this.establishmentDate = establishmentDate;
     }
