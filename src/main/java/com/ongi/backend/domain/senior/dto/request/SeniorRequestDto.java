@@ -1,7 +1,7 @@
 package com.ongi.backend.domain.senior.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ongi.backend.common.entity.Gender;
+import com.ongi.backend.common.enums.Gender;
 import com.ongi.backend.domain.senior.entity.enums.GradeType;
 import com.ongi.backend.domain.senior.entity.enums.Residence;
 import com.ongi.backend.domain.senior.entity.enums.ResidenceType;

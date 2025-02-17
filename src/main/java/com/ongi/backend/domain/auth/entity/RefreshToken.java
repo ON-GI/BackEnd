@@ -1,6 +1,6 @@
 package com.ongi.backend.domain.auth.entity;
 
-import com.ongi.backend.domain.auth.entity.enums.Authority;
+import com.ongi.backend.common.enums.Authority;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;

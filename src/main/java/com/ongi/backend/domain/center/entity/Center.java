@@ -5,6 +5,7 @@ import com.ongi.backend.domain.center.dto.request.CenterInitializerRequestDto;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
 import com.ongi.backend.domain.center.entity.enums.CenterGrade;
 import com.ongi.backend.domain.center.entity.enums.CenterStatus;
+import com.ongi.backend.domain.centerstaff.entity.CenterStaff;
 import com.ongi.backend.domain.senior.entity.Senior;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,6 +52,9 @@ public class Center extends BaseEntity {
     private String profileImageUrl;
 
     private String centerDocumentUrl;
+
+    @OneToMany(mappedBy = "center", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CenterStaff> centerStaffs;
 
     @OneToMany(mappedBy = "center", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Senior> seniors;

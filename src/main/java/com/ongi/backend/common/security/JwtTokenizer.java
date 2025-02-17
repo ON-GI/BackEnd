@@ -1,7 +1,7 @@
 package com.ongi.backend.common.security;
 
 import com.ongi.backend.common.exception.ApplicationException;
-import com.ongi.backend.domain.auth.entity.enums.Authority;
+import com.ongi.backend.common.enums.Authority;
 import com.ongi.backend.domain.auth.exception.AuthErrorCase;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

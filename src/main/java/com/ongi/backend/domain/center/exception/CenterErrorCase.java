@@ -8,10 +8,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum CenterErrorCase implements ErrorCase {
 
-    CENTER_NOT_FOUND(1000, 400, "센터를 찾을 수 없습니다."),
-
-    CENTER_EMAIL_NOT_EXIST(1001, 400, "센터 이메일이 등록되어 있지 않습니다."),
-    INVALID_SEARCH_CONDITION(1002, 400, "올바르지 않은 검색 조건입니다.");
+    CENTER_NOT_FOUND(404,1000,  "센터를 찾을 수 없습니다."),
+    CENTER_EMAIL_NOT_EXIST(400,1001,  "센터 이메일이 등록되어 있지 않습니다."),
+    INVALID_SEARCH_CONDITION(400,1002,  "올바르지 않은 검색 조건입니다.");
 
     private final Integer httpStatusCode;
     private final Integer errorCode;

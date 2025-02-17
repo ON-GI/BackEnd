@@ -36,14 +36,16 @@ class SecurityConfig {
         );
 
         http.authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/api/v1/auth/caregiver/login").permitAll()
+                .requestMatchers("/api/v1/auth/login").permitAll()
                 .requestMatchers("/api/v1/caregiver/validate-id").permitAll()
                 .requestMatchers("/api/v1/caregiver/signup").permitAll()
+                .requestMatchers("/api/v1/center-staff/signup").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/api/v1/center/").permitAll()
                 .requestMatchers("/api/v1/center/search").permitAll()
                 .requestMatchers("/api/v1/caregiver/**").hasRole("CAREGIVER")
-                .requestMatchers("/api/v1/center/**").hasRole("CENTER")
+                .requestMatchers("/api/v1/center/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
+                .requestMatchers("/api/v1/center-staff/**").permitAll()
                 .anyRequest().authenticated()
         );
 

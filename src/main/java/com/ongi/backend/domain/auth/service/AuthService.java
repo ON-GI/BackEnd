@@ -5,7 +5,7 @@ import com.ongi.backend.common.security.JwtTokenizer;
 import com.ongi.backend.domain.auth.dto.LoginTokensDto;
 import com.ongi.backend.domain.auth.dto.request.CaregiverLoginRequest;
 import com.ongi.backend.domain.auth.entity.RefreshToken;
-import com.ongi.backend.domain.auth.entity.enums.Authority;
+import com.ongi.backend.common.enums.Authority;
 import com.ongi.backend.domain.auth.exception.AuthErrorCase;
 import com.ongi.backend.domain.auth.repository.RefreshTokenRepository;
 import com.ongi.backend.domain.caregiver.entity.Caregiver;
