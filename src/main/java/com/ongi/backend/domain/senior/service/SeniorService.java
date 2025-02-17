@@ -2,7 +2,9 @@ package com.ongi.backend.domain.senior.service;
 
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.service.FileUploadService;
+import com.ongi.backend.domain.auth.exception.AuthErrorCase;
 import com.ongi.backend.domain.center.entity.Center;
+import com.ongi.backend.domain.center.service.CenterService;
 import com.ongi.backend.domain.senior.dto.request.SeniorCareConditionRequestDto;
 import com.ongi.backend.domain.senior.dto.request.SeniorDiseaseRequestDto;
 import com.ongi.backend.domain.senior.dto.request.SeniorRequestDto;
@@ -29,11 +31,17 @@ public class SeniorService {
 
     private final SeniorDiseaseRepository seniorDiseaseRepository;
 
+    private final CenterService centerService;
+
     private final FileUploadService fileUploadService;
 
     @Transactional
-    public void registerSenior(SeniorRequestDto request, Center center) {
+    public void registerSenior(SeniorRequestDto request, Long centerId) {
+        if (centerId == null) {
+            throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
+        }
 
+        Center center = centerService.findCenterEntity(centerId);
         // 어르신 엔티티 생성 후 저장
         Senior senior = Senior.from(request, center);
         seniorRepository.save(senior);
@@ -54,7 +62,13 @@ public class SeniorService {
     }
 
     @Transactional
-    public List<SeniorResponseDto> findSeniorsByCenter(Center center) {
+    public List<SeniorResponseDto> findSeniorsByCenter(Long centerId) {
+        if (centerId == null) {
+            throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
+        }
+
+        Center center = centerService.findCenterEntity(centerId);
+
         List<Senior> seniors = seniorRepository.findSeniorsByCenter(center);
 
         if (seniors.isEmpty()) {
@@ -67,7 +81,12 @@ public class SeniorService {
     }
 
     @Transactional
-    public void updateSenior(Long seniorId, SeniorRequestDto request, Center center) {
+    public void updateSenior(Long seniorId, SeniorRequestDto request, Long centerId) {
+        if (centerId == null) {
+            throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
+        }
+        Center center = centerService.findCenterEntity(centerId);
+
         Senior senior = seniorRepository.findById(seniorId)
                 .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
 

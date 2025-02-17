@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -22,35 +24,37 @@ public class SeniorController {
 
     private final SeniorService seniorService;
 
-    private final CenterService centerService;
-
     @GetMapping("/{seniorId}")
     public CommonResponse<Object> findSenior(@PathVariable("seniorId") Long seniorId) {
         return CommonResponse.success(seniorService.findSenior(seniorId));
     }
 
     @GetMapping("")
-    public CommonResponse<Object> findSenior() {
+    public CommonResponse<Object> findSeniors() {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-        log.info("centerId: " + centerId);
-        if (centerId == null) {
-            throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
-        }
-        return CommonResponse.success("ok");
-        //return CommonResponse.success(seniorService.findSenior(seniorId));
+
+        return CommonResponse.success(seniorService.findSeniorsByCenter(centerId));
     }
 
     @PostMapping()
     public CommonResponse<Object> registerSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto) {
-        Center center = centerService.findCenterEntity(1L);
-        seniorService.registerSenior(seniorRequestDto, center);
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        if (centerId == null) {
+            throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
+        }
+
+        seniorService.registerSenior(seniorRequestDto, centerId);
         return CommonResponse.success("어르신 정보를 성공적으로 등록했습니다.");
     }
 
     @PostMapping("/{seniorId}")
     public CommonResponse<Object> updateSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto, @PathVariable("seniorId") Long seniorId) {
-        Center center = centerService.findCenterEntity(1L);
-        seniorService.updateSenior(seniorId, seniorRequestDto, center);
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        if (centerId == null) {
+            throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
+        }
+
+        seniorService.updateSenior(seniorId, seniorRequestDto, centerId);
         return CommonResponse.success("어르신 정보를 성공적으로 수정했습니다.");
     }
 
