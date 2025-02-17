@@ -19,8 +19,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             errorMessage = "인증이 실패했습니다.";
 
         response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("{\"message\":\"" + errorMessage + "\"}");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 UNAUTHORIZED 상태 코드
+        response.getWriter().write("{\"errorCode\":\"401\",\n\"message\":\"" + errorMessage + "\"}");
     }
 
 }

@@ -49,9 +49,9 @@ public class CaregiverController {
         return CommonResponse.success("근무 조건 업데이트 완료했습니다.");
     }
 
-    @PostMapping("/{caregiverId}/profile")
-    public CommonResponse<String> registerProfileImage(@RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
-                                                       @PathVariable("caregiverId") Long caregiverId) {
+    @PostMapping("/profile")
+    public CommonResponse<String> registerProfileImage(@RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         caregiverService.updateCaregiverProfileImage(profileImage, caregiverId);
         return CommonResponse.success("프로필 이미지 등록 완료했습니다.");
     }
