@@ -1,4 +1,4 @@
-package com.ongi.backend.domain.center.service;
+package com.ongi.backend.common.initializer;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3Object;
