@@ -1,6 +1,7 @@
 package com.ongi.backend.domain.senior.service;
 
 import com.ongi.backend.common.exception.ApplicationException;
+import com.ongi.backend.common.service.FileUploadService;
 import com.ongi.backend.domain.center.entity.Center;
 import com.ongi.backend.domain.senior.dto.request.SeniorCareConditionRequestDto;
 import com.ongi.backend.domain.senior.dto.request.SeniorDiseaseRequestDto;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ public class SeniorService {
 
     private final SeniorDiseaseRepository seniorDiseaseRepository;
 
+    private final FileUploadService fileUploadService;
+
     @Transactional
     public void registerSenior(SeniorRequestDto request, Center center) {
 
@@ -38,16 +42,6 @@ public class SeniorService {
         updateCareCondition(request.careCondition(), senior);
 
         // 질병 정보 저장 (SeniorDiseaseService 호출)
-        updateDisease(request.diseaseCondition(), senior);
-    }
-
-    @Transactional
-    public void updateSenior(Long seniorId, SeniorRequestDto request, Center center) {
-        Senior senior = seniorRepository.findById(seniorId)
-                .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
-
-        senior.updateBasicInfo(request);
-        updateCareCondition(request.careCondition(), senior);
         updateDisease(request.diseaseCondition(), senior);
     }
 
@@ -73,11 +67,27 @@ public class SeniorService {
     }
 
     @Transactional
-    public void deleteSenior(Long seniorId) {
+    public void updateSenior(Long seniorId, SeniorRequestDto request, Center center) {
         Senior senior = seniorRepository.findById(seniorId)
                 .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
 
-        seniorRepository.delete(senior); // Soft Delete 적용으로 deleted_at이 자동 업데이트됨.
+        senior.updateBasicInfo(request);
+        updateCareCondition(request.careCondition(), senior);
+        updateDisease(request.diseaseCondition(), senior);
+    }
+
+    @Transactional
+    public void updateSeniorProfileImage(Long seniorId, MultipartFile profileImage) {
+        Senior senior = seniorRepository.findById(seniorId)
+                .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
+
+        String oldProfileImageUrl = senior.getProfileImageUrl();
+        if (oldProfileImageUrl != null) {
+            fileUploadService.deleteImage(oldProfileImageUrl);
+        }
+
+        String imageUrl = fileUploadService.uploadFileToS3(profileImage);
+        senior.updateProfileImageUrl(imageUrl);
     }
 
     private void updateCareCondition(SeniorCareConditionRequestDto request, Senior senior) {
@@ -96,5 +106,13 @@ public class SeniorService {
         seniorDisease.updateDisease(request);
 
         seniorDiseaseRepository.save(seniorDisease);
+    }
+
+    @Transactional
+    public void deleteSenior(Long seniorId) {
+        Senior senior = seniorRepository.findById(seniorId)
+                .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
+
+        seniorRepository.delete(senior); // Soft Delete 적용으로 deleted_at이 자동 업데이트됨.
     }
 }
