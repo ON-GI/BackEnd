@@ -37,6 +37,7 @@ class SecurityConfig {
 
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/api/v1/auth/login").permitAll()
+                .requestMatchers("/api/v1/auth/refresh").permitAll()
                 .requestMatchers("/api/v1/caregiver/validate-id").permitAll()
                 .requestMatchers("/api/v1/caregiver/signup").permitAll()
                 .requestMatchers("/api/v1/center-staff/signup").permitAll()
