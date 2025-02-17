@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,11 @@ public class SeniorCareCondition extends BaseEntity{
     @JoinColumn(name = "senior_id", nullable = false)
     private Senior senior;
 
+    private LocalDate careStartDate;
+
+    private LocalDate careEndDate;
+
+
     // 어르신이 필요한 서비스 항목들 (N:M 관계)
     @OneToMany(mappedBy = "seniorCareCondition", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeniorCareTypeMapping> careTypes = new ArrayList<>();
@@ -35,10 +41,13 @@ public class SeniorCareCondition extends BaseEntity{
     @OneToMany(mappedBy = "careCondition", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeniorCareTime> seniorCareTimes;   // 캐어 필요 시간
 
+
     public static SeniorCareCondition from(SeniorCareConditionRequestDto requestDto, Senior senior) {
 
         SeniorCareCondition seniorCareCondition = SeniorCareCondition.builder()
                 .senior(senior)
+                .careStartDate(requestDto.careStartDate())
+                .careEndDate(requestDto.careEndDate())
                 .careTypes(new ArrayList<>())  // 초기화
                 .seniorCareTimes(new ArrayList<>()) // 초기화
                 .build();
@@ -64,6 +73,10 @@ public class SeniorCareCondition extends BaseEntity{
     }
 
     public void updateCareCondition(SeniorCareConditionRequestDto request) {
+
+        this.careStartDate = request.careStartDate();
+        this.careEndDate = request.careEndDate();
+
         // 기존 careTypes와 seniorCareTimes 리스트를 초기화
         this.careTypes.clear();
         this.seniorCareTimes.clear();

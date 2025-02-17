@@ -23,15 +23,28 @@ VALUES
     (20, '오세준', '1938-10-05', 87, 'MALE', 2, '서울특별시', '서초구', '서초동', 'WITH_SPOUSE_AWAY', NULL, 1, NOW(), NOW());
 
 -- ✅ senior_care_condition 테이블 더미 데이터
-INSERT INTO senior_care_condition (id, senior_id, created_at, updated_at)
+INSERT INTO senior_care_condition (id, senior_id, care_start_date, care_end_date, created_at, updated_at)
 VALUES
-    (1, 1, NOW(), NOW()), (2, 2, NOW(), NOW()), (3, 3, NOW(), NOW()),
-    (4, 4, NOW(), NOW()), (5, 5, NOW(), NOW()), (6, 6, NOW(), NOW()),
-    (7, 7, NOW(), NOW()), (8, 8, NOW(), NOW()), (9, 9, NOW(), NOW()),
-    (10, 10, NOW(), NOW()), (11, 11, NOW(), NOW()), (12, 12, NOW(), NOW()), (13, 13, NOW(), NOW()),
-    (14, 14, NOW(), NOW()), (15, 15, NOW(), NOW()), (16, 16, NOW(), NOW()),
-    (17, 17, NOW(), NOW()), (18, 18, NOW(), NOW()), (19, 19, NOW(), NOW()),
-    (20, 20, NOW(), NOW());
+    (1, 1, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (2, 2, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (3, 3, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 180) DAY), NOW(), NOW()),
+    (4, 4, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (5, 5, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NOW(), NOW()),
+    (6, 6, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (7, 7, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (8, 8, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 60) DAY), NOW(), NOW()),
+    (9, 9, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (10, 10, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 120) DAY), NOW(), NOW()),
+    (11, 11, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (12, 12, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 150) DAY), NOW(), NOW()),
+    (13, 13, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (14, 14, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 60) DAY), NOW(), NOW()),
+    (15, 15, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (16, 16, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NOW(), NOW()),
+    (17, 17, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (18, 18, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 120) DAY), NOW(), NOW()),
+    (19, 19, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), NULL, NOW(), NOW()),
+    (20, 20, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 90) DAY), DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 180) DAY), NOW(), NOW());
 
 -- ✅ senior_care_type_mapping 테이블 더미 데이터
 INSERT INTO senior_care_type_mapping (id, senior_care_condition_id, senior_care_detail, created_at, updated_at)
