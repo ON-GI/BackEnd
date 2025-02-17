@@ -40,6 +40,7 @@ class SecurityConfig {
                 .requestMatchers("/api/v1/caregiver/validate-id").permitAll()
                 .requestMatchers("/api/v1/caregiver/signup").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/api/v1/senior/**").permitAll()
                 .requestMatchers("/api/v1/center/").permitAll()
                 .requestMatchers("/api/v1/center/search").permitAll()
                 .requestMatchers("/api/v1/caregiver/**").hasRole("CAREGIVER")
