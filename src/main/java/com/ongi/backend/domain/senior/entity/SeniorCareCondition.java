@@ -16,9 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE senior_care_condition SET deleted_at = now() WHERE id = ?")  // soft delete
-@SQLRestriction("deleted_at IS NULL")
-public class SeniorCareCondition extends BaseEntity {
+public class SeniorCareCondition {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

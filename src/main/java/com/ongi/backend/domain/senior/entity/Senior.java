@@ -4,6 +4,7 @@ import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.common.entity.Gender;
 import com.ongi.backend.domain.center.entity.Center;
 import com.ongi.backend.domain.senior.dto.request.SeniorRequestDto;
+import com.ongi.backend.domain.senior.entity.enums.GradeType;
 import com.ongi.backend.domain.senior.entity.enums.Residence;
 import com.ongi.backend.domain.senior.entity.enums.ResidenceType;
 import jakarta.persistence.*;
@@ -41,6 +42,9 @@ public class Senior extends BaseEntity {
     private Gender gender;
 
     @Column
+    private GradeType gradeType;
+
+    @Column
     @Embedded
     private Residence residence;
 
@@ -66,6 +70,7 @@ public class Senior extends BaseEntity {
                 .birthDate(requestDto.birthDate())
                 .age(requestDto.age())
                 .gender(requestDto.gender())
+                .gradeType(requestDto.gradeType())
                 .residence(requestDto.residence().toEntity())
                 .residenceType(requestDto.residenceType())
                 .center(center)

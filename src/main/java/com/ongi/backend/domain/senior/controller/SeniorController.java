@@ -8,10 +8,7 @@ import com.ongi.backend.domain.senior.service.SeniorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -22,6 +19,11 @@ public class SeniorController {
     private final SeniorService seniorService;
 
     private final CenterService centerService;
+
+    @GetMapping("/{seniorId}")
+    public CommonResponse<Object> findSenior(@PathVariable("seniorId") Long seniorId) {
+        return CommonResponse.success(seniorService.findSenior(seniorId));
+    }
 
     @PostMapping("/register")
     public CommonResponse<Object> registerSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto) {

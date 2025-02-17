@@ -14,8 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE senior_disease SET deleted_at = now() WHERE id = ?")  // soft delete
-@SQLRestriction("deleted_at IS NULL")
 public class SeniorDisease {
 
     @Id

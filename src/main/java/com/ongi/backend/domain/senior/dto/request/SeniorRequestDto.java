@@ -2,6 +2,7 @@ package com.ongi.backend.domain.senior.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ongi.backend.common.entity.Gender;
+import com.ongi.backend.domain.senior.entity.enums.GradeType;
 import com.ongi.backend.domain.senior.entity.enums.Residence;
 import com.ongi.backend.domain.senior.entity.enums.ResidenceType;
 import jakarta.validation.Valid;
@@ -24,6 +25,9 @@ public record SeniorRequestDto (
 
         @NotNull(message = "성별을 입력하세요.")
         Gender gender,
+
+        @NotNull(message = "요양등급을 입력하세요.")
+        GradeType gradeType,
 
         @Valid
         @NotNull(message = "거주지를 입력하세요.")
