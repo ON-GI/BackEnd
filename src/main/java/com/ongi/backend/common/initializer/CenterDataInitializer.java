@@ -1,4 +1,4 @@
-package com.ongi.backend.domain.center.service;
+package com.ongi.backend.common.initializer;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3Object;
@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CenterDataInitializerService {
+public class CenterDataInitializer {
 
     private final AmazonS3 amazonS3;
     private final CenterRepository centerRepository;

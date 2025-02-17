@@ -42,6 +42,7 @@ public class Senior extends BaseEntity {
     private Gender gender;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private GradeType gradeType;
 
     @Column
@@ -49,6 +50,7 @@ public class Senior extends BaseEntity {
     private Residence residence;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private ResidenceType residenceType;
 
     @Column
