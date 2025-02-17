@@ -1,6 +1,8 @@
 package com.ongi.backend.domain.senior.controller;
 
+import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.response.CommonResponse;
+import com.ongi.backend.domain.auth.exception.AuthErrorCase;
 import com.ongi.backend.domain.center.entity.Center;
 import com.ongi.backend.domain.center.service.CenterService;
 import com.ongi.backend.domain.senior.dto.request.SeniorRequestDto;
@@ -8,6 +10,7 @@ import com.ongi.backend.domain.senior.service.SeniorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +27,17 @@ public class SeniorController {
     @GetMapping("/{seniorId}")
     public CommonResponse<Object> findSenior(@PathVariable("seniorId") Long seniorId) {
         return CommonResponse.success(seniorService.findSenior(seniorId));
+    }
+
+    @GetMapping("")
+    public CommonResponse<Object> findSenior() {
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        if (centerId == null) {
+            throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
+        }
+        log.info("centerId: " + centerId);
+        return CommonResponse.success("ok");
+        //return CommonResponse.success(seniorService.findSenior(seniorId));
     }
 
     @PostMapping()

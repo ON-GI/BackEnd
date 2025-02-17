@@ -22,7 +22,7 @@ public class RefreshToken {
     private Long userId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private Authority authority;
 
     @Column(nullable = false)
