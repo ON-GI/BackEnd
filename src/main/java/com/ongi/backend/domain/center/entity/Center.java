@@ -2,6 +2,7 @@ package com.ongi.backend.domain.center.entity;
 
 import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.domain.center.dto.request.CenterInitializerRequestDto;
+import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
 import com.ongi.backend.domain.senior.entity.Senior;
 import jakarta.persistence.*;
 import lombok.*;
@@ -46,6 +47,10 @@ public class Center extends BaseEntity {
 
     private String centerCode;
 
+    private String profileImageUrl;
+
+    private String centerDocumentUrl;
+
     @OneToMany(mappedBy = "center", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Senior> seniors;
 
@@ -56,5 +61,19 @@ public class Center extends BaseEntity {
                 .address(centerInitializerRequestDto.getAddress())
                 .establishmentDate(centerInitializerRequestDto.getEstablishmentDate())
                 .build();
+    }
+
+    public void updateCenterInfo(
+            CenterRequestDto requestDto) {
+
+        this.contact = requestDto.contact();
+        this.email = requestDto.email();
+        this.centerGrade = requestDto.centerGrade();
+        this.description = requestDto.description();
+        this.hasVehicle = requestDto.hasVehicle();
+    }
+
+    public void updateCenterCode(String centerCode) {
+        this.centerCode = centerCode;
     }
 }
