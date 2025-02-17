@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CenterDataInitializerService {
+public class CenterDataInitializer {
 
     private final AmazonS3 amazonS3;
     private final CenterRepository centerRepository;

@@ -1,0 +1,153 @@
+-- ✅ senior 테이블에 더미 데이터 삽입
+INSERT INTO senior (id, name, birth_date, age, gender, grade_type, city, district, town, residence_type, profile_image_url, center_id, created_at, updated_at)
+VALUES
+    (1, '한정자', '1944-05-20', 81, 'FEMALE', 3, '서울특별시', '강남구', '역삼동', 'ALONE', NULL, 26312, NOW(), NOW()),
+    (2, '박명호', '1940-08-15', 85, 'MALE', 2, '서울특별시', '서초구', '반포동', 'WITH_SPOUSE_AWAY', NULL, 26312, NOW(), NOW()),
+    (3, '김순자', '1947-03-10', 78, 'FEMALE', 4, '서울특별시', '송파구', '잠실동', 'WITH_FAMILY_HOME', NULL, 26312, NOW(), NOW()),
+    (4, '이대철', '1942-11-25', 83, 'MALE', 1, '서울특별시', '강서구', '등촌동', 'ALONE', NULL, 26312, NOW(), NOW()),
+    (5, '정영희', '1950-07-01', 75, 'FEMALE', 3, '서울특별시', '마포구', '홍대동', 'WITH_SPOUSE_AWAY', NULL, 26312, NOW(), NOW()),
+    (6, '최병철', '1938-12-05', 87, 'MALE', 2, '서울특별시', '양천구', '목동', 'WITH_FAMILY_AWAY', NULL, 26312, NOW(), NOW()),
+    (7, '박정숙', '1945-09-15', 80, 'FEMALE', 3, '서울특별시', '구로구', '개봉동', 'ALONE', NULL, 26312, NOW(), NOW()),
+    (8, '이만수', '1941-06-20', 84, 'MALE', 2, '부산광역시', '해운대구', '중동', 'WITH_SPOUSE_HOME', NULL, 26312, NOW(), NOW()),
+    (9, '김미경', '1948-02-28', 77, 'FEMALE', 4, '부산광역시', '사상구', '감전동', 'WITH_FAMILY_HOME', NULL, 26312, NOW(), NOW()),
+    (10, '강동원', '1937-11-11', 88, 'MALE', 1, '부산광역시', '연제구', '연산동', 'WITH_FAMILY_AWAY', NULL, 26312, NOW(), NOW()),
+    (11, '윤혜숙', '1943-08-08', 82, 'FEMALE', 3, '대구광역시', '수성구', '만촌동', 'ALONE', NULL, 26312, NOW(), NOW()),
+    (12, '임철호', '1939-04-15', 86, 'MALE', 2, '대구광역시', '북구', '산격동', 'WITH_SPOUSE_HOME', NULL, 26312, NOW(), NOW()),
+    (13, '송영자', '1946-01-25', 79, 'FEMALE', 4, '대전광역시', '중구', '은행동', 'WITH_SPOUSE_AWAY', NULL, 26312, NOW(), NOW()),
+    (14, '오정수', '1940-07-30', 85, 'MALE', 2, '광주광역시', '서구', '화정동', 'WITH_FAMILY_AWAY', NULL, 26312, NOW(), NOW()),
+    (15, '황순희', '1947-12-20', 78, 'FEMALE', 3, '울산광역시', '남구', '삼산동', 'ALONE', NULL, 26312, NOW(), NOW()),
+    (16, '류종민', '1936-09-05', 89, 'MALE', 1, '세종특별자치시', '조치원읍', '서창리', 'WITH_SPOUSE_HOME', NULL, 26312, NOW(), NOW()),
+    (17, '김옥자', '1944-03-18', 81, 'FEMALE', 3, '경기도', '수원시', '영통구', 'WITH_SPOUSE_AWAY', NULL, 26312, NOW(), NOW()),
+    (18, '장병호', '1938-10-10', 87, 'MALE', 2, '경기도', '고양시', '덕양구', 'WITH_FAMILY_HOME', NULL, 26312, NOW(), NOW()),
+    (19, '신영숙', '1949-05-22', 76, 'FEMALE', 4, '경기도', '성남시', '분당구', 'WITH_FAMILY_AWAY', NULL, 26312, NOW(), NOW()),
+    (20, '권영민', '1941-02-14', 84, 'MALE', 2, '경기도', '안양시', '만안구', 'WITH_SPOUSE_AWAY', NULL, 26312, NOW(), NOW()),
+    (21, '김철수', '1952-11-21', 73, 'MALE', 3, '충청남도', '천안시', '동남구', 'WITH_FAMILY_AWAY', NULL, 26312, NOW(), NOW()),
+    (22, '이영희', '1951-06-09', 74, 'FEMALE', 4, '충청남도', '공주시', '웅진동', 'WITH_SPOUSE_HOME', NULL, 26312, NOW(), NOW()),
+    (23, '박성민', '1950-03-17', 75, 'MALE', 2, '전라남도', '여수시', '돌산읍', 'WITH_SPOUSE_AWAY', NULL, 26312, NOW(), NOW()),
+    (24, '정민호', '1949-10-30', 76, 'MALE', 2, '전라북도', '전주시', '완산구', 'ALONE', NULL, 26312, NOW(), NOW()),
+    (25, '최지우', '1948-12-05', 77, 'FEMALE', 3, '강원도', '춘천시', '효자동', 'WITH_FAMILY_HOME', NULL, 26312, NOW(), NOW()),
+    (26, '한지민', '1947-07-25', 78, 'FEMALE', 4, '제주특별자치도', '제주시', '연동', 'WITH_SPOUSE_AWAY', NULL, 26312, NOW(), NOW()),
+    (27, '김도윤', '1946-02-19', 79, 'MALE', 1, '경상남도', '창원시', '의창구', 'WITH_SPOUSE_HOME', NULL, 26312, NOW(), NOW()),
+    (28, '배수지', '1945-09-14', 80, 'FEMALE', 2, '경상북도', '포항시', '남구', 'WITH_FAMILY_AWAY', NULL, 26312, NOW(), NOW()),
+    (29, '유재석', '1944-04-29', 81, 'MALE', 3, '충청북도', '청주시', '흥덕구', 'ALONE', NULL, 26312, NOW(), NOW()),
+    (30, '강호동', '1943-12-10', 82, 'MALE', 2, '강원도', '강릉시', '옥계면', 'WITH_SPOUSE_AWAY', NULL, 26312, NOW(), NOW());
+
+-- ✅ senior_care_condition 테이블 더미 데이터
+INSERT INTO senior_care_condition (id, senior_id, created_at, updated_at)
+VALUES
+    (1, 1, NOW(), NOW()), (2, 2, NOW(), NOW()), (3, 3, NOW(), NOW()),
+    (4, 4, NOW(), NOW()), (5, 5, NOW(), NOW()), (6, 6, NOW(), NOW()),
+    (7, 7, NOW(), NOW()), (8, 8, NOW(), NOW()), (9, 9, NOW(), NOW()),
+    (10, 10, NOW(), NOW()), (11, 11, NOW(), NOW()), (12, 12, NOW(), NOW()),
+    (13, 13, NOW(), NOW()), (14, 14, NOW(), NOW()), (15, 15, NOW(), NOW()),
+    (16, 16, NOW(), NOW()), (17, 17, NOW(), NOW()), (18, 18, NOW(), NOW()),
+    (19, 19, NOW(), NOW()), (20, 20, NOW(), NOW()), (21, 21, NOW(), NOW()),
+    (22, 22, NOW(), NOW()), (23, 23, NOW(), NOW()), (24, 24, NOW(), NOW()),
+    (25, 25, NOW(), NOW()), (26, 26, NOW(), NOW()), (27, 27, NOW(), NOW()),
+    (28, 28, NOW(), NOW()), (29, 29, NOW(), NOW()), (30, 30, NOW(), NOW());
+
+-- ✅ senior_care_type_mapping 테이블 더미 데이터
+INSERT INTO senior_care_type_mapping (id, senior_care_condition_id, senior_care_detail, created_at, updated_at)
+VALUES
+    (1, 1, 'DAILY_CLEANING', NOW(), NOW()), (2, 1, 'MOBILITY_ASSIST', NOW(), NOW()),
+    (3, 2, 'FEEDING_ASSIST', NOW(), NOW()), (4, 2, 'TOILETING_ASSISTANCE', NOW(), NOW()),
+    (5, 3, 'DAILY_BATHING', NOW(), NOW()), (6, 3, 'MOBILITY_WHEELCHAIR', NOW(), NOW()),
+    (7, 4, 'DAILY_HOSPITAL', NOW(), NOW()), (8, 4, 'FEEDING_COOKING', NOW(), NOW()),
+    (9, 5, 'TOILETING_BED_CARE', NOW(), NOW()), (10, 5, 'DAILY_COGNITIVE', NOW(), NOW()),
+    (11, 6, 'DAILY_EXERCISE', NOW(), NOW()), (12, 6, 'DAILY_EMOTIONAL_SUPPORT', NOW(), NOW()),
+    (13, 7, 'FEEDING_TUBE', NOW(), NOW()), (14, 7, 'MOBILITY_IMMOBILE', NOW(), NOW()),
+    (15, 8, 'TOILETING_DEVICE', NOW(), NOW()), (16, 8, 'DAILY_CLEANING', NOW(), NOW()),
+    (17, 9, 'DAILY_BATHING', NOW(), NOW()), (18, 9, 'MOBILITY_ASSIST', NOW(), NOW()),
+    (19, 10, 'TOILETING_ASSISTANCE', NOW(), NOW()), (20, 10, 'FEEDING_COOKING', NOW(), NOW()),
+    (21, 11, 'DAILY_HOSPITAL', NOW(), NOW()), (22, 11, 'DAILY_EXERCISE', NOW(), NOW()),
+    (23, 12, 'FEEDING_SELF', NOW(), NOW()), (24, 12, 'DAILY_EMOTIONAL_SUPPORT', NOW(), NOW()),
+    (25, 13, 'MOBILITY_WHEELCHAIR', NOW(), NOW()), (26, 13, 'DAILY_COGNITIVE', NOW(), NOW()),
+    (27, 14, 'MOBILITY_IMMOBILE', NOW(), NOW()), (28, 14, 'FEEDING_TUBE', NOW(), NOW()),
+    (29, 15, 'TOILETING_BED_CARE', NOW(), NOW()), (30, 15, 'TOILETING_ASSISTANCE', NOW(), NOW()),
+    (31, 16, 'DAILY_HOSPITAL', NOW(), NOW()), (32, 16, 'DAILY_EXERCISE', NOW(), NOW()),
+    (33, 17, 'FEEDING_COOKING', NOW(), NOW()), (34, 17, 'TOILETING_BED_CARE', NOW(), NOW()),
+    (35, 18, 'DAILY_COGNITIVE', NOW(), NOW()), (36, 18, 'MOBILITY_ASSIST', NOW(), NOW()),
+    (37, 19, 'DAILY_BATHING', NOW(), NOW()), (38, 19, 'DAILY_CLEANING', NOW(), NOW()),
+    (39, 20, 'MOBILITY_WHEELCHAIR', NOW(), NOW()), (40, 20, 'TOILETING_ASSISTANCE', NOW(), NOW()),
+    (41, 21, 'DAILY_EXERCISE', NOW(), NOW()), (42, 21, 'DAILY_EMOTIONAL_SUPPORT', NOW(), NOW()),
+    (43, 22, 'FEEDING_TUBE', NOW(), NOW()), (44, 22, 'MOBILITY_IMMOBILE', NOW(), NOW()),
+    (45, 23, 'TOILETING_DEVICE', NOW(), NOW()), (46, 23, 'DAILY_COGNITIVE', NOW(), NOW()),
+    (47, 24, 'DAILY_HOSPITAL', NOW(), NOW()), (48, 24, 'DAILY_BATHING', NOW(), NOW()),
+    (49, 25, 'FEEDING_SELF', NOW(), NOW()), (50, 25, 'TOILETING_BED_CARE', NOW(), NOW()),
+    (51, 26, 'MOBILITY_WHEELCHAIR', NOW(), NOW()), (52, 26, 'FEEDING_ASSIST', NOW(), NOW()),
+    (53, 27, 'DAILY_BATHING', NOW(), NOW()), (54, 27, 'TOILETING_ASSISTANCE', NOW(), NOW()),
+    (55, 28, 'DAILY_CLEANING', NOW(), NOW()), (56, 28, 'MOBILITY_IMMOBILE', NOW(), NOW()),
+    (57, 29, 'TOILETING_DEVICE', NOW(), NOW()), (58, 29, 'DAILY_EXERCISE', NOW(), NOW()),
+    (59, 30, 'DAILY_HOSPITAL', NOW(), NOW()), (60, 30, 'MOBILITY_WHEELCHAIR', NOW(), NOW());
+
+-- ✅ senior_care_time 테이블 더미 데이터
+INSERT INTO senior_care_time (id, care_condition_id, day_of_week, start_time, end_time, created_at, updated_at)
+VALUES
+    (1, 1, 'MONDAY', '09:00:00', '12:00:00', NOW(), NOW()), (2, 1, 'WEDNESDAY', '14:00:00', '18:00:00', NOW(), NOW()),
+    (3, 2, 'TUESDAY', '10:00:00', '14:00:00', NOW(), NOW()), (4, 2, 'THURSDAY', '16:00:00', '20:00:00', NOW(), NOW()),
+    (5, 3, 'FRIDAY', '08:00:00', '12:00:00', NOW(), NOW()), (6, 3, 'SUNDAY', '10:00:00', '14:00:00', NOW(), NOW()),
+    (7, 4, 'SATURDAY', '09:00:00', '13:00:00', NOW(), NOW()), (8, 4, 'MONDAY', '15:00:00', '19:00:00', NOW(), NOW()),
+    (9, 11, 'TUESDAY', '09:00:00', '12:00:00', NOW(), NOW()), (10, 11, 'THURSDAY', '14:00:00', '18:00:00', NOW(), NOW()),
+    (11, 12, 'WEDNESDAY', '10:00:00', '14:00:00', NOW(), NOW()), (12, 12, 'FRIDAY', '16:00:00', '20:00:00', NOW(), NOW()),
+    (13, 13, 'SATURDAY', '08:00:00', '12:00:00', NOW(), NOW()), (14, 13, 'SUNDAY', '10:00:00', '14:00:00', NOW(), NOW()),
+    (15, 14, 'MONDAY', '09:00:00', '13:00:00', NOW(), NOW()), (16, 14, 'THURSDAY', '15:00:00', '19:00:00', NOW(), NOW()),
+    (17, 15, 'FRIDAY', '11:00:00', '15:00:00', NOW(), NOW()), (18, 15, 'TUESDAY', '12:00:00', '16:00:00', NOW(), NOW()),
+    (19, 16, 'SUNDAY', '14:00:00', '18:00:00', NOW(), NOW()), (20, 16, 'WEDNESDAY', '10:00:00', '13:00:00', NOW(), NOW()),
+    (21, 17, 'MONDAY', '10:00:00', '14:00:00', NOW(), NOW()), (22, 17, 'THURSDAY', '13:00:00', '17:00:00', NOW(), NOW()),
+    (23, 18, 'TUESDAY', '14:00:00', '18:00:00', NOW(), NOW()), (24, 18, 'SATURDAY', '08:00:00', '12:00:00', NOW(), NOW()),
+    (25, 19, 'WEDNESDAY', '09:00:00', '13:00:00', NOW(), NOW()), (26, 19, 'SUNDAY', '12:00:00', '16:00:00', NOW(), NOW()),
+    (27, 20, 'FRIDAY', '11:00:00', '15:00:00', NOW(), NOW()), (28, 20, 'TUESDAY', '15:00:00', '19:00:00', NOW(), NOW()),
+    (29, 21, 'MONDAY', '08:00:00', '12:00:00', NOW(), NOW()), (30, 21, 'THURSDAY', '09:00:00', '13:00:00', NOW(), NOW()),
+    (31, 22, 'TUESDAY', '10:00:00', '14:00:00', NOW(), NOW()), (32, 22, 'SATURDAY', '14:00:00', '18:00:00', NOW(), NOW()),
+    (33, 23, 'WEDNESDAY', '08:00:00', '12:00:00', NOW(), NOW()), (34, 23, 'SUNDAY', '10:00:00', '14:00:00', NOW(), NOW()),
+    (35, 24, 'THURSDAY', '09:00:00', '13:00:00', NOW(), NOW()), (36, 24, 'FRIDAY', '13:00:00', '17:00:00', NOW(), NOW()),
+    (37, 25, 'MONDAY', '11:00:00', '15:00:00', NOW(), NOW()), (38, 25, 'THURSDAY', '12:00:00', '16:00:00', NOW(), NOW()),
+    (39, 26, 'TUESDAY', '14:00:00', '18:00:00', NOW(), NOW()), (40, 26, 'WEDNESDAY', '09:00:00', '12:00:00', NOW(), NOW()),
+    (41, 27, 'SATURDAY', '08:00:00', '12:00:00', NOW(), NOW()), (42, 27, 'SUNDAY', '10:00:00', '14:00:00', NOW(), NOW()),
+    (43, 28, 'MONDAY', '09:00:00', '13:00:00', NOW(), NOW()), (44, 28, 'FRIDAY', '13:00:00', '17:00:00', NOW(), NOW()),
+    (45, 29, 'THURSDAY', '11:00:00', '15:00:00', NOW(), NOW()), (46, 29, 'TUESDAY', '12:00:00', '16:00:00', NOW(), NOW()),
+    (47, 30, 'SUNDAY', '14:00:00', '18:00:00', NOW(), NOW()), (48, 30, 'WEDNESDAY', '10:00:00', '13:00:00', NOW(), NOW());
+
+-- ✅ senior_disease 테이블 더미 데이터 (각 어르신마다 1~2개 질환)
+INSERT INTO senior_disease (id, senior_id, disease, additional_dementia_symptoms, created_at, updated_at)
+VALUES
+    (1, 1, 'DIABETES', 'MEMORY_LOSS', NOW(), NOW()), (2, 2, 'HYPERTENSION', NULL, NOW(), NOW()),
+    (3, 3, 'ALZHEIMER', 'GETTING_LOST', NOW(), NOW()), (4, 4, 'PARKINSON', NULL, NOW(), NOW()),
+    (5, 5, 'STROKE', 'DELUSIONS', NOW(), NOW()), (6, 6, 'DIABETES', 'WANDERING', NOW(), NOW()),
+    (7, 7, 'ALZHEIMER', 'AGGRESSIVE_BEHAVIOR', NOW(), NOW()), (8, 8, 'HYPERTENSION', NULL, NOW(), NOW()),
+    (9, 9, 'PARKINSON', 'CHILDISH_BEHAVIOR', NOW(), NOW()), (10, 10, 'STROKE', 'CANNOT_RECOGNIZE_FAMILY', NOW(), NOW()),
+    (11, 11, 'ALZHEIMER', 'MEMORY_LOSS', NOW(), NOW()), (12, 12, 'HYPERTENSION', NULL, NOW(), NOW()),
+    (13, 13, 'DIABETES', 'GETTING_LOST', NOW(), NOW()), (14, 14, 'STROKE', NULL, NOW(), NOW()),
+    (15, 15, 'PARKINSON', 'CHILDISH_BEHAVIOR', NOW(), NOW()), (16, 16, 'HYPERTENSION', 'DELUSIONS', NOW(), NOW()),
+    (17, 17, 'ALZHEIMER', 'WANDERING', NOW(), NOW()), (18, 18, 'PARKINSON', NULL, NOW(), NOW()),
+    (19, 19, 'DIABETES', 'CANNOT_RECOGNIZE_FAMILY', NOW(), NOW()), (20, 20, 'STROKE', NULL, NOW(), NOW()),
+    (21, 21, 'HYPERTENSION', 'AGGRESSIVE_BEHAVIOR', NOW(), NOW()), (22, 22, 'PARKINSON', NULL, NOW(), NOW()),
+    (23, 23, 'ALZHEIMER', 'GETTING_LOST', NOW(), NOW()), (24, 24, 'STROKE', NULL, NOW(), NOW()),
+    (25, 25, 'DIABETES', 'MEMORY_LOSS', NOW(), NOW()), (26, 26, 'HYPERTENSION', NULL, NOW(), NOW()),
+    (27, 27, 'PARKINSON', 'DELUSIONS', NOW(), NOW()), (28, 28, 'STROKE', NULL, NOW(), NOW()),
+    (29, 29, 'ALZHEIMER', 'WANDERING', NOW(), NOW()), (30, 30, 'HYPERTENSION', NULL, NOW(), NOW());
+
+-- ✅ disease_dementia_mapping 테이블 더미 데이터 (각 어르신마다 1~2개 치매 증상)
+INSERT INTO disease_dementia_mapping (id, senior_disease_id, dementia_symptom)
+VALUES
+    (1, 1, 'MEMORY_LOSS'), (2, 3, 'GETTING_LOST'), (3, 5, 'DELUSIONS'), (4, 6, 'WANDERING'),
+    (5, 7, 'AGGRESSIVE_BEHAVIOR'), (6, 9, 'CHILDISH_BEHAVIOR'), (7, 10, 'CANNOT_RECOGNIZE_FAMILY'),
+    (8, 11, 'MEMORY_LOSS'), (9, 13, 'GETTING_LOST'), (10, 15, 'CHILDISH_BEHAVIOR'), (11, 16, 'DELUSIONS'),
+    (12, 17, 'WANDERING'), (13, 19, 'CANNOT_RECOGNIZE_FAMILY'), (14, 21, 'AGGRESSIVE_BEHAVIOR'),
+    (15, 23, 'GETTING_LOST'), (16, 25, 'MEMORY_LOSS'), (17, 27, 'DELUSIONS'), (18, 29, 'WANDERING'),
+    (19, 1, 'MEMORY_LOSS'), (20, 1, 'WANDERING'),
+    (21, 3, 'GETTING_LOST'), (22, 3, 'AGGRESSIVE_BEHAVIOR'),
+    (23, 5, 'DELUSIONS'), (24, 5, 'CANNOT_RECOGNIZE_FAMILY'),
+    (25, 7, 'CHILDISH_BEHAVIOR'), (26, 7, 'MEMORY_LOSS'),
+    (27, 9, 'WANDERING'), (28, 9, 'DELUSIONS'),
+    (29, 11, 'AGGRESSIVE_BEHAVIOR'), (30, 11, 'CHILDISH_BEHAVIOR'),
+    (31, 13, 'GETTING_LOST'), (32, 13, 'MEMORY_LOSS'),
+    (33, 15, 'DELUSIONS'), (34, 15, 'WANDERING'),
+    (35, 17, 'CANNOT_RECOGNIZE_FAMILY'), (36, 17, 'GETTING_LOST'),
+    (37, 19, 'MEMORY_LOSS'), (38, 19, 'CHILDISH_BEHAVIOR'),
+    (39, 21, 'DELUSIONS'), (40, 21, 'WANDERING'),
+    (41, 23, 'CANNOT_RECOGNIZE_FAMILY'), (42, 23, 'MEMORY_LOSS'),
+    (43, 25, 'AGGRESSIVE_BEHAVIOR'), (44, 25, 'CHILDISH_BEHAVIOR'),
+    (45, 27, 'GETTING_LOST'), (46, 27, 'MEMORY_LOSS'),
+    (47, 29, 'DELUSIONS'), (48, 29, 'WANDERING'),
+    (49, 30, 'CANNOT_RECOGNIZE_FAMILY'), (50, 30, 'GETTING_LOST');
