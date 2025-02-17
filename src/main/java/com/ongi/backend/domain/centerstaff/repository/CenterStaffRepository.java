@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface CenterStaffRepository extends JpaRepository<CenterStaff, Long> {
     Optional<CenterStaff> findByLoginId(String loginId);
+
+    boolean existsByLoginId(String loginId);
 }

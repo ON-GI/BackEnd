@@ -6,11 +6,13 @@ import com.ongi.backend.domain.auth.exception.AuthErrorCase;
 import com.ongi.backend.domain.center.entity.Center;
 import com.ongi.backend.domain.center.service.CenterService;
 import com.ongi.backend.domain.centerstaff.dto.request.CenterStaffSignupRequest;
+import com.ongi.backend.domain.centerstaff.dto.request.ValidateIdRequest;
 import com.ongi.backend.domain.centerstaff.dto.response.CenterStaffSignupResponse;
 import com.ongi.backend.domain.centerstaff.entity.CenterStaff;
 import com.ongi.backend.domain.centerstaff.exception.CenterStaffErrorCase;
 import com.ongi.backend.domain.centerstaff.repository.CenterStaffRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,12 @@ public class CenterStaffService {
     private final CenterStaffRepository centerStaffRepository;
     private final PasswordEncoder passwordEncoder;
     private final CenterService centerService;
+
+    public void validateId(@Valid ValidateIdRequest request) {
+        if(existsDuplicateId(request.loginId())) {
+            throw new ApplicationException(CenterStaffErrorCase.DUPLICATE_LOGIN_ID);
+        }
+    }
 
     @Transactional
     public CenterStaffSignupResponse signup(CenterStaffSignupRequest requestDto) {
@@ -37,6 +45,10 @@ public class CenterStaffService {
         }
 
         return new CenterStaffSignupResponse(centerStaff.getId());
+    }
+
+    private boolean existsDuplicateId(String loginId) {
+        return centerStaffRepository.existsByLoginId(loginId);
     }
 
     private CenterStaff socialWorkerSignup(CenterStaffSignupRequest requestDto, String encodedPassword) {
