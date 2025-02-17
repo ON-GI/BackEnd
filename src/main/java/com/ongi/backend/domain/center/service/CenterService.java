@@ -1,7 +1,6 @@
 package com.ongi.backend.domain.center.service;
 
 import com.ongi.backend.common.exception.ApplicationException;
-import com.ongi.backend.common.service.EmailService;
 import com.ongi.backend.common.service.FileUploadService;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
 import com.ongi.backend.domain.center.dto.response.CenterResponseDto;
@@ -29,7 +28,7 @@ public class CenterService {
 
     private final FileUploadService fileUploadService;
 
-    private final EmailService emailService;
+    private final CenterEmailService centerEmailService;
 
     @Transactional
     public void saveCenterInfo(CenterRequestDto requestDto) {
@@ -38,11 +37,6 @@ public class CenterService {
         Center center = findCenterEntity(centerId);
 
         center.updateCenterInfo(requestDto);
-
-        if (center.getCenterCode() == null) {
-            String centerCode = generateUniqueCenterCode();
-            center.updateCenterCode(centerCode);
-        }
     }
 
     @Transactional(readOnly = true)
@@ -81,6 +75,7 @@ public class CenterService {
         center.updateProfileImageUrl(imageUrl);
     }
 
+    // 관리자에게 센터 등록 메일 전송
     @Transactional
     public void updateCenterDocument(Long centerId, MultipartFile centerDocument) {
         Center center = findCenterEntity(centerId);
@@ -96,11 +91,22 @@ public class CenterService {
         if (center.getCenterStatus().equals(CenterStatus.NOT_VERIFIED)) {
             center.updateCenterStatus(CenterStatus.PENDING_VERIFICATION);
         }
-        sendCenterDocumentUploadEmail(centerDocumentUrl);
+
+        centerEmailService.sendCenterVerificationRequestMail(center, centerDocumentUrl);
     }
 
-    private void sendCenterDocumentUploadEmail(String centerDocumentUrl) {
-        emailService.sendSimpleMailToAdmin("센터 인증 요청", centerDocumentUrl);
+    // 센터에게 승인 메일 전송
+    public void approveCenterDocument(Long centerId) {
+        Center center = findCenterEntity(centerId);
+
+        if (center.getCenterCode() == null) {
+            String centerCode = generateUniqueCenterCode();
+            center.updateCenterCode(centerCode);
+        }
+
+        center.updateCenterStatus(CenterStatus.VERIFIED);
+
+        centerEmailService.sendCenterApprovalMail(center);
     }
 
     private String generateUniqueCenterCode() {

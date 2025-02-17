@@ -22,12 +22,24 @@ public class CenterController {
 
     @PostMapping(value = "/register")
     public CommonResponse<String> registerCenter(
-            @Valid  @RequestBody CenterRequestDto requestDto  // JSON 데이터
+            @Valid @RequestBody CenterRequestDto requestDto  // JSON 데이터
     ) {
         // JSON 데이터 + 이미지 경로를 사용하여 센터 등록
         centerService.saveCenterInfo(requestDto);
 
         return CommonResponse.success("센터 등록 성공");
+    }
+
+    @GetMapping("/search/name")
+    public CommonResponse<Object> findCenterByName(@RequestParam("centerName") String centerName) {
+        List<CenterResponseDto> centerResponseDtoList = centerService.findCenterByName(centerName);
+        return CommonResponse.success(centerResponseDtoList);
+    }
+
+    @GetMapping("/search/code")
+    public CommonResponse<Object> findCenterByCode(@RequestParam("centerCode") String centerCode) {
+        CenterResponseDto centerResponseDto = centerService.findCenterByCode(centerCode);
+        return CommonResponse.success(centerResponseDto);
     }
 
     @PostMapping("/{centerId}/profile")
@@ -46,15 +58,10 @@ public class CenterController {
         return CommonResponse.success("센터 증빙 자료를 성공적으로 등록했습니다.");
     }
 
-    @GetMapping("/search/name")
-    public CommonResponse<Object> findCenterByName(@RequestParam("centerName") String centerName) {
-        List<CenterResponseDto> centerResponseDtoList = centerService.findCenterByName(centerName);
-        return CommonResponse.success(centerResponseDtoList);
-    }
-
-    @GetMapping("/search/code")
-    public CommonResponse<Object> findCenterByCode(@RequestParam("centerCode") String centerCode) {
-        CenterResponseDto centerResponseDto = centerService.findCenterByCode(centerCode);
-        return CommonResponse.success(centerResponseDto);
+    @PostMapping("/{centerId}/approve")
+    public CommonResponse<Object> approveCenterDocument(
+            @PathVariable("centerId") Long centerId) {
+        centerService.approveCenterDocument(centerId);
+        return CommonResponse.success("센터 인증이 완료되었습니다.");
     }
 }

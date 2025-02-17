@@ -32,14 +32,14 @@ public class EmailService {
         }
     }
 
-    public void sendSimpleMailToAdmin(String subject, String text) {
+    public void sendHtmlMailToAdmin(String subject, String htmlContent) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
 
             helper.setTo(adminEmail);
             helper.setSubject(subject);
-            helper.setText(text, false); // HTML이 아니므로 false
+            helper.setText(htmlContent, true); // HTML 포맷이므로 true
 
             mailSender.send(message);
         } catch (MessagingException e) {
