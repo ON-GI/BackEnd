@@ -25,10 +25,17 @@ public class SeniorController {
         return CommonResponse.success(seniorService.findSenior(seniorId));
     }
 
-    @PostMapping("/register")
+    @PostMapping()
     public CommonResponse<Object> registerSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto) {
         Center center = centerService.findCenter(1L);
         seniorService.registerSenior(seniorRequestDto, center);
+        return CommonResponse.success();
+    }
+
+    @PutMapping("/{seniorId}")
+    public CommonResponse<Object> updateSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto, @PathVariable("seniorId") Long seniorId) {
+        Center center = centerService.findCenter(1L);
+        seniorService.updateSenior(seniorId, seniorRequestDto, center);
         return CommonResponse.success();
     }
 }

@@ -60,4 +60,27 @@ public class SeniorCareCondition {
 
         return seniorCareCondition;
     }
+
+    public void updateCareCondition(SeniorCareConditionRequestDto request) {
+        // 기존 careTypes와 seniorCareTimes 리스트를 초기화
+        this.careTypes.clear();
+        this.seniorCareTimes.clear();
+
+        // 새로운 careTypes 추가
+        this.careTypes.addAll(
+                request.careDetails().stream()
+                        .map(detail -> SeniorCareTypeMapping.builder()
+                                .seniorCareCondition(this)
+                                .seniorCareDetail(SeniorCareDetail.valueOf(detail))
+                                .build())
+                        .toList()
+        );
+
+        // 새로운 careTimes 추가
+        this.seniorCareTimes.addAll(
+                request.careTimes().stream()
+                        .map(time -> SeniorCareTime.from(time, this))
+                        .toList()
+        );
+    }
 }

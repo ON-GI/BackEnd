@@ -1,10 +1,9 @@
 package com.ongi.backend.domain.senior.entity;
 
 import com.ongi.backend.domain.senior.dto.request.SeniorDiseaseRequestDto;
+import com.ongi.backend.domain.senior.entity.enums.DementiaSymptom;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +38,29 @@ public class SeniorDisease {
                 .senior(senior)
                 .disease(requestDto.disease())
                 .additionalDementiaSymptoms(requestDto.additionalDementiaSymptoms())
+                .dementiaMappings(new ArrayList<>())
                 .build();
+    }
+
+    public void updateDisease(SeniorDiseaseRequestDto request) {
+        this.disease = request.disease();
+        this.additionalDementiaSymptoms = request.additionalDementiaSymptoms();
+
+        // 기존 dementiaMappings 초기화
+        if (this.dementiaMappings == null) {
+            this.dementiaMappings = new ArrayList<>();
+        } else {
+            this.dementiaMappings.clear();
+        }
+
+        // 새로운 dementiaMappings 추가
+        this.dementiaMappings.addAll(
+                request.dementiaSymptoms().stream()
+                        .map(symptom -> DiseaseDementiaMapping.builder()
+                                .seniorDisease(this)
+                                .dementiaSymptom(DementiaSymptom.valueOf(symptom))
+                                .build())
+                        .toList()
+        );
     }
 }

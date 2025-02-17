@@ -80,4 +80,14 @@ public class Senior extends BaseEntity {
     public void updateProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
+
+    public void updateBasicInfo(SeniorRequestDto requestDto) {
+        this.name = requestDto.name();
+        this.birthDate = requestDto.birthDate();
+        this.age = requestDto.age();
+        this.gender = requestDto.gender();
+        this.gradeType = requestDto.gradeType();
+        this.residence = requestDto.residence().toEntity();
+        this.residenceType = requestDto.residenceType();
+    }
 }

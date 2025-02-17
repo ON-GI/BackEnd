@@ -18,14 +18,14 @@ public class SeniorDiseaseResponseDto {
 
     private String additionalDementiaSymptoms;
 
-    private List<DementiaSymptom> dementiaSymptoms;
+    private List<String> dementiaSymptoms;
 
     public static SeniorDiseaseResponseDto from(SeniorDisease seniorDisease) {
         return SeniorDiseaseResponseDto.builder()
                 .disease(seniorDisease.getDisease())
                 .additionalDementiaSymptoms(seniorDisease.getAdditionalDementiaSymptoms())
                 .dementiaSymptoms(seniorDisease.getDementiaMappings().stream()
-                        .map(DiseaseDementiaMapping::getDementiaSymptom) // DementiaSymptom 리스트로 변환
+                        .map(dementiaMapping -> dementiaMapping.getDementiaSymptom().getDescription()) // DementiaSymptom 리스트로 변환
                         .toList())
                 .build();
     }
