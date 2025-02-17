@@ -60,6 +60,15 @@ public class CaregiverInformation {
     }
 
     public void updateLicenses(List<CaregiverLicense> licenses) {
-        this.licenses = licenses;
+        this.licenses.clear();
+        this.licenses.addAll(licenses);
+    }
+
+    public void update(InformationRequestDto request) {
+        this.hasDementiaTraining = request.hasDementiaTraining();
+        this.toiletingAssistance = request.getToiletingAssistanceEnum();
+        this.feedingAssistance = request.getFeedingAssistanceEnum();
+        this.mobilityAssistance = request.getMobilityAssistanceEnum();
+        this.dailyLivingAssistance = request.getDailyLivingAssistanceEnum();
     }
 }
