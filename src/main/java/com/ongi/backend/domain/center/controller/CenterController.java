@@ -17,9 +17,15 @@ public class CenterController {
 
     private final CenterService centerService;
 
-    @GetMapping("/search")
+    @GetMapping("/search/name")
     public CommonResponse<Object> findCenterByName(@RequestParam("centerName") String centerName) {
         List<CenterResponseDto> centerResponseDtoList = centerService.findCenterByName(centerName);
         return CommonResponse.success(centerResponseDtoList);
+    }
+
+    @GetMapping("/search/code")
+    public CommonResponse<Object> findCenterByCode(@RequestParam("centerCode") String centerCode) {
+        CenterResponseDto centerResponseDto = centerService.findCenterByCode(centerCode);
+        return CommonResponse.success(centerResponseDto);
     }
 }
