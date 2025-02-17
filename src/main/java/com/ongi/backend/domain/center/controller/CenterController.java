@@ -2,6 +2,7 @@ package com.ongi.backend.domain.center.controller;
 
 import com.ongi.backend.common.response.CommonResponse;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
+import com.ongi.backend.domain.center.dto.request.CenterSearchCondition;
 import com.ongi.backend.domain.center.dto.response.CenterResponseDto;
 import com.ongi.backend.domain.center.service.CenterService;
 import jakarta.validation.Valid;
@@ -30,16 +31,10 @@ public class CenterController {
         return CommonResponse.success("센터 등록 성공");
     }
 
-    @GetMapping("/search/name")
-    public CommonResponse<Object> findCenterByName(@RequestParam("centerName") String centerName) {
-        List<CenterResponseDto> centerResponseDtoList = centerService.findCenterByName(centerName);
-        return CommonResponse.success(centerResponseDtoList);
-    }
-
-    @GetMapping("/search/code")
-    public CommonResponse<Object> findCenterByCode(@RequestParam("centerCode") String centerCode) {
-        CenterResponseDto centerResponseDto = centerService.findCenterByCode(centerCode);
-        return CommonResponse.success(centerResponseDto);
+    @GetMapping("/search")
+    public CommonResponse<Object> findCenter(@ModelAttribute CenterSearchCondition condition) {
+        List<CenterResponseDto> result = centerService.findCenter(condition);
+        return CommonResponse.success(result);
     }
 
     @PostMapping("/{centerId}/profile")
