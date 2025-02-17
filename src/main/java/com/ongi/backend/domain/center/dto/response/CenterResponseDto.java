@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class CenterResponseDto {
 
-    private String centerId;
+    private Long centerId;
 
     private String centerName;
 
@@ -37,7 +37,7 @@ public class CenterResponseDto {
 
     public static CenterResponseDto fromEntity(Center center) {
         return CenterResponseDto.builder()
-                .centerId(center.getCenterId())
+                .centerId(center.getId())
                 .centerName(center.getName())
                 .establishmentYear(center.getEstablishmentDate().getYear())
                 .operatingPeriod(calculateEstablishedYears(center.getEstablishmentDate()))

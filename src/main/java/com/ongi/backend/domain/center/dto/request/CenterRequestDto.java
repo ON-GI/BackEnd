@@ -11,7 +11,7 @@ public record CenterRequestDto (
     String centerName,
 
     @NotBlank(message = "센터 아이디를 입력해주세요.")
-    String centerId,
+    Long centerId,
 
     @NotNull(message = "전화번호를 입력하세요.")
     String contact,

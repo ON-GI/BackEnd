@@ -1,6 +1,7 @@
 package com.ongi.backend.domain.center.service;
 
 import com.ongi.backend.common.exception.ApplicationException;
+import com.ongi.backend.common.service.FileUploadService;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
 import com.ongi.backend.domain.center.dto.response.CenterResponseDto;
 import com.ongi.backend.domain.center.entity.Center;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,12 +25,13 @@ public class CenterService {
 
     private final CenterCodeService centerCodeService;
 
-    @Transactional
-    public void registerCenter(CenterRequestDto requestDto) {
-        String centerId = requestDto.centerId();
+    private final FileUploadService fileUploadService;
 
-        Center center = centerRepository.findByCenterId(centerId)
-                .orElseThrow(() -> new ApplicationException(CenterErrorCase.CENTER_NOT_FOUND));
+    @Transactional
+    public void saveCenterInfo(CenterRequestDto requestDto) {
+        Long centerId = requestDto.centerId();
+
+        Center center = findCenterEntity(centerId);
 
         center.updateCenterInfo(requestDto);
 
@@ -59,6 +62,32 @@ public class CenterService {
                 .orElseThrow(() -> new ApplicationException(CenterErrorCase.CENTER_NOT_FOUND));
 
         return CenterResponseDto.fromEntity(center);
+    }
+
+    @Transactional
+    public void updateCenterProfileImage(Long centerId, MultipartFile profileImage) {
+        Center center = findCenterEntity(centerId);
+
+        String oldProfileImageUrl = center.getProfileImageUrl();
+        if (oldProfileImageUrl != null) {
+            fileUploadService.deleteImage(oldProfileImageUrl);
+        }
+
+        String imageUrl = fileUploadService.uploadFileToS3(profileImage);
+        center.updateProfileImageUrl(imageUrl);
+    }
+
+    @Transactional
+    public void updateCenterDocument(Long centerId, MultipartFile centerDocument) {
+        Center center = findCenterEntity(centerId);
+
+        String oldCenterDocumentUrl = center.getCenterDocumentUrl();
+        if (oldCenterDocumentUrl != null) {
+            fileUploadService.deleteImage(oldCenterDocumentUrl);
+        }
+
+        String centerDocumentUrl = fileUploadService.uploadFileToS3(centerDocument);
+        center.updateCenterDocumentUrl(centerDocumentUrl);
     }
 
     private String generateUniqueCenterCode() {

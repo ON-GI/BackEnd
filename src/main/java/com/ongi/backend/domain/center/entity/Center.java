@@ -28,9 +28,6 @@ public class Center extends BaseEntity {
 
     private String name;
 
-    @Column(nullable = false)
-    private String centerId;
-
     private String contact;
 
     private String email;
@@ -57,7 +54,6 @@ public class Center extends BaseEntity {
     public static Center from(CenterInitializerRequestDto centerInitializerRequestDto) {
         return Center.builder()
                 .name(centerInitializerRequestDto.getName())
-                .centerId(centerInitializerRequestDto.getCenterId())
                 .address(centerInitializerRequestDto.getAddress())
                 .establishmentDate(centerInitializerRequestDto.getEstablishmentDate())
                 .build();
@@ -75,5 +71,13 @@ public class Center extends BaseEntity {
 
     public void updateCenterCode(String centerCode) {
         this.centerCode = centerCode;
+    }
+
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public void updateCenterDocumentUrl(String centerDocumentUrl) {
+        this.centerDocumentUrl = centerDocumentUrl;
     }
 }
