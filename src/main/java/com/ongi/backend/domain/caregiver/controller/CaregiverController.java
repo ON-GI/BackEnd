@@ -2,8 +2,10 @@ package com.ongi.backend.domain.caregiver.controller;
 
 import com.ongi.backend.common.response.CommonResponse;
 import com.ongi.backend.domain.caregiver.dto.request.CaregiverSignupRequestDto;
+import com.ongi.backend.domain.caregiver.dto.request.CaregiverUpdateRequestDto;
 import com.ongi.backend.domain.caregiver.dto.request.ValidateIdRequestDto;
 import com.ongi.backend.domain.caregiver.dto.request.WorkConditionRequestDto;
+import com.ongi.backend.domain.caregiver.dto.response.CaregiverResponseDto;
 import com.ongi.backend.domain.caregiver.dto.response.CaregiverSignupResponse;
 import com.ongi.backend.domain.caregiver.dto.response.WorkConditionResponseDto;
 import com.ongi.backend.domain.caregiver.service.CaregiverService;
@@ -54,5 +56,19 @@ public class CaregiverController {
         Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         caregiverService.updateCaregiverProfileImage(profileImage, caregiverId);
         return CommonResponse.success("프로필 이미지 등록 완료했습니다.");
+    }
+
+    @GetMapping
+    public CommonResponse<CaregiverResponseDto> getCaregiver() {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CaregiverResponseDto response = caregiverService.getCaregiver(caregiverId);
+        return CommonResponse.success(response);
+    }
+
+    @PutMapping
+    public CommonResponse<Object> updateCaregiver(@Valid @RequestBody CaregiverUpdateRequestDto request) {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        caregiverService.updateCaregiver(caregiverId, request);
+        return CommonResponse.success();
     }
 }

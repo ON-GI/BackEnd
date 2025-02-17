@@ -3,6 +3,7 @@ package com.ongi.backend.domain.caregiver.service;
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.service.FileUploadService;
 import com.ongi.backend.domain.caregiver.dto.request.*;
+import com.ongi.backend.domain.caregiver.dto.response.CaregiverResponseDto;
 import com.ongi.backend.domain.caregiver.dto.response.CaregiverSignupResponse;
 import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.entity.CaregiverInformation;
@@ -14,6 +15,7 @@ import com.ongi.backend.domain.caregiver.repository.CaregiverInformationReposito
 import com.ongi.backend.domain.caregiver.repository.CaregiverLicenseRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverOptionalRepository;
 import com.ongi.backend.domain.caregiver.repository.CaregiverRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -66,6 +68,17 @@ public class CaregiverService {
                 .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.CAREGIVER_NOT_FOUND));
     }
 
+    public CaregiverResponseDto getCaregiver(Long caregiverId) {
+        Caregiver caregiver = findCaregiverById(caregiverId);
+        return CaregiverResponseDto.from(caregiver);
+    }
+
+    public void updateCaregiver(Long caregiverId, @Valid CaregiverUpdateRequestDto request) {
+        Caregiver caregiver = findCaregiverById(caregiverId);
+        caregiver.updateBy(request);
+        caregiverRepository.save(caregiver);
+    }
+
     private boolean existsDuplicateId(String loginId) {
         return caregiverRepository.existsByLoginId(loginId);
     }
@@ -103,5 +116,10 @@ public class CaregiverService {
         caregiverLicenseRepository.saveAll(licenses);
 
         return licenses;
+    }
+
+    private Caregiver findCaregiverById(Long caregiverId) {
+        return caregiverRepository.findById(caregiverId)
+                .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.CAREGIVER_NOT_FOUND));
     }
 }
