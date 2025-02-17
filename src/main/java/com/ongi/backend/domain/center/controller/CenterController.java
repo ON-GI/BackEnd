@@ -64,4 +64,11 @@ public class CenterController {
         centerService.approveCenterDocument(centerId);
         return CommonResponse.success("센터 인증이 완료되었습니다.");
     }
+
+    @DeleteMapping("/{centerId}")
+    public CommonResponse<Object> deleteCenter(
+            @PathVariable("centerId") Long centerId) {
+        centerService.deleteCenter(centerId);
+        return CommonResponse.success("센터 삭제가 완료되었습니다.");
+    }
 }

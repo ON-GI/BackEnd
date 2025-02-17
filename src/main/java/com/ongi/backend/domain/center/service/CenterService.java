@@ -116,4 +116,10 @@ public class CenterService {
         } while (centerRepository.existsByCenterCode(centerCode)); // 중복 체크 후 다시 생성
         return centerCode;
     }
+
+    public void deleteCenter(Long centerId) {
+        Center center = findCenterEntity(centerId);
+
+        centerRepository.delete(center);
+    }
 }
