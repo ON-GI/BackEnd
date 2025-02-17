@@ -1,8 +1,11 @@
 package com.ongi.backend.domain.senior.entity;
 
+import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.domain.senior.dto.request.SeniorCareConditionRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -12,7 +15,9 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class SeniorCareTime {
+@SQLDelete(sql = "UPDATE senior_care_time SET deleted_at = now() WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class SeniorCareTime extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

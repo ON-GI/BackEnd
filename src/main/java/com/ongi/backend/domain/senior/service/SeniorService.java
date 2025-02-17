@@ -27,8 +27,6 @@ public class SeniorService {
 
     private final SeniorDiseaseRepository seniorDiseaseRepository;
 
-    private final DiseaseDementiaMappingRepository diseaseDementiaMappingRepository;
-
     @Transactional
     public void registerSenior(SeniorRequestDto request, Center center) {
 
@@ -72,6 +70,14 @@ public class SeniorService {
         return seniors.stream()
                 .map(SeniorResponseDto::fromEntity)
                 .toList();
+    }
+
+    @Transactional
+    public void deleteSenior(Long seniorId) {
+        Senior senior = seniorRepository.findById(seniorId)
+                .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
+
+        seniorRepository.delete(senior); // Soft Delete 적용으로 deleted_at이 자동 업데이트됨.
     }
 
     private void updateCareCondition(SeniorCareConditionRequestDto request, Senior senior) {

@@ -38,4 +38,10 @@ public class SeniorController {
         seniorService.updateSenior(seniorId, seniorRequestDto, center);
         return CommonResponse.success();
     }
+
+    @DeleteMapping("/{seniorId}")
+    public CommonResponse<Object> updateSenior(@PathVariable("seniorId") Long seniorId) {
+        seniorService.deleteSenior(seniorId);
+        return CommonResponse.success();
+    }
 }

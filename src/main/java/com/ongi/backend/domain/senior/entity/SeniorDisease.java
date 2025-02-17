@@ -1,9 +1,12 @@
 package com.ongi.backend.domain.senior.entity;
 
+import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.domain.senior.dto.request.SeniorDiseaseRequestDto;
 import com.ongi.backend.domain.senior.entity.enums.DementiaSymptom;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class SeniorDisease {
+@SQLDelete(sql = "UPDATE senior_disease SET deleted_at = now() WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class SeniorDisease extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
