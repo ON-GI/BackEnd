@@ -1,7 +1,7 @@
 package com.ongi.backend.domain.center.dto.response;
 
 import com.ongi.backend.domain.center.entity.Center;
-import com.ongi.backend.domain.center.entity.CenterGrade;
+import com.ongi.backend.domain.center.entity.enums.CenterGrade;
 import lombok.*;
 
 import java.time.LocalDate;

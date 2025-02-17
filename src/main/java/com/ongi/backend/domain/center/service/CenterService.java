@@ -6,6 +6,7 @@ import com.ongi.backend.common.service.FileUploadService;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
 import com.ongi.backend.domain.center.dto.response.CenterResponseDto;
 import com.ongi.backend.domain.center.entity.Center;
+import com.ongi.backend.domain.center.entity.enums.CenterStatus;
 import com.ongi.backend.domain.center.exception.CenterErrorCase;
 import com.ongi.backend.domain.center.repository.CenterRepository;
 import lombok.RequiredArgsConstructor;
@@ -91,6 +92,10 @@ public class CenterService {
 
         String centerDocumentUrl = fileUploadService.uploadFileToS3(centerDocument);
         center.updateCenterDocumentUrl(centerDocumentUrl);
+
+        if (center.getCenterStatus().equals(CenterStatus.NOT_VERIFIED)) {
+            center.updateCenterStatus(CenterStatus.PENDING_VERIFICATION);
+        }
         sendCenterDocumentUploadEmail(centerDocumentUrl);
     }
 

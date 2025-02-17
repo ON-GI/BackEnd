@@ -3,6 +3,8 @@ package com.ongi.backend.domain.center.entity;
 import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.domain.center.dto.request.CenterInitializerRequestDto;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
+import com.ongi.backend.domain.center.entity.enums.CenterGrade;
+import com.ongi.backend.domain.center.entity.enums.CenterStatus;
 import com.ongi.backend.domain.senior.entity.Senior;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +29,8 @@ public class Center extends BaseEntity {
     private Long id;
 
     private String name;
+
+    private CenterStatus centerStatus;
 
     private String contact;
 
@@ -54,6 +58,7 @@ public class Center extends BaseEntity {
     public static Center from(CenterInitializerRequestDto centerInitializerRequestDto) {
         return Center.builder()
                 .name(centerInitializerRequestDto.getName())
+                .centerStatus(CenterStatus.NOT_VERIFIED)
                 .address(centerInitializerRequestDto.getAddress())
                 .establishmentDate(centerInitializerRequestDto.getEstablishmentDate())
                 .build();
@@ -71,6 +76,10 @@ public class Center extends BaseEntity {
 
     public void updateCenterCode(String centerCode) {
         this.centerCode = centerCode;
+    }
+
+    public void updateCenterStatus(CenterStatus centerStatus) {
+        this.centerStatus = centerStatus;
     }
 
     public void updateProfileImageUrl(String profileImageUrl) {

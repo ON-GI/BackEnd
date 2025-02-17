@@ -1,6 +1,6 @@
 package com.ongi.backend.domain.center.dto.request;
 
-import com.ongi.backend.domain.center.entity.CenterGrade;
+import com.ongi.backend.domain.center.entity.enums.CenterGrade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
