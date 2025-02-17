@@ -32,10 +32,10 @@ public class SeniorController {
     @GetMapping("")
     public CommonResponse<Object> findSenior() {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        log.info("centerId: " + centerId);
         if (centerId == null) {
             throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
         }
-        log.info("centerId: " + centerId);
         return CommonResponse.success("ok");
         //return CommonResponse.success(seniorService.findSenior(seniorId));
     }
