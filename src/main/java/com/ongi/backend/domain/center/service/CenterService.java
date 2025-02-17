@@ -1,6 +1,7 @@
 package com.ongi.backend.domain.center.service;
 
 import com.ongi.backend.common.exception.ApplicationException;
+import com.ongi.backend.common.service.EmailService;
 import com.ongi.backend.common.service.FileUploadService;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
 import com.ongi.backend.domain.center.dto.response.CenterResponseDto;
@@ -26,6 +27,8 @@ public class CenterService {
     private final CenterCodeService centerCodeService;
 
     private final FileUploadService fileUploadService;
+
+    private final EmailService emailService;
 
     @Transactional
     public void saveCenterInfo(CenterRequestDto requestDto) {
@@ -88,6 +91,11 @@ public class CenterService {
 
         String centerDocumentUrl = fileUploadService.uploadFileToS3(centerDocument);
         center.updateCenterDocumentUrl(centerDocumentUrl);
+        sendCenterDocumentUploadEmail(centerDocumentUrl);
+    }
+
+    private void sendCenterDocumentUploadEmail(String centerDocumentUrl) {
+        emailService.sendSimpleMailToAdmin("센터 인증 요청", centerDocumentUrl);
     }
 
     private String generateUniqueCenterCode() {
