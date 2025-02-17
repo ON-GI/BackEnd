@@ -1,6 +1,6 @@
 package com.ongi.backend.domain.senior.dto.response;
 
-import com.ongi.backend.common.entity.Gender;
+import com.ongi.backend.common.enums.Gender;
 import com.ongi.backend.domain.senior.entity.Senior;
 import com.ongi.backend.domain.senior.entity.enums.Residence;
 import lombok.*;

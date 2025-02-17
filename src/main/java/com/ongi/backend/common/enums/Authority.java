@@ -1,9 +1,7 @@
-package com.ongi.backend.domain.auth.entity.enums;
+package com.ongi.backend.common.enums;
 
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.domain.auth.exception.AuthErrorCase;
-import com.ongi.backend.domain.caregiver.entity.enums.CaregiverCareer;
-import com.ongi.backend.domain.caregiver.exception.CaregiverErrorCase;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +11,8 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum Authority {
     ROLE_CAREGIVER("요양 보호사"),
-    ROLE_CENTER("센터 관리자");
+    ROLE_CENTER_MANAGER("센터장"),
+    ROLE_SOCIAL_WORKER("사회 복지사");
 
     private final String description;
 

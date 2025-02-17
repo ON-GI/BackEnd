@@ -1,7 +1,7 @@
 package com.ongi.backend.domain.auth.repository;
 
 import com.ongi.backend.domain.auth.entity.RefreshToken;
-import com.ongi.backend.domain.auth.entity.enums.Authority;
+import com.ongi.backend.common.enums.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

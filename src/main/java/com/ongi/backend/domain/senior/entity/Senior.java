@@ -1,7 +1,7 @@
 package com.ongi.backend.domain.senior.entity;
 
 import com.ongi.backend.common.entity.BaseEntity;
-import com.ongi.backend.common.entity.Gender;
+import com.ongi.backend.common.enums.Gender;
 import com.ongi.backend.domain.center.entity.Center;
 import com.ongi.backend.domain.senior.dto.request.SeniorRequestDto;
 import com.ongi.backend.domain.senior.entity.enums.GradeType;

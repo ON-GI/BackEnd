@@ -1,6 +1,6 @@
 package com.ongi.backend.common.security;
 
-import com.ongi.backend.domain.auth.entity.enums.Authority;
+import com.ongi.backend.common.enums.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

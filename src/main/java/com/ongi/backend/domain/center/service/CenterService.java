@@ -3,7 +3,6 @@ package com.ongi.backend.domain.center.service;
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.service.FileUploadService;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
-import com.ongi.backend.domain.center.dto.request.CenterSearchCondition;
 import com.ongi.backend.domain.center.dto.response.CenterResponseDto;
 import com.ongi.backend.domain.center.entity.Center;
 import com.ongi.backend.domain.center.entity.enums.CenterStatus;
@@ -47,19 +46,16 @@ public class CenterService {
     }
 
     @Transactional(readOnly = true)
-    public List<CenterResponseDto> findCenter(CenterSearchCondition condition) {
-        if (condition.getCenterName() != null) {
-            return centerRepository.findTop10ByNameStartingWith(condition.getCenterName())
-                    .stream()
-                    .map(CenterResponseDto::fromEntity)
-                    .toList();
-        } else if (condition.getCenterCode() != null) {
-            Center center = centerRepository.findByCenterCode(condition.getCenterCode())
-                    .orElseThrow(() -> new ApplicationException(CenterErrorCase.CENTER_NOT_FOUND));
-            return List.of(CenterResponseDto.fromEntity(center));
-        } else {
-            throw new ApplicationException(CenterErrorCase.INVALID_SEARCH_CONDITION);
-        }
+    public List<CenterResponseDto> findCenter(String centerName) {
+        return centerRepository.findTop10ByNameStartingWith(centerName)
+                .stream()
+                .map(CenterResponseDto::fromEntity)
+                .toList();
+    }
+
+    public Center findCenterByCenterCode(String centerCode) {
+        return centerRepository.findByCenterCode(centerCode)
+                .orElseThrow(() -> new ApplicationException(CenterErrorCase.CENTER_NOT_FOUND));
     }
 
     @Transactional
