@@ -3,9 +3,8 @@ package com.ongi.backend.domain.auth.controller;
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.response.CommonResponse;
 import com.ongi.backend.domain.auth.dto.LoginTokensDto;
-import com.ongi.backend.domain.auth.dto.request.CaregiverLoginRequest;
-import com.ongi.backend.domain.auth.dto.response.CaregiverLoginResponse;
-import com.ongi.backend.domain.auth.exception.AuthErrorCase;
+import com.ongi.backend.domain.auth.dto.request.LoginRequest;
+import com.ongi.backend.domain.auth.dto.response.LoginResponse;
 import com.ongi.backend.domain.auth.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,12 +22,12 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/caregiver/login")
-    public CommonResponse<CaregiverLoginResponse> login(@Valid @RequestBody CaregiverLoginRequest requestDto,
-                                                        HttpServletResponse httpServletResponse) {
-        LoginTokensDto tokens = authService.caregiverLogin(requestDto);
+    @PostMapping("/login")
+    public CommonResponse<LoginResponse> login(@Valid @RequestBody LoginRequest requestDto,
+                                               HttpServletResponse httpServletResponse) {
+        LoginTokensDto tokens = authService.login(requestDto);
         setRefreshTokenCookie(httpServletResponse, tokens.refreshToken());
-        return CommonResponse.success(new CaregiverLoginResponse(tokens.accessToken()));
+        return CommonResponse.success(new LoginResponse(tokens.accessToken()));
     }
 
     @DeleteMapping("/logout")
@@ -39,14 +38,14 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public CommonResponse<CaregiverLoginResponse> refreshAccessToken(HttpServletRequest httpServletRequest,
-                                                                     HttpServletResponse httpServletResponse) {
+    public CommonResponse<LoginResponse> refreshAccessToken(HttpServletRequest httpServletRequest,
+                                                            HttpServletResponse httpServletResponse) {
         String refreshToken = extractRefreshToken(httpServletRequest);
 
         try {
             LoginTokensDto tokens = authService.refreshAccessToken(refreshToken);
             setRefreshTokenCookie(httpServletResponse, tokens.refreshToken());
-            return CommonResponse.success(new CaregiverLoginResponse(tokens.accessToken()));
+            return CommonResponse.success(new LoginResponse(tokens.accessToken()));
         } catch (ApplicationException e) {
             deleteRefreshTokenCookie(httpServletResponse);
             throw e;

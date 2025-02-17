@@ -59,4 +59,9 @@ public class CenterStaffService {
     private CenterStaff saveCenterStaff(CenterStaffSignupRequest requestDto, String encodedPassword, Center center) {
         return centerStaffRepository.save(CenterStaff.from(requestDto, encodedPassword, center));
     }
+
+    public CenterStaff findByLoginId(String loginId) {
+        return centerStaffRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new ApplicationException(CenterStaffErrorCase.CENTER_STAFF_NOT_FOUND));
+    }
 }

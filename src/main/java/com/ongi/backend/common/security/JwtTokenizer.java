@@ -103,6 +103,11 @@ public class JwtTokenizer {
         return Long.valueOf(claims.getSubject());
     }
 
+    public Long getCenterIdFromRefreshToken(String token) {
+        Claims claims = getClaimsFromRefreshToken(token);
+        return claims.get("centerId", Long.class);
+    }
+
     public Authority getAuthorityFromRefreshToken(String token) {
         Claims claims = getClaimsFromRefreshToken(token);
         return Authority.fromString(claims.get("role", String.class));
