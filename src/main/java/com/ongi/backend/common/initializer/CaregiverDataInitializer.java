@@ -26,13 +26,11 @@ public class CaregiverDataInitializer {
         try {
             // ✅ senior 테이블에 데이터가 없으면 실행
             Integer count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Caregiver", Integer.class);
-            /*
+
             if (count != null && count > 0) {
                 log.info("✅ Caregiver 테이블에 데이터가 이미 존재하여 초기화 생략");
                 return;
             }
-
-             */
 
             // ✅ SQL 파일 로드 및 실행
             ClassPathResource caregiverResource = new ClassPathResource("sql/caregiver.sql");
