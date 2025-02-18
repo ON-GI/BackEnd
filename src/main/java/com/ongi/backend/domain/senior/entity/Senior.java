@@ -59,6 +59,9 @@ public class Senior extends BaseEntity {
     @Column
     private String profileImageUrl;
 
+    @Column
+    private String staffContact;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center_id", nullable = false)
     private Center center;
@@ -79,6 +82,7 @@ public class Senior extends BaseEntity {
                 .gradeType(requestDto.gradeType())
                 .residence(requestDto.residence().toEntity())
                 .residenceType(requestDto.residenceType())
+                .staffContact(requestDto.staffContact())
                 .center(center)
                 .build();
     }
@@ -96,5 +100,6 @@ public class Senior extends BaseEntity {
         this.gradeType = requestDto.gradeType();
         this.residence = requestDto.residence().toEntity();
         this.residenceType = requestDto.residenceType();
+        this.staffContact = requestDto.staffContact();
     }
 }
