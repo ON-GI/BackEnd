@@ -23,7 +23,6 @@ public record SeniorRequestDto (
         @NotNull(message = "나이를 입력하세요.")
         Integer age,
 
-        @NotNull(message = "몸무게를 입력하세요.")
         Double weight,
 
         @NotNull(message = "성별을 입력하세요.")
@@ -39,7 +38,7 @@ public record SeniorRequestDto (
         @NotNull(message = "거주 형태를 입력하세요.")
         ResidenceType residenceType,
 
-        String profileImageUrl,
+        String staffContact,
 
         @Valid
         SeniorCareConditionRequestDto careCondition,  // 어르신의 필요 서비스 항목

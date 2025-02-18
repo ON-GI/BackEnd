@@ -32,6 +32,8 @@ public class SeniorResponseDto {
 
     private String profileImageUrl;
 
+    private String staffContact;
+
     private SeniorDiseaseResponseDto disease;
 
     private SeniorCareConditionResponseDto careCondition;
@@ -47,6 +49,7 @@ public class SeniorResponseDto {
                 .residence(senior.getResidence())
                 .residenceType(senior.getResidenceType().getDescription())
                 .profileImageUrl(senior.getProfileImageUrl())
+                .staffContact(senior.getStaffContact())
                 .disease(senior.getSeniorDisease() != null ? SeniorDiseaseResponseDto.from(senior.getSeniorDisease()) : null)
                 .careCondition(senior.getCareCondition() != null ? SeniorCareConditionResponseDto.from(senior.getCareCondition()) : null)
                 .build();
