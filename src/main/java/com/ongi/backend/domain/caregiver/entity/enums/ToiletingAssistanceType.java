@@ -10,10 +10,10 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum ToiletingAssistanceType {
-    INDEPENDENT("스스로 식사 가능"),
-    MEAL_PREPARATION("식사 차려드리기"),
-    COOKING_REQUIRED("죽, 반찬 등 요리 필요"),
-    TUBE_FEEDING("경관식 보조"),
+    INDEPENDENT("스스로 배변 가능"),
+    OCCASIONAL_HELP("가끔 대소변 실수 시 도움"),
+    DIAPER_CARE("기저귀 케어 필요"),
+    CATHETER_OR_COLOSTOMY("유치도뇨/방광루/장루"),
     NOT_APPLICABLE("해당 없음");
 
     private final String description;
