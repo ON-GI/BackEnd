@@ -2,6 +2,7 @@ package com.ongi.backend.domain.matching.service;
 
 import com.ongi.backend.domain.caregiver.service.CaregiverService;
 import com.ongi.backend.domain.matching.dto.request.MatchingRequestDto;
+import com.ongi.backend.domain.matching.entity.Matching;
 import com.ongi.backend.domain.matching.repository.MatchingRepository;
 import com.ongi.backend.domain.senior.entity.Senior;
 import com.ongi.backend.domain.senior.service.SeniorService;
@@ -25,5 +26,6 @@ public class MatchingService {
     public void registerMatching(MatchingRequestDto matchingRequestDto, Long centerId) {
 
         Senior senior = seniorService.findSeniorEntity(matchingRequestDto.seniorId(), centerId);
+        Matching matching = Matching.from(matchingRequestDto, senior);
     }
 }

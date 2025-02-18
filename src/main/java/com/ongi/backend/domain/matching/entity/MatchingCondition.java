@@ -1,5 +1,6 @@
 package com.ongi.backend.domain.matching.entity;
 
+import com.ongi.backend.domain.matching.dto.request.MatchingConditionRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,7 +8,9 @@ import java.time.LocalDate;
 
 @Embeddable
 @Getter
+@Builder(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class MatchingCondition {
 
     @Id
@@ -29,4 +32,15 @@ public class MatchingCondition {
 
     @Column(nullable = false)
     private Integer maxPayAmount;
+
+    public static MatchingCondition from(MatchingConditionRequestDto requestDto) {
+        return MatchingCondition.builder()
+                .matchingCareRegion(requestDto.careRegion().toEntity())
+                .careStartDate(requestDto.careStartDate())
+                .careEndDate(requestDto.careEndDate())
+                .benefits(requestDto.benefits())
+                .minPayAmount(requestDto.minPayAmount())
+                .maxPayAmount(requestDto.maxPayAmount())
+                .build();
+    }
 }

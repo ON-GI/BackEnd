@@ -1,5 +1,7 @@
 package com.ongi.backend.domain.matching.entity;
 
+import com.ongi.backend.domain.matching.dto.request.MatchingCareTimeRequestDto;
+import com.ongi.backend.domain.senior.entity.SeniorCareTime;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -34,4 +36,14 @@ public class MatchingCareTime {
 
     @Column(nullable = false)
     private LocalTime endTime;  // 캐어 종료 시간
+
+    public static MatchingCareTime from(MatchingCareTimeRequestDto requestDto, Matching matching) {
+
+        return MatchingCareTime.builder()
+                .matching(matching)
+                .dayOfWeek(requestDto.dayOfWeek())
+                .startTime(requestDto.startTime())
+                .endTime(requestDto.endTime())
+                .build();
+    }
 }

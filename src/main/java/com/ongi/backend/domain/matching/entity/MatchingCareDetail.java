@@ -23,4 +23,11 @@ public class MatchingCareDetail {
     @Enumerated(EnumType.STRING)  // ✅ Enum을 문자열로 저장
     @Column(nullable = false, length = 50)
     private SeniorCareDetail careDetail;
+
+    public static MatchingCareDetail from(Matching matching, SeniorCareDetail careDetail) {
+        return MatchingCareDetail.builder()
+                .matching(matching)
+                .careDetail(careDetail)
+                .build();
+    }
 }
