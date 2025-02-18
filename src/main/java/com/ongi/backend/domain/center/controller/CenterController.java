@@ -31,13 +31,13 @@ public class CenterController {
     }
 
     @GetMapping("/search")
-    public CommonResponse<Object> findCenter(@RequestParam("centerName") String centerName) {
+    public CommonResponse<List<CenterResponseDto>> findCenter(@RequestParam("centerName") String centerName) {
         List<CenterResponseDto> result = centerService.findCenter(centerName);
         return CommonResponse.success(result);
     }
 
     @PostMapping("/{centerId}/profile")
-    public CommonResponse<Object> updateCenterProfileImage(
+    public CommonResponse<String> updateCenterProfileImage(
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @PathVariable("centerId") Long centerId) {
         centerService.updateCenterProfileImage(centerId, profileImage);
@@ -45,7 +45,7 @@ public class CenterController {
     }
 
     @PostMapping("/{centerId}/document")
-    public CommonResponse<Object> updateCenterDocument(
+    public CommonResponse<String> updateCenterDocument(
             @RequestParam(value = "centerDocument", required = false) MultipartFile centerDocument,
             @PathVariable("centerId") Long centerId) {
         centerService.updateCenterDocument(centerId, centerDocument);
@@ -53,14 +53,14 @@ public class CenterController {
     }
 
     @PostMapping("/{centerId}/approve")
-    public CommonResponse<Object> approveCenterDocument(
+    public CommonResponse<String> approveCenterDocument(
             @PathVariable("centerId") Long centerId) {
         centerService.approveCenterDocument(centerId);
         return CommonResponse.success("센터 인증이 완료되었습니다.");
     }
 
     @DeleteMapping("/{centerId}")
-    public CommonResponse<Object> deleteCenter(
+    public CommonResponse<String> deleteCenter(
             @PathVariable("centerId") Long centerId) {
         centerService.deleteCenter(centerId);
         return CommonResponse.success("센터 삭제가 완료되었습니다.");

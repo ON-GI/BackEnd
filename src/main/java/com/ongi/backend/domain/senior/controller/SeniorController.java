@@ -2,6 +2,7 @@ package com.ongi.backend.domain.senior.controller;
 
 import com.ongi.backend.common.response.CommonResponse;
 import com.ongi.backend.domain.senior.dto.request.SeniorRequestDto;
+import com.ongi.backend.domain.senior.dto.response.SeniorResponseDto;
 import com.ongi.backend.domain.senior.service.SeniorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @Slf4j
@@ -20,21 +23,21 @@ public class SeniorController {
     private final SeniorService seniorService;
 
     @GetMapping("/{seniorId}")
-    public CommonResponse<Object> findSenior(@PathVariable("seniorId") Long seniorId) {
+    public CommonResponse<SeniorResponseDto> findSenior(@PathVariable("seniorId") Long seniorId) {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
         return CommonResponse.success(seniorService.findSenior(seniorId, centerId));
     }
 
     @GetMapping("")
-    public CommonResponse<Object> findSeniors() {
+    public CommonResponse<List<SeniorResponseDto>> findSeniors() {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
         return CommonResponse.success(seniorService.findSeniorsByCenter(centerId));
     }
 
     @PostMapping()
-    public CommonResponse<Object> registerSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto) {
+    public CommonResponse<String> registerSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto) {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
         seniorService.registerSenior(seniorRequestDto, centerId);
@@ -42,7 +45,7 @@ public class SeniorController {
     }
 
     @PostMapping("/{seniorId}")
-    public CommonResponse<Object> updateSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto, @PathVariable("seniorId") Long seniorId) {
+    public CommonResponse<String> updateSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto, @PathVariable("seniorId") Long seniorId) {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
         seniorService.updateSenior(seniorId, seniorRequestDto, centerId);
@@ -50,7 +53,7 @@ public class SeniorController {
     }
 
     @PostMapping("/{seniorId}/profile")
-    public CommonResponse<Object> updateSeniorProfileImage(
+    public CommonResponse<String> updateSeniorProfileImage(
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @PathVariable("seniorId") Long seniorId) {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
@@ -60,7 +63,7 @@ public class SeniorController {
     }
 
     @DeleteMapping("/{seniorId}")
-    public CommonResponse<Object> updateSenior(@PathVariable("seniorId") Long seniorId) {
+    public CommonResponse<String> updateSenior(@PathVariable("seniorId") Long seniorId) {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
         seniorService.deleteSenior(seniorId, centerId);
