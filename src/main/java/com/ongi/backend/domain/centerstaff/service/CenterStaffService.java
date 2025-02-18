@@ -2,6 +2,7 @@ package com.ongi.backend.domain.centerstaff.service;
 
 import com.ongi.backend.common.enums.Authority;
 import com.ongi.backend.common.exception.ApplicationException;
+import com.ongi.backend.common.security.JwtTokenizer;
 import com.ongi.backend.domain.auth.exception.AuthErrorCase;
 import com.ongi.backend.domain.center.entity.Center;
 import com.ongi.backend.domain.center.service.CenterService;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class CenterStaffService {
@@ -24,6 +27,7 @@ public class CenterStaffService {
     private final CenterStaffRepository centerStaffRepository;
     private final PasswordEncoder passwordEncoder;
     private final CenterService centerService;
+    private final JwtTokenizer jwtTokenizer;
 
     public void validateId(@Valid ValidateIdRequest request) {
         if(existsDuplicateId(request.loginId())) {
@@ -35,37 +39,41 @@ public class CenterStaffService {
     public CenterStaffSignupResponse signup(CenterStaffSignupRequest requestDto) {
         String encodedPassword = passwordEncoder.encode(requestDto.password());
 
-        CenterStaff centerStaff;
         if(requestDto.authority().equals(Authority.ROLE_SOCIAL_WORKER.toString())) {
-            centerStaff = socialWorkerSignup(requestDto, encodedPassword);
+            return socialWorkerSignup(requestDto, encodedPassword);
         } else if(requestDto.authority().equals(Authority.ROLE_CENTER_MANAGER.toString())) {
-            centerStaff = centerManagerSignup(requestDto, encodedPassword);
+            return centerManagerSignup(requestDto, encodedPassword);
         } else {
             throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
         }
-
-        return new CenterStaffSignupResponse(centerStaff.getId());
     }
 
     private boolean existsDuplicateId(String loginId) {
         return centerStaffRepository.existsByLoginId(loginId);
     }
 
-    private CenterStaff socialWorkerSignup(CenterStaffSignupRequest requestDto, String encodedPassword) {
+    private CenterStaffSignupResponse socialWorkerSignup(CenterStaffSignupRequest requestDto, String encodedPassword) {
         if(requestDto.centerCode() == null)
             throw new ApplicationException(CenterStaffErrorCase.CENTER_INFO_REQUIRED);
 
         Center center = centerService.findCenterByCenterCode(requestDto.centerCode());
-        return saveCenterStaff(requestDto, encodedPassword, center);
+        CenterStaff centerStaff = saveCenterStaff(requestDto, encodedPassword, center);
 
+        return new CenterStaffSignupResponse(centerStaff.getId(), null);
     }
 
-    private CenterStaff centerManagerSignup(CenterStaffSignupRequest requestDto, String encodedPassword) {
+    private CenterStaffSignupResponse centerManagerSignup(CenterStaffSignupRequest requestDto, String encodedPassword) {
         if(requestDto.centerId() == null)
             throw new ApplicationException(CenterStaffErrorCase.CENTER_INFO_REQUIRED);
 
         Center center = centerService.findCenterEntity(requestDto.centerId());
-        return saveCenterStaff(requestDto, encodedPassword, center);
+        CenterStaff centerStaff = saveCenterStaff(requestDto, encodedPassword, center);
+
+        String userId = String.valueOf(centerStaff.getId());
+        Map<String, Object> claims = Map.of("role", Authority.ROLE_CENTER_MANAGER, "centerId", requestDto.centerId());
+        String accessToken = jwtTokenizer.createAccessToken(userId, claims);
+
+        return new CenterStaffSignupResponse(centerStaff.getId(), accessToken);
     }
 
     private CenterStaff saveCenterStaff(CenterStaffSignupRequest requestDto, String encodedPassword, Center center) {

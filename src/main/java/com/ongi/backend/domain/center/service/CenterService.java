@@ -31,11 +31,8 @@ public class CenterService {
     private final CenterEmailService centerEmailService;
 
     @Transactional
-    public void saveCenterInfo(CenterRequestDto requestDto) {
-        Long centerId = requestDto.centerId();
-
+    public void saveCenterInfo(Long centerId, CenterRequestDto requestDto) {
         Center center = findCenterEntity(centerId);
-
         center.updateCenterInfo(requestDto);
     }
 
