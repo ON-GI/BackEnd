@@ -4,7 +4,6 @@ import com.ongi.backend.domain.center.entity.Center;
 import com.ongi.backend.domain.senior.entity.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
