@@ -5,7 +5,6 @@ import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.matching.dto.request.MatchingRequestDto;
 import com.ongi.backend.domain.matching.entity.enums.MatchingStatus;
 import com.ongi.backend.domain.senior.entity.Senior;
-import com.ongi.backend.domain.senior.entity.SeniorCareTypeMapping;
 import com.ongi.backend.domain.senior.entity.enums.SeniorCareDetail;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,7 +13,6 @@ import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -23,7 +21,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE matching SET deleted_at = now() WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
-@Table(name = "senior")
+@Table(name = "matching")
 public class Matching extends BaseEntity {
 
     @Id
@@ -55,7 +53,7 @@ public class Matching extends BaseEntity {
 
         Matching matching =  Matching.builder()
                 .senior(senior)
-                .matchingStatus(MatchingStatus.PENDING)
+                .matchingStatus(MatchingStatus.CREATED)
                 .matchingCondition(MatchingCondition.from(requestDto.matchingConditionRequestDto()))
                 .build();
 
@@ -72,5 +70,13 @@ public class Matching extends BaseEntity {
         matching.getMatchingCareDetails().addAll(careDetails);
 
         return matching;
+    }
+
+    public void updateCaregiver(Caregiver caregiver) {
+        this.caregiver = caregiver;
+    }
+
+    public void updateMatchingStatus(MatchingStatus status) {
+        this.matchingStatus = status;
     }
 }

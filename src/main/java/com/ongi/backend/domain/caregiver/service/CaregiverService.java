@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -156,13 +155,13 @@ public class CaregiverService {
     }
 
     @Transactional(readOnly = true)
-    private Caregiver findCaregiverById(Long caregiverId) {
+    public Caregiver findCaregiverById(Long caregiverId) {
         return caregiverRepository.findById(caregiverId)
                 .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.CAREGIVER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
-    private Caregiver findCaregiverByIdJoinInfo(Long caregiverId) {
+    public Caregiver findCaregiverByIdJoinInfo(Long caregiverId) {
         return caregiverRepository.findByIdJoinInfo(caregiverId)
                 .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.CAREGIVER_NOT_FOUND));
     }

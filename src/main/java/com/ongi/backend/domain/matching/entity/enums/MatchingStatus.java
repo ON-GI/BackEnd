@@ -1,5 +1,17 @@
 package com.ongi.backend.domain.matching.entity.enums;
 
 public enum MatchingStatus {
-    REJECTED, CANCELLED, PENDING, ADJUSTING, MATCHED
+    // 거절됨
+    REJECTED,
+    // 생성만 된 상태
+    CREATED,
+    // 요청 대기중 - 요양 보호사가 확인 안 함
+    PENDING_UNVIEW,
+
+    // 요청 대기중 - 요양 보호사가 확인함
+    PENDING_VIEW,
+    // 조율중
+    ADJUSTING,
+    // 매칭 완료
+    MATCHED
 }
