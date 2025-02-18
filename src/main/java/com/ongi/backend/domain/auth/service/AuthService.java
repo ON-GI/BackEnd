@@ -119,6 +119,7 @@ public class AuthService {
 
     private void saveRefreshToken(Long userId, Authority authority, String refreshToken) {
         refreshTokenRepository.deleteByUserIdAndAuthority(userId, authority);
+        refreshTokenRepository.flush();
         refreshTokenRepository.save(RefreshToken.from(userId, authority, refreshToken));
     }
 
