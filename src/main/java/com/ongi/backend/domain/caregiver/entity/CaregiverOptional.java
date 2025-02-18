@@ -26,14 +26,14 @@ public class CaregiverOptional {
 
     public static CaregiverOptional from(OptionalRequestDto request, Caregiver caregiver) {
         return CaregiverOptional.builder()
-                .career(CaregiverCareer.fromString(request.career()))
+                .career(request.career() == null ? null : CaregiverCareer.fromString(request.career()))
                 .description(request.description())
                 .caregiver(caregiver)
                 .build();
     }
 
     public void updateFrom(@Valid OptionalRequestDto request) {
-        this.career = CaregiverCareer.fromString(request.career());
+        this.career = request.career() == null ? null : CaregiverCareer.fromString(request.career());
         this.description = request.description();
     }
 }

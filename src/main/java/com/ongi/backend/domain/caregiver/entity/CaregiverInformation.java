@@ -10,6 +10,7 @@ import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -56,6 +57,7 @@ public class CaregiverInformation {
                 .mobilityAssistance(request.getMobilityAssistanceEnum())
                 .dailyLivingAssistance(request.getDailyLivingAssistanceEnum())
                 .caregiver(caregiver)
+                .licenses(new ArrayList<CaregiverLicense>())
                 .build();
     }
 
