@@ -43,10 +43,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 Long userId = Long.valueOf(claims.getSubject());
                 Authority authority = Authority.valueOf(claims.get("role", String.class));
 
+                Long centerId = claims.get("centerId", Long.class);
+
                 List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(authority.name()));
 
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userId, null, authorities);
+                        new UsernamePasswordAuthenticationToken(userId, centerId, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (ExpiredJwtException e) {

@@ -38,6 +38,9 @@ public class Senior extends BaseEntity {
     private Integer age;
 
     @Column
+    private Double weight;
+
+    @Column
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -71,6 +74,7 @@ public class Senior extends BaseEntity {
                 .name(requestDto.name())
                 .birthDate(requestDto.birthDate())
                 .age(requestDto.age())
+                .weight(requestDto.weight())
                 .gender(requestDto.gender())
                 .gradeType(requestDto.gradeType())
                 .residence(requestDto.residence().toEntity())
@@ -87,6 +91,7 @@ public class Senior extends BaseEntity {
         this.name = requestDto.name();
         this.birthDate = requestDto.birthDate();
         this.age = requestDto.age();
+        this.weight = requestDto.weight();
         this.gender = requestDto.gender();
         this.gradeType = requestDto.gradeType();
         this.residence = requestDto.residence().toEntity();

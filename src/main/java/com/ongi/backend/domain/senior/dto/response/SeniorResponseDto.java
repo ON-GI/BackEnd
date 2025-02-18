@@ -20,6 +20,8 @@ public class SeniorResponseDto {
 
     private Integer age;
 
+    private Double weight;
+
     private Gender gender;
 
     private String gradeType;
@@ -39,6 +41,7 @@ public class SeniorResponseDto {
                 .name(senior.getName())
                 .birthDate(senior.getBirthDate())
                 .age(senior.getAge())
+                .weight(senior.getWeight())
                 .gender(senior.getGender())
                 .gradeType(senior.getGradeType().getDescription())
                 .residence(senior.getResidence())

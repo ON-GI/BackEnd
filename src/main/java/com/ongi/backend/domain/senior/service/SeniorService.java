@@ -2,7 +2,9 @@ package com.ongi.backend.domain.senior.service;
 
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.service.FileUploadService;
+import com.ongi.backend.domain.auth.exception.AuthErrorCase;
 import com.ongi.backend.domain.center.entity.Center;
+import com.ongi.backend.domain.center.service.CenterService;
 import com.ongi.backend.domain.senior.dto.request.SeniorCareConditionRequestDto;
 import com.ongi.backend.domain.senior.dto.request.SeniorDiseaseRequestDto;
 import com.ongi.backend.domain.senior.dto.request.SeniorRequestDto;
@@ -29,11 +31,13 @@ public class SeniorService {
 
     private final SeniorDiseaseRepository seniorDiseaseRepository;
 
+    private final CenterService centerService;
+
     private final FileUploadService fileUploadService;
 
     @Transactional
-    public void registerSenior(SeniorRequestDto request, Center center) {
-
+    public void registerSenior(SeniorRequestDto request, Long centerId) {
+        Center center = centerService.findCenterEntity(centerId);
         // 어르신 엔티티 생성 후 저장
         Senior senior = Senior.from(request, center);
         seniorRepository.save(senior);
@@ -46,15 +50,23 @@ public class SeniorService {
     }
 
     @Transactional
-    public SeniorResponseDto findSenior(Long seniorId) {
+    public SeniorResponseDto findSenior(Long seniorId, Long centerId) {
+        Center center = findCenterEntity(centerId);
+
         Senior senior = seniorRepository.findById(seniorId)
                 .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
 
-        return SeniorResponseDto.fromEntity(senior);
+        if (senior.getCenter().equals(center)) {
+            return SeniorResponseDto.fromEntity(senior);
+        } else{
+            throw new ApplicationException(SeniorErrorCase.SENIOR_CENTER_UNMATCHED);
+        }
     }
 
     @Transactional
-    public List<SeniorResponseDto> findSeniorsByCenter(Center center) {
+    public List<SeniorResponseDto> findSeniorsByCenter(Long centerId) {
+        Center center = findCenterEntity(centerId);
+
         List<Senior> seniors = seniorRepository.findSeniorsByCenter(center);
 
         if (seniors.isEmpty()) {
@@ -67,27 +79,40 @@ public class SeniorService {
     }
 
     @Transactional
-    public void updateSenior(Long seniorId, SeniorRequestDto request, Center center) {
+    public void updateSenior(Long seniorId, SeniorRequestDto request, Long centerId) {
+        Center center = findCenterEntity(centerId);
+
         Senior senior = seniorRepository.findById(seniorId)
                 .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
 
-        senior.updateBasicInfo(request);
-        updateCareCondition(request.careCondition(), senior);
-        updateDisease(request.diseaseCondition(), senior);
+        if (senior.getCenter().equals(center)) {
+            senior.updateBasicInfo(request);
+            updateCareCondition(request.careCondition(), senior);
+            updateDisease(request.diseaseCondition(), senior);
+        } else{
+            throw new ApplicationException(SeniorErrorCase.SENIOR_CENTER_UNMATCHED);
+        }
     }
 
     @Transactional
-    public void updateSeniorProfileImage(Long seniorId, MultipartFile profileImage) {
+    public void updateSeniorProfileImage(Long seniorId, Long centerId, MultipartFile profileImage) {
+
+        Center center = findCenterEntity(centerId);
+
         Senior senior = seniorRepository.findById(seniorId)
                 .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
 
-        String oldProfileImageUrl = senior.getProfileImageUrl();
-        if (oldProfileImageUrl != null) {
-            fileUploadService.deleteImage(oldProfileImageUrl);
-        }
+        if (senior.getCenter().equals(center)) {
+            String oldProfileImageUrl = senior.getProfileImageUrl();
+            if (oldProfileImageUrl != null) {
+                fileUploadService.deleteImage(oldProfileImageUrl);
+            }
 
-        String imageUrl = fileUploadService.uploadFileToS3(profileImage);
-        senior.updateProfileImageUrl(imageUrl);
+            String imageUrl = fileUploadService.uploadFileToS3(profileImage);
+            senior.updateProfileImageUrl(imageUrl);
+        } else{
+            throw new ApplicationException(SeniorErrorCase.SENIOR_CENTER_UNMATCHED);
+        }
     }
 
     private void updateCareCondition(SeniorCareConditionRequestDto request, Senior senior) {
@@ -109,10 +134,24 @@ public class SeniorService {
     }
 
     @Transactional
-    public void deleteSenior(Long seniorId) {
+    public void deleteSenior(Long seniorId, Long centerId) {
+
+        Center center = findCenterEntity(centerId);
         Senior senior = seniorRepository.findById(seniorId)
                 .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
 
-        seniorRepository.delete(senior); // Soft Delete 적용으로 deleted_at이 자동 업데이트됨.
+        if (senior.getCenter().equals(center)) {
+            seniorRepository.delete(senior); // Soft Delete 적용으로 deleted_at이 자동 업데이트됨.
+        } else{
+            throw new ApplicationException(SeniorErrorCase.SENIOR_CENTER_UNMATCHED);
+        }
+    }
+
+    private Center findCenterEntity(Long centerId) {
+        if (centerId == null) {
+            throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
+        }
+
+        return centerService.findCenterEntity(centerId);
     }
 }

@@ -46,6 +46,7 @@ class SecurityConfig {
                 .requestMatchers("/api/v1/center/").permitAll()
                 .requestMatchers("/api/v1/center/search").permitAll()
                 .requestMatchers("/api/v1/caregiver/**").hasRole("CAREGIVER")
+                .requestMatchers("/api/v1/senior/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
                 .requestMatchers("/api/v1/center/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
                 .requestMatchers("/api/v1/center-staff/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
                 .requestMatchers("/api/v1/senior/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")

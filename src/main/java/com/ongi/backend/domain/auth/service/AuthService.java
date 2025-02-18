@@ -37,7 +37,7 @@ public class AuthService {
     public LoginTokensDto login(LoginRequest request) {
         if(request.authority().equals(Authority.ROLE_CAREGIVER.toString())) {
             return caregiverLogin(request);
-        } else if(request.authority().equals("ROLE_CENTER")) {
+        } else if(request.authority().equals(Authority.ROLE_CENTER_MANAGER.toString()) || request.authority().equals(Authority.ROLE_SOCIAL_WORKER.toString())) {
             return centerStaffLogin(request);
         } else {
             throw new ApplicationException(AuthErrorCase.INVALID_AUTHORITY);
