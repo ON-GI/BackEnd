@@ -3,6 +3,7 @@ package com.ongi.backend.domain.senior.entity;
 import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.common.enums.Gender;
 import com.ongi.backend.domain.center.entity.Center;
+import com.ongi.backend.domain.matching.entity.Matching;
 import com.ongi.backend.domain.senior.dto.request.SeniorRequestDto;
 import com.ongi.backend.domain.senior.entity.enums.GradeType;
 import com.ongi.backend.domain.senior.entity.enums.Residence;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -65,6 +67,9 @@ public class Senior extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center_id", nullable = false)
     private Center center;
+
+    @OneToMany(mappedBy = "senior", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Matching> matchings;
 
     @OneToOne(mappedBy = "senior", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private SeniorCareCondition careCondition;

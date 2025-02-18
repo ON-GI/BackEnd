@@ -13,10 +13,6 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class MatchingCondition {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column
     @Embedded
     private MatchingCareRegion matchingCareRegion;

@@ -55,6 +55,8 @@ public class Matching extends BaseEntity {
                 .senior(senior)
                 .matchingStatus(MatchingStatus.CREATED)
                 .matchingCondition(MatchingCondition.from(requestDto.matchingConditionRequestDto()))
+                .matchingCareDetails(new ArrayList<>())
+                .matchingCareTimes(new ArrayList<>())
                 .build();
 
         List<MatchingCareTime> careTimes = requestDto.careTimes().stream()

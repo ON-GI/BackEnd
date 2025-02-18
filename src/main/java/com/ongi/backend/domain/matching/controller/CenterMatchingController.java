@@ -25,6 +25,6 @@ public class CenterMatchingController {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
         matchingService.registerMatching(matchingRequestDto, centerId);
-        return CommonResponse.success("어르신 정보를 성공적으로 등록했습니다.");
+        return CommonResponse.success("센터 정보를 성공적으로 등록했습니다.");
     }
 }

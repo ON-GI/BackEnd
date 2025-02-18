@@ -38,6 +38,8 @@ public class MatchingService {
 
         Senior senior = seniorService.findSeniorEntity(matchingRequestDto.seniorId(), centerId);
         Matching matching = Matching.from(matchingRequestDto, senior);
+
+        matchingRepository.save(matching);
     }
 
     public void findMatchingDetail(Long matchingId) {
