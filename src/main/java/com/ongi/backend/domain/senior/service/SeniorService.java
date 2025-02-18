@@ -64,6 +64,16 @@ public class SeniorService {
     }
 
     @Transactional
+    public Senior findSeniorEntity(Long seniorId, Long centerId) {
+        Center center = findCenterEntity(centerId);
+
+        Senior senior = seniorRepository.findById(seniorId)
+                .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
+
+        return senior;
+    }
+
+    @Transactional
     public List<SeniorResponseDto> findSeniorsByCenter(Long centerId) {
         Center center = findCenterEntity(centerId);
 

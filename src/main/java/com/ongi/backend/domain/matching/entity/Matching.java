@@ -10,6 +10,9 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
@@ -35,6 +38,12 @@ public class Matching extends BaseEntity {
     @Column
     @Enumerated(EnumType.STRING)
     private MatchingStatus matchingStatus;
+
+    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)  // ✅ 추가
+    private List<MatchingCareDetail> matchingCareDetails = new ArrayList<>();
+
+    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)  // ✅ 추가
+    private List<MatchingCareTime> matchingCareTimes = new ArrayList<>();
 
     public static Matching from(MatchingRequestDto matchingRequestDto) {
 
