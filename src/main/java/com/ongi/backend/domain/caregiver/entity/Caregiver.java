@@ -4,7 +4,6 @@ import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.domain.caregiver.dto.request.CaregiverSignupRequestDto;
 import com.ongi.backend.domain.caregiver.dto.request.CaregiverUpdateRequestDto;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;

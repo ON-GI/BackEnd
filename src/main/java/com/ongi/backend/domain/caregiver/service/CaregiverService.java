@@ -120,10 +120,12 @@ public class CaregiverService {
         Caregiver caregiver = caregiverRepository.save(Caregiver.from(requestDto, encodedPassword));
 
         CaregiverInformation information = saveCaregiverInformation(requestDto.information(), caregiver);
-        CaregiverOptional optional = saveCaregiverOptional(requestDto.optional(), caregiver);
-
         caregiver.updateCaregiverInformation(information);
-        caregiver.updateCaregiverOptional(optional);
+
+        if(requestDto.optional() != null) {
+            CaregiverOptional optional = saveCaregiverOptional(requestDto.optional(), caregiver);
+            caregiver.updateCaregiverOptional(optional);
+        }
 
         return caregiver;
     }
