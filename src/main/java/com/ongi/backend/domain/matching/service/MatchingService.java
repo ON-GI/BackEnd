@@ -4,6 +4,7 @@ import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.service.CaregiverService;
 import com.ongi.backend.domain.matching.dto.request.MatchingRequestDto;
+import com.ongi.backend.domain.matching.dto.response.MatchingThumbnailResponseDto;
 import com.ongi.backend.domain.matching.entity.Matching;
 import com.ongi.backend.domain.matching.entity.enums.MatchingStatus;
 import com.ongi.backend.domain.matching.exception.MatchingErrorCase;
@@ -44,6 +45,10 @@ public class MatchingService {
 
     public void findMatchingDetail(Long matchingId) {
 
+    }
+
+    public List<MatchingThumbnailResponseDto> findAllMatchingThumbnailsByCenterAndStatus(Long centerId, List<MatchingStatus> statuses) {
+        return matchingRepository.findAllMatchingThumbnailsByCenterAndStatus(centerId, statuses);
     }
 
     public void findMatchingByCenter(Long centerId) {

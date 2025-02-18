@@ -1,7 +1,7 @@
 package com.ongi.backend.domain.matching.entity;
 
+import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.domain.matching.dto.request.MatchingCareTimeRequestDto;
-import com.ongi.backend.domain.senior.entity.SeniorCareTime;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -17,7 +17,7 @@ import java.time.LocalTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE matching_care_time SET deleted_at = now() WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
-public class MatchingCareTime {
+public class MatchingCareTime extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
