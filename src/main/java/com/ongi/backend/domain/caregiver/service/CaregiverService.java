@@ -3,7 +3,10 @@ package com.ongi.backend.domain.caregiver.service;
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.service.FileUploadService;
 import com.ongi.backend.domain.caregiver.dto.request.*;
+import com.ongi.backend.domain.caregiver.dto.response.CaregiverResponseDto;
 import com.ongi.backend.domain.caregiver.dto.response.CaregiverSignupResponse;
+import com.ongi.backend.domain.caregiver.dto.response.InformationResponseDto;
+import com.ongi.backend.domain.caregiver.dto.response.OptionalResponseDto;
 import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.entity.CaregiverInformation;
 import com.ongi.backend.domain.caregiver.entity.CaregiverLicense;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +70,48 @@ public class CaregiverService {
                 .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.CAREGIVER_NOT_FOUND));
     }
 
+    public CaregiverResponseDto getCaregiver(Long caregiverId) {
+        Caregiver caregiver = findCaregiverById(caregiverId);
+        return CaregiverResponseDto.from(caregiver);
+    }
+
+    @Transactional
+    public void updateCaregiver(Long caregiverId, CaregiverUpdateRequestDto request) {
+        Caregiver caregiver = findCaregiverById(caregiverId);
+        caregiver.updateBy(request);
+        caregiverRepository.save(caregiver);
+    }
+
+    public InformationResponseDto getCaregiverInfo(Long caregiverId) {
+        Caregiver caregiver = findCaregiverByIdJoinInfo(caregiverId);
+        return InformationResponseDto.from(caregiver.getCaregiverInformation());
+    }
+
+    @Transactional
+    public void updateCaregiverInfo(Long caregiverId, InformationRequestDto request) {
+        CaregiverInformation information = findCaregiverById(caregiverId).getCaregiverInformation();
+        information.update(request);
+
+        List<CaregiverLicense> licenses = request.licenses().stream()
+                .map(license -> CaregiverLicense.from(license, information))
+                .toList();
+
+        information.updateLicenses(licenses);
+        caregiverInformationRepository.save(information);
+    }
+
+    public OptionalResponseDto getCaregiverOptional(Long caregiverId) {
+        Caregiver caregiver = findCaregiverById(caregiverId);
+        return OptionalResponseDto.from(caregiver.getCaregiverOptional());
+    }
+
+    @Transactional
+    public void updateCaregiverOptional(Long caregiverId, OptionalRequestDto request) {
+        CaregiverOptional optional = findCaregiverById(caregiverId).getCaregiverOptional();
+        optional.updateFrom(request);
+        caregiverOptionalRepository.save(optional);
+    }
+
     private boolean existsDuplicateId(String loginId) {
         return caregiverRepository.existsByLoginId(loginId);
     }
@@ -103,5 +149,17 @@ public class CaregiverService {
         caregiverLicenseRepository.saveAll(licenses);
 
         return licenses;
+    }
+
+    @Transactional(readOnly = true)
+    private Caregiver findCaregiverById(Long caregiverId) {
+        return caregiverRepository.findById(caregiverId)
+                .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.CAREGIVER_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    private Caregiver findCaregiverByIdJoinInfo(Long caregiverId) {
+        return caregiverRepository.findByIdJoinInfo(caregiverId)
+                .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.CAREGIVER_NOT_FOUND));
     }
 }

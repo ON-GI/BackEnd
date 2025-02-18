@@ -2,7 +2,9 @@ package com.ongi.backend.domain.caregiver.entity;
 
 import com.ongi.backend.common.entity.BaseEntity;
 import com.ongi.backend.domain.caregiver.dto.request.CaregiverSignupRequestDto;
+import com.ongi.backend.domain.caregiver.dto.request.CaregiverUpdateRequestDto;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -71,5 +73,12 @@ public class Caregiver extends BaseEntity {
 
     public void updateProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public void updateBy(CaregiverUpdateRequestDto request) {
+        this.name = request.name();
+        this.phoneNumber = request.phoneNum();
+        this.address = request.address();
+        this.hasCar = request.hasCar();
     }
 }

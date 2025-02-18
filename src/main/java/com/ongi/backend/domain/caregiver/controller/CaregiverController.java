@@ -1,11 +1,8 @@
 package com.ongi.backend.domain.caregiver.controller;
 
 import com.ongi.backend.common.response.CommonResponse;
-import com.ongi.backend.domain.caregiver.dto.request.CaregiverSignupRequestDto;
-import com.ongi.backend.domain.caregiver.dto.request.ValidateIdRequestDto;
-import com.ongi.backend.domain.caregiver.dto.request.WorkConditionRequestDto;
-import com.ongi.backend.domain.caregiver.dto.response.CaregiverSignupResponse;
-import com.ongi.backend.domain.caregiver.dto.response.WorkConditionResponseDto;
+import com.ongi.backend.domain.caregiver.dto.request.*;
+import com.ongi.backend.domain.caregiver.dto.response.*;
 import com.ongi.backend.domain.caregiver.service.CaregiverService;
 import com.ongi.backend.domain.caregiver.service.CaregiverWorkService;
 import jakarta.validation.Valid;
@@ -54,5 +51,47 @@ public class CaregiverController {
         Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         caregiverService.updateCaregiverProfileImage(profileImage, caregiverId);
         return CommonResponse.success("프로필 이미지 등록 완료했습니다.");
+    }
+
+    @GetMapping
+    public CommonResponse<CaregiverResponseDto> getCaregiver() {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CaregiverResponseDto response = caregiverService.getCaregiver(caregiverId);
+        return CommonResponse.success(response);
+    }
+
+    @PutMapping
+    public CommonResponse<Object> updateCaregiver(@Valid @RequestBody CaregiverUpdateRequestDto request) {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        caregiverService.updateCaregiver(caregiverId, request);
+        return CommonResponse.success();
+    }
+
+    @GetMapping("/job-info")
+    public CommonResponse<InformationResponseDto> getCaregiverInfo() {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        InformationResponseDto response = caregiverService.getCaregiverInfo(caregiverId);
+        return CommonResponse.success(response);
+    }
+
+    @PutMapping("/job-info")
+    public CommonResponse<Object> updateCaregiverInfo(@Valid @RequestBody InformationRequestDto request) {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        caregiverService.updateCaregiverInfo(caregiverId, request);
+        return CommonResponse.success();
+    }
+
+    @GetMapping("/optional")
+    public CommonResponse<OptionalResponseDto> getCaregiverOptional() {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        OptionalResponseDto response = caregiverService.getCaregiverOptional(caregiverId);
+        return CommonResponse.success(response);
+    }
+
+    @PutMapping("/optional")
+    public CommonResponse<Object> updateCaregiverOptional(@Valid @RequestBody OptionalRequestDto request) {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        caregiverService.updateCaregiverOptional(caregiverId, request);
+        return CommonResponse.success();
     }
 }
