@@ -23,6 +23,9 @@ public record SeniorRequestDto (
         @NotNull(message = "나이를 입력하세요.")
         Integer age,
 
+        @NotNull(message = "몸무게를 입력하세요.")
+        Double weight,
+
         @NotNull(message = "성별을 입력하세요.")
         Gender gender,
 
