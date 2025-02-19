@@ -3,9 +3,11 @@ package com.ongi.backend.domain.matching.service;
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.service.CaregiverService;
+import com.ongi.backend.domain.matching.dto.request.MatchingAdjustRequestDto;
 import com.ongi.backend.domain.matching.dto.request.MatchingRequestDto;
 import com.ongi.backend.domain.matching.dto.response.MatchingThumbnailResponseDto;
 import com.ongi.backend.domain.matching.entity.Matching;
+import com.ongi.backend.domain.matching.entity.MatchingAdjustment;
 import com.ongi.backend.domain.matching.entity.enums.MatchingStatus;
 import com.ongi.backend.domain.matching.exception.MatchingErrorCase;
 import com.ongi.backend.domain.matching.repository.MatchingRepository;
@@ -95,8 +97,13 @@ public class MatchingService {
         matching.updateMatchingStatus(MatchingStatus.REJECTED);
     }
 
-    public void adjustingMatching(Long matchingId) {
+    public void adjustMatching(MatchingAdjustRequestDto requestDto, Long matchingId, Long caregiverId) {
+        checkMatchingAndCaregiver(matchingId, caregiverId);
+        MatchingAdjustment matchingAdjustment = MatchingAdjustment.from(requestDto);
 
+        Matching matching = findMatchingEntity(matchingId);
+        matching.updateMatchingAdjustment(matchingAdjustment);
+        matching.updateMatchingStatus(MatchingStatus.ADJUSTING);
     }
 
     public void completeMatching(Long matchingId) {

@@ -43,6 +43,9 @@ public class Matching extends BaseEntity {
     @Embedded
     private MatchingCondition matchingCondition;
 
+    @Embedded
+    private MatchingAdjustment matchingAdjustment;
+
     @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)  // ✅ 추가
     private List<MatchingCareDetail> matchingCareDetails = new ArrayList<>();
 
@@ -80,5 +83,9 @@ public class Matching extends BaseEntity {
 
     public void updateMatchingStatus(MatchingStatus status) {
         this.matchingStatus = status;
+    }
+
+    public void updateMatchingAdjustment(MatchingAdjustment adjustment) {
+        this.matchingAdjustment = adjustment;
     }
 }
