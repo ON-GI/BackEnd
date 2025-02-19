@@ -46,6 +46,13 @@ public class CaregiverController {
         return CommonResponse.success("근무 조건 업데이트 완료했습니다.");
     }
 
+    @GetMapping("/profile")
+    public CommonResponse<ProfileUrlResponseDto> getProfileUrl() {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ProfileUrlResponseDto response = caregiverService.getProfileUrl(caregiverId);
+        return CommonResponse.success(response);
+    }
+
     @PostMapping("/profile")
     public CommonResponse<String> registerProfileImage(@RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
         Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
