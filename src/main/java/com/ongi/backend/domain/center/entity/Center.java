@@ -1,7 +1,9 @@
 package com.ongi.backend.domain.center.entity;
 
 import com.ongi.backend.common.entity.BaseEntity;
+import com.ongi.backend.domain.center.dto.request.CenterEssentialRequestDto;
 import com.ongi.backend.domain.center.dto.request.CenterInitializerRequestDto;
+import com.ongi.backend.domain.center.dto.request.CenterOptionalRequestDto;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
 import com.ongi.backend.domain.center.entity.enums.CenterGrade;
 import com.ongi.backend.domain.center.entity.enums.CenterStatus;
@@ -92,5 +94,19 @@ public class Center extends BaseEntity {
 
     public void updateCenterDocumentUrl(String centerDocumentUrl) {
         this.centerDocumentUrl = centerDocumentUrl;
+    }
+
+    public void updateCenterEssential(CenterEssentialRequestDto request) {
+        this.name = request.centerName();
+        this.contact = request.contact();
+        this.address = request.address();
+    }
+
+    public void updateCenterOptional(CenterOptionalRequestDto request) {
+        this.centerGrade = request.centerGrade() == null
+                ? null : CenterGrade.fromString(request.centerGrade());
+        this.establishmentDate = request.establishmentDate();
+        this.description = request.description();
+        this.hasVehicle = request.hasVehicle();
     }
 }
