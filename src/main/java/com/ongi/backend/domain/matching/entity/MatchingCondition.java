@@ -29,6 +29,8 @@ public class MatchingCondition {
     @Column(nullable = false)
     private Integer maxPayAmount;   // 시급 상한선
 
+    private Integer peopleCount;    // 필요한 인원 수
+
     public static MatchingCondition from(MatchingConditionRequestDto requestDto) {
         return MatchingCondition.builder()
                 .matchingCareRegion(requestDto.careRegion().toEntity())
@@ -37,6 +39,7 @@ public class MatchingCondition {
                 .benefits(requestDto.benefits())
                 .minPayAmount(requestDto.minPayAmount())
                 .maxPayAmount(requestDto.maxPayAmount())
+                .peopleCount(requestDto.peopleCount())
                 .build();
     }
 }
