@@ -36,7 +36,7 @@ public class Matching extends BaseEntity {
     @JoinColumn(name = "caregiver_id")
     private Caregiver caregiver;
 
-    @Column
+    @Column(nullable = false, length = 60)
     @Enumerated(EnumType.STRING)
     private MatchingStatus matchingStatus;
 

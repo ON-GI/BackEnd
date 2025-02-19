@@ -61,6 +61,18 @@ public class MatchingRepositoryImpl implements MatchingRepositoryCustom{
     }
 
     @Override
+    public Long findCaregiverUnReadMatchingCount(Long caregiverId) {
+        QMatching matching = QMatching.matching;
+
+        return queryFactory
+                .select(matching.count())
+                .from(matching)
+                .where(matching.caregiver.id.eq(caregiverId)
+                        .and(matching.matchingStatus.eq(MatchingStatus.PENDING_UNREAD))) // 상태 필터링
+                .fetchOne();  // 개수 조회
+    }
+
+    @Override
     public List<MatchingThumbnailResponseDto> findAllMatchingThumbnailsByCenterAndStatus(Long centerId, List<MatchingStatus> statuses) {
         QMatching matching = QMatching.matching;
         QSenior senior = QSenior.senior;

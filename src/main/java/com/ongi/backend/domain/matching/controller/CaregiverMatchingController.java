@@ -1,5 +1,6 @@
 package com.ongi.backend.domain.matching.controller;
 
+import com.ongi.backend.common.response.CommonResponse;
 import com.ongi.backend.domain.matching.dto.response.MatchingThumbnailResponseDto;
 import com.ongi.backend.domain.matching.entity.enums.MatchingStatus;
 import com.ongi.backend.domain.matching.service.MatchingService;
@@ -22,11 +23,17 @@ public class CaregiverMatchingController {
     private final MatchingService matchingService;
 
     @GetMapping()
-    public List<MatchingThumbnailResponseDto> findAllCaregiverMatchingsByStatus(
+    public CommonResponse<List<MatchingThumbnailResponseDto>> findAllCaregiverMatchingsByStatus(
             @RequestParam(value = "statuses", required = false) List<MatchingStatus> statuses
     ) {
         Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return matchingService.findAllMatchingThumbnailsByCaregiverAndStatus(caregiverId, statuses);
+        return CommonResponse.success(matchingService.findAllMatchingThumbnailsByCaregiverAndStatus(caregiverId, statuses));
     }
 
+    @GetMapping("unread-count")
+    public CommonResponse<Long> findCaregiverUnReadMatchingCount() {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return CommonResponse.success(matchingService.findCaregiverUnReadMatchingCount(caregiverId));
+    }
 }
+

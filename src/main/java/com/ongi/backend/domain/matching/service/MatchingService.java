@@ -63,6 +63,10 @@ public class MatchingService {
 
     }
 
+    public Long findCaregiverUnReadMatchingCount(Long caregiverId) {
+        return matchingRepository.findCaregiverUnReadMatchingCount(caregiverId);
+    }
+
     public List<MatchingThumbnailResponseDto> findAllMatchingThumbnailsByCenterAndStatus(Long centerId, List<MatchingStatus> statuses) {
         return matchingRepository.findAllMatchingThumbnailsByCenterAndStatus(centerId, statuses);
     }
@@ -81,7 +85,7 @@ public class MatchingService {
 
         Matching matching = findMatchingEntity(matchingId);
         matching.updateCaregiver(caregiver);
-        matching.updateMatchingStatus(MatchingStatus.PENDING_UNVIEW);
+        matching.updateMatchingStatus(MatchingStatus.PENDING_UNREAD);
     }
 
     public void cancelMatching(Long matchingId) {

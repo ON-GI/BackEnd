@@ -22,11 +22,11 @@ public class CenterMatchingController {
     private final MatchingService matchingService;
 
     @GetMapping()
-    public List<MatchingThumbnailResponseDto> findAllCenterMatchingsByStatus(
+    public CommonResponse<List<MatchingThumbnailResponseDto>> findAllCenterMatchingsByStatus(
             @RequestParam(value = "statuses", required = false) List<MatchingStatus> statuses
     ) {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-        return matchingService.findAllMatchingThumbnailsByCenterAndStatus(centerId, statuses);
+        return CommonResponse.success(matchingService.findAllMatchingThumbnailsByCenterAndStatus(centerId, statuses));
     }
 
     @PostMapping("/register")

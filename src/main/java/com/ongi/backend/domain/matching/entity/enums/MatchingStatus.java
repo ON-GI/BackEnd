@@ -6,10 +6,10 @@ public enum MatchingStatus {
     // 생성만 된 상태
     CREATED,
     // 요청 대기중 - 요양 보호사가 확인 안 함
-    PENDING_UNVIEW,
+    PENDING_UNREAD,
 
     // 요청 대기중 - 요양 보호사가 확인함
-    PENDING_VIEW,
+    PENDING_READ,
     // 조율중
     ADJUSTING,
     // 매칭 완료

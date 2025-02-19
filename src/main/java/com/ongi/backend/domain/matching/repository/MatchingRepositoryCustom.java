@@ -9,6 +9,8 @@ public interface MatchingRepositoryCustom {
 
     boolean existsByMatchingIdAndCenterId(Long matchingId, Long centerId);
     boolean existsByMatchingIdAndCaregiverId(Long matchingId, Long caregiverId);
+
+    Long findCaregiverUnReadMatchingCount(Long caregiverId);
     List<MatchingThumbnailResponseDto> findAllMatchingThumbnailsByCenterAndStatus(Long centerId, List<MatchingStatus> statuses);
     List<MatchingThumbnailResponseDto> findAllMatchingThumbnailsByCaregiverAndStatus(Long caregiverId, List<MatchingStatus> statuses);
 }
