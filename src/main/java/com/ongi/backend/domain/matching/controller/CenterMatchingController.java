@@ -30,7 +30,7 @@ public class CenterMatchingController {
         return CommonResponse.success(matchingService.findAllMatchingThumbnailsByCenterAndStatus(centerId, statuses));
     }
 
-    @GetMapping("/matching/caregiver/{caregiverId}")
+    @GetMapping("/caregiver/{caregiverId}")
     public CommonResponse<MatchingCaregiverInfoResponseDto> getCaregiverInfo(@PathVariable("caregiverId") Long id) {
         return CommonResponse.success(matchingService.getCaregiverInfo(id));
     }
