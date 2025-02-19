@@ -7,10 +7,7 @@ import com.ongi.backend.domain.matching.service.MatchingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,6 +31,14 @@ public class CaregiverMatchingController {
     public CommonResponse<Long> findCaregiverUnReadMatchingCount() {
         Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return CommonResponse.success(matchingService.findCaregiverUnReadMatchingCount(caregiverId));
+    }
+
+    @PostMapping("/{matchingId}/reject")
+    public CommonResponse<String> rejectMatching(@PathVariable("matchingId") Long matchingId) {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        matchingService.rejectMatching(matchingId, caregiverId);
+
+        return CommonResponse.success("매칭이 거절되었습니다.");
     }
 }
 

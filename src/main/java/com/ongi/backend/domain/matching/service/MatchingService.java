@@ -88,8 +88,11 @@ public class MatchingService {
         matching.updateMatchingStatus(MatchingStatus.PENDING_UNREAD);
     }
 
-    public void cancelMatching(Long matchingId) {
+    public void rejectMatching(Long matchingId, Long caregiverId) {
+        checkMatchingAndCaregiver(matchingId, caregiverId);
 
+        Matching matching = findMatchingEntity(matchingId);
+        matching.updateMatchingStatus(MatchingStatus.REJECTED);
     }
 
     public void adjustingMatching(Long matchingId) {
