@@ -2,6 +2,7 @@ package com.ongi.backend.domain.matching.controller;
 
 import com.ongi.backend.common.response.CommonResponse;
 import com.ongi.backend.domain.matching.dto.request.MatchingRequestDto;
+import com.ongi.backend.domain.matching.dto.response.CaregiverMatchingResponseDto;
 import com.ongi.backend.domain.matching.dto.response.MatchingCaregiverInfoResponseDto;
 import com.ongi.backend.domain.matching.dto.response.MatchingThumbnailResponseDto;
 import com.ongi.backend.domain.matching.dto.response.SeniorMatchingDetailResponseDto;
@@ -22,6 +23,13 @@ import java.util.List;
 public class CenterMatchingController {
 
     private final MatchingService matchingService;
+
+    @GetMapping("/seniors/{seniorId}/caregivers")
+    public CommonResponse<List<CaregiverMatchingResponseDto>> findMatchingCaregivers(
+            @PathVariable("seniorId") Long seniorId) {
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        return CommonResponse.success(matchingService.findMatchingCaregivers(seniorId));
+    }
 
     @GetMapping()
     public CommonResponse<List<MatchingThumbnailResponseDto>> findAllCenterMatchingsByStatus(
