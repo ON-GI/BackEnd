@@ -47,7 +47,7 @@ public class Matching extends BaseEntity {
     private List<MatchingCareDetail> matchingCareDetails = new ArrayList<>();
 
     @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MatchingCareTime> matchingTimes = new ArrayList<>();
+    private List<MatchingCareTime> matchingCareTimes = new ArrayList<>();
 
     @Embedded
     private MatchingAdjustment matchingAdjustment;  // 매칭 조율 사항
@@ -59,13 +59,13 @@ public class Matching extends BaseEntity {
                 .matchingCondition(MatchingCondition.from(requestDto.matchingConditionRequestDto()))
                 .matchingStatus(MatchingStatus.PENDING_UNREAD)
                 .matchingCareDetails(new ArrayList<>())
-                .matchingTimes(new ArrayList<>())
+                .matchingCareTimes(new ArrayList<>())
                 .build();
 
         List<MatchingCareTime> matchingCareTimes = requestDto.careTimes().stream()
                 .map(matchingCareTimeRequestDto -> MatchingCareTime.from(matchingCareTimeRequestDto, matching))
                 .toList();
-        matching.getMatchingTimes().addAll(matchingCareTimes);
+        matching.getMatchingCareTimes().addAll(matchingCareTimes);
 
         List<MatchingCareDetail> matchingDetails = requestDto.careDetails().stream()
                 .map(detail -> MatchingCareDetail.from(matching, SeniorCareDetail.valueOf(detail))) // ✅ String → Enum 변환
