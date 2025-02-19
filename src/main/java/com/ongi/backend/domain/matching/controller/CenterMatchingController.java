@@ -34,7 +34,7 @@ public class CenterMatchingController {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
         matchingService.registerMatching(matchingRequestDto, centerId);
-        return CommonResponse.success("매칭을 성공적으로 등록했습니다.");
+        return CommonResponse.success("매칭을 성공적으로 요청했습니다.");
     }
 
     @PostMapping("/{matchingId}/confirm")
