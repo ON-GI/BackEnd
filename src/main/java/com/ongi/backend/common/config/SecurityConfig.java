@@ -56,7 +56,6 @@ class SecurityConfig {
                 .requestMatchers("/api/v1/center/**").hasAnyRole("CENTER_MANAGER")
                 .requestMatchers("/api/v1/center-staff/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
                 .requestMatchers("/api/v1/senior/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
-                .requestMatchers("/api/v1/matching/center/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
                 .anyRequest().authenticated()
         );
 

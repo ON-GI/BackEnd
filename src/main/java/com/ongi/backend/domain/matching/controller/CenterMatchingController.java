@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/matching/center")
+@RequestMapping("/api/v1/center/matching")
 public class CenterMatchingController {
 
     private final MatchingService matchingService;
@@ -35,5 +35,14 @@ public class CenterMatchingController {
 
         matchingService.registerMatching(matchingRequestDto, centerId);
         return CommonResponse.success("센터 정보를 성공적으로 등록했습니다.");
+    }
+
+    @PostMapping("/{matchingId}/request-caregiver")
+    public CommonResponse<String> requestCaregiver(
+            @PathVariable Long matchingId,
+            @RequestParam Long caregiverId) {
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        //matchingService.requestCaregiver(matchingId, caregiverId, centerId);
+        return CommonResponse.success("요양 보호사에게 매칭 요청을 보냈습니다.");
     }
 }

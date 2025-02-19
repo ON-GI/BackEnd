@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/matching/caregiver")
+@RequestMapping("/api/v1/caregiver/matching")
 public class CaregiverMatchingController {
 
 }
