@@ -5,6 +5,7 @@ import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.service.CaregiverService;
 import com.ongi.backend.domain.matching.dto.request.MatchingAdjustRequestDto;
 import com.ongi.backend.domain.matching.dto.request.MatchingRequestDto;
+import com.ongi.backend.domain.matching.dto.response.MatchingCaregiverInfoResponseDto;
 import com.ongi.backend.domain.matching.dto.response.MatchingThumbnailResponseDto;
 import com.ongi.backend.domain.matching.entity.Matching;
 import com.ongi.backend.domain.matching.entity.MatchingAdjustment;
@@ -110,5 +111,10 @@ public class MatchingService {
 
         Matching matching = findMatchingEntity(matchingId);
         matching.updateMatchingStatus(MatchingStatus.CONFIRMED);
+    }
+
+    public MatchingCaregiverInfoResponseDto getCaregiverInfo(Long id) {
+        Caregiver caregiver = caregiverService.findCaregiverById(id);
+        return MatchingCaregiverInfoResponseDto.from(caregiver);
     }
 }
