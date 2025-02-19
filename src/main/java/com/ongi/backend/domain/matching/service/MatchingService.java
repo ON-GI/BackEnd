@@ -43,6 +43,14 @@ public class MatchingService {
         }
     }
 
+    private void checkMatchingAndCaregiver(Long matchingId, Long caregiverId) {
+        boolean checkResult = matchingRepository.existsByMatchingIdAndCaregiverId(matchingId, caregiverId);
+
+        if (!checkResult) {
+            throw new ApplicationException(MatchingErrorCase.MATCHING_CAREGIVER_UNMATCHED);
+        }
+    }
+
     public void registerMatching(MatchingRequestDto matchingRequestDto, Long centerId) {
 
         Senior senior = seniorService.findSeniorEntity(matchingRequestDto.seniorId(), centerId);
@@ -59,8 +67,8 @@ public class MatchingService {
         return matchingRepository.findAllMatchingThumbnailsByCenterAndStatus(centerId, statuses);
     }
 
-    public void findMatchingByCaregiver(Long caregiverId) {
-
+    public List<MatchingThumbnailResponseDto> findAllMatchingThumbnailsByCaregiverAndStatus(Long caregiverId, List<MatchingStatus> statuses) {
+        return matchingRepository.findAllMatchingThumbnailsByCaregiverAndStatus(caregiverId, statuses);
     }
 
     public void findOptimalCaregivers(Long matchingId) {
