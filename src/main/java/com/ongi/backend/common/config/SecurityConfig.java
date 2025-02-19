@@ -6,6 +6,7 @@ import com.ongi.backend.common.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -53,9 +54,10 @@ class SecurityConfig {
 
                 .requestMatchers("/api/v1/caregiver/**").hasRole("CAREGIVER")
                 .requestMatchers("/api/v1/senior/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
-                .requestMatchers("/api/v1/center/**").hasAnyRole("CENTER_MANAGER")
                 .requestMatchers("/api/v1/center-staff/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
-                .requestMatchers("/api/v1/senior/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
+                .requestMatchers("/api/v1/center/matching/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
+                .requestMatchers(HttpMethod.GET, "/api/v1/center/**").hasAnyRole("CENTER_MANAGER", "SOCIAL_WORKER")
+                .requestMatchers("/api/v1/center/**").hasAnyRole("CENTER_MANAGER")
                 .anyRequest().authenticated()
         );
 

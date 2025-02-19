@@ -1,13 +1,17 @@
 package com.ongi.backend.domain.center.controller;
 
 import com.ongi.backend.common.response.CommonResponse;
+import com.ongi.backend.domain.center.dto.request.CenterEssentialRequestDto;
+import com.ongi.backend.domain.center.dto.request.CenterOptionalRequestDto;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
+import com.ongi.backend.domain.center.dto.response.CenterEssentialResponseDto;
+import com.ongi.backend.domain.center.dto.response.CenterOptionalResponseDto;
+import com.ongi.backend.domain.center.dto.response.CenterProfileResponseDto;
 import com.ongi.backend.domain.center.dto.response.CenterResponseDto;
 import com.ongi.backend.domain.center.service.CenterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,5 +69,40 @@ public class CenterController {
             @PathVariable("centerId") Long centerId) {
         centerService.deleteCenter(centerId);
         return CommonResponse.success("센터 삭제가 완료되었습니다.");
+    }
+
+    @GetMapping("/essential")
+    public CommonResponse<CenterEssentialResponseDto> getCenterEssential() {
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        CenterEssentialResponseDto response = centerService.getCenterEssential(centerId);
+        return CommonResponse.success(response);
+    }
+
+    @PutMapping("/essential")
+    public CommonResponse<Object> updateCenterEssential(@Valid @RequestBody CenterEssentialRequestDto request) {
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        centerService.updateCenterEssential(centerId, request);
+        return CommonResponse.success();
+    }
+
+    @GetMapping("/optional")
+    public CommonResponse<CenterOptionalResponseDto> getCenterOptional() {
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        CenterOptionalResponseDto response = centerService.getCenterOptional(centerId);
+        return CommonResponse.success(response);
+    }
+
+    @PutMapping("/optional")
+    public CommonResponse<Object> updateCenterOptional(@Valid @RequestBody CenterOptionalRequestDto request) {
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        centerService.updateCenterOptional(centerId, request);
+        return CommonResponse.success();
+    }
+
+    @GetMapping("/profile")
+    public CommonResponse<CenterProfileResponseDto> getProfile() {
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        CenterProfileResponseDto response = centerService.getProfile(centerId);
+        return CommonResponse.success(response);
     }
 }

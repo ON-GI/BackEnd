@@ -2,7 +2,12 @@ package com.ongi.backend.domain.center.service;
 
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.service.FileUploadService;
+import com.ongi.backend.domain.center.dto.request.CenterEssentialRequestDto;
+import com.ongi.backend.domain.center.dto.request.CenterOptionalRequestDto;
 import com.ongi.backend.domain.center.dto.request.CenterRequestDto;
+import com.ongi.backend.domain.center.dto.response.CenterEssentialResponseDto;
+import com.ongi.backend.domain.center.dto.response.CenterOptionalResponseDto;
+import com.ongi.backend.domain.center.dto.response.CenterProfileResponseDto;
 import com.ongi.backend.domain.center.dto.response.CenterResponseDto;
 import com.ongi.backend.domain.center.entity.Center;
 import com.ongi.backend.domain.center.entity.enums.CenterStatus;
@@ -114,5 +119,32 @@ public class CenterService {
         Center center = findCenterEntity(centerId);
 
         centerRepository.delete(center);
+    }
+
+    public CenterEssentialResponseDto getCenterEssential(Long centerId) {
+        Center center = findCenterEntity(centerId);
+        return CenterEssentialResponseDto.from(center);
+    }
+
+    public void updateCenterEssential(Long centerId, CenterEssentialRequestDto request) {
+        Center center = findCenterEntity(centerId);
+        center.updateCenterEssential(request);
+        centerRepository.save(center);
+    }
+
+    public CenterOptionalResponseDto getCenterOptional(Long centerId) {
+        Center center = findCenterEntity(centerId);
+        return CenterOptionalResponseDto.from(center);
+    }
+
+    public void updateCenterOptional(Long centerId, CenterOptionalRequestDto request) {
+        Center center = findCenterEntity(centerId);
+        center.updateCenterOptional(request);
+        centerRepository.save(center);
+    }
+
+    public CenterProfileResponseDto getProfile(Long centerId) {
+        Center center = findCenterEntity(centerId);
+        return new CenterProfileResponseDto(center.getProfileImageUrl());
     }
 }
