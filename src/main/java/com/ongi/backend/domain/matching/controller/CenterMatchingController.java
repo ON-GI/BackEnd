@@ -46,4 +46,13 @@ public class CenterMatchingController {
         matchingService.requestMatchingToCaregiver(matchingId, caregiverId, centerId);
         return CommonResponse.success("요양 보호사에게 매칭 요청을 보냈습니다.");
     }
+
+    @PostMapping("/{matchingId}/confirm")
+    public CommonResponse<String> confirmMatching(
+            @PathVariable("matchingId") Long matchingId) {
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+
+        matchingService.confirmMatching(matchingId, centerId);
+        return CommonResponse.success("매칭이 완료되었습니다");
+    }
 }

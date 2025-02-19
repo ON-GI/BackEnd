@@ -106,7 +106,10 @@ public class MatchingService {
         matching.updateMatchingStatus(MatchingStatus.ADJUSTING);
     }
 
-    public void completeMatching(Long matchingId) {
+    public void confirmMatching(Long matchingId, Long centerId) {
+        checkMatchingAndCenter(matchingId, centerId);
 
+        Matching matching = findMatchingEntity(matchingId);
+        matching.updateMatchingStatus(MatchingStatus.CONFIRMED);
     }
 }

@@ -13,5 +13,5 @@ public enum MatchingStatus {
     // 조율중
     ADJUSTING,
     // 매칭 완료
-    MATCHED
+    CONFIRMED
 }
