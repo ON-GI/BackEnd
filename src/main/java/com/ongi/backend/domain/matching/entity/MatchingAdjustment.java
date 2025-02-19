@@ -18,10 +18,14 @@ public class MatchingAdjustment {
     @Column
     private String additionalRequest;
 
+    @Column(nullable = false)
+    private Boolean showCaregiverContact;
+
     public static MatchingAdjustment from(MatchingAdjustRequestDto requestDto) {
         return MatchingAdjustment.builder()
                 .adjustRequest(requestDto.adjustRequest())
                 .additionalRequest(requestDto.additionalRequest())
+                .showCaregiverContact(requestDto.showCaregiverContact())
                 .build();
     }
 }

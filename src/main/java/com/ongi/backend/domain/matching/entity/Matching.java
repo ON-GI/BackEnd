@@ -41,16 +41,16 @@ public class Matching extends BaseEntity {
     private MatchingStatus matchingStatus;
 
     @Embedded
-    private MatchingCondition matchingCondition;
+    private MatchingCondition matchingCondition;    // 근무 조건
 
     @Embedded
-    private MatchingAdjustment matchingAdjustment;
+    private MatchingAdjustment matchingAdjustment;  // 매칭 조율 사항
 
-    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)  // ✅ 추가
-    private List<MatchingCareDetail> matchingCareDetails = new ArrayList<>();
+    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MatchingCareDetail> matchingCareDetails = new ArrayList<>();   // 캐어 항목
 
-    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)  // ✅ 추가
-    private List<MatchingCareTime> matchingCareTimes = new ArrayList<>();
+    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MatchingCareTime> matchingCareTimes = new ArrayList<>();   // 캐어 시간
 
     public static Matching from(MatchingRequestDto requestDto, Senior senior) {
 

@@ -17,17 +17,17 @@ public class MatchingCondition {
     @Embedded
     private MatchingCareRegion matchingCareRegion;
 
-    private LocalDate careStartDate;
+    private LocalDate careStartDate;    // 캐어 시작 일시
 
-    private LocalDate careEndDate;
+    private LocalDate careEndDate;      // 캐어 종료 일시
 
-    private String benefits;
-
-    @Column(nullable = false)
-    private Integer minPayAmount;
+    private String benefits;        // 복리후생
 
     @Column(nullable = false)
-    private Integer maxPayAmount;
+    private Integer minPayAmount;   // 시급 하한선
+
+    @Column(nullable = false)
+    private Integer maxPayAmount;   // 시급 상한선
 
     public static MatchingCondition from(MatchingConditionRequestDto requestDto) {
         return MatchingCondition.builder()
