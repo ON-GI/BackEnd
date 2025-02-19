@@ -1,21 +1,27 @@
 package com.ongi.backend.domain.matching.repository;
 
+import com.ongi.backend.common.enums.Gender;
 import com.ongi.backend.domain.caregiver.entity.QCaregiver;
-import com.ongi.backend.domain.matching.dto.response.MatchingCareTimeResponseDto;
-import com.ongi.backend.domain.matching.dto.response.MatchingThumbnailResponseDto;
-import com.ongi.backend.domain.matching.dto.response.QMatchingThumbnailResponseDto;
+import com.ongi.backend.domain.matching.dto.response.*;
 import com.ongi.backend.domain.matching.entity.MatchingCareTime;
 import com.ongi.backend.domain.matching.entity.QMatching;
 import com.ongi.backend.domain.matching.entity.QMatchingCareDetail;
 import com.ongi.backend.domain.matching.entity.QMatchingCareTime;
 import com.ongi.backend.domain.matching.entity.enums.MatchingStatus;
+import com.ongi.backend.domain.senior.entity.QDiseaseDementiaMapping;
 import com.ongi.backend.domain.senior.entity.QSenior;
+import com.ongi.backend.domain.senior.entity.QSeniorDisease;
+import com.ongi.backend.domain.senior.entity.enums.DementiaSymptom;
+import com.ongi.backend.domain.senior.entity.enums.GradeType;
+import com.ongi.backend.domain.senior.entity.enums.ResidenceType;
 import com.ongi.backend.domain.senior.entity.enums.SeniorCareDetail;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MatchingRepositoryImpl implements MatchingRepositoryCustom{
@@ -198,5 +204,102 @@ public class MatchingRepositoryImpl implements MatchingRepositoryCustom{
         });
 
         return matchings;
+    }
+
+    @Override
+    public Optional<SeniorMatchingDetailResponseDto> findSeniorMatchingDetailByMatchingId(Long matchingId) {
+        QMatching matching = QMatching.matching;
+        QSenior senior = QSenior.senior;
+        QSeniorDisease seniorDisease = QSeniorDisease.seniorDisease;
+        QDiseaseDementiaMapping dementiaMapping = QDiseaseDementiaMapping.diseaseDementiaMapping;
+        QMatchingCareTime careTime = QMatchingCareTime.matchingCareTime;
+        QMatchingCareDetail careDetail = QMatchingCareDetail.matchingCareDetail;
+
+        // 1️⃣ Senior & Matching 기본 정보 조회
+        SeniorMatchingDetailResponseDto seniorDetail = queryFactory
+                .select(Projections.constructor(SeniorMatchingDetailResponseDto.class,
+                        senior.name,
+                        senior.birthDate,
+                        senior.gender.stringValue(),
+                        senior.age,
+                        senior.weight,
+                        matching.matchingCondition.benefits,
+                        senior.residence,
+                        senior.gradeType.stringValue(), // ✅ Enum을 String으로 변환
+                        senior.residenceType.stringValue(), // ✅ Enum을 String으로 변환
+                        senior.profileImageUrl,
+                        senior.staffContact
+                ))
+                .from(matching)
+                .leftJoin(matching.senior, senior)
+                .leftJoin(senior.seniorDisease, seniorDisease)
+                .where(matching.id.eq(matchingId))
+                .fetchOne();
+
+        if (seniorDetail == null) {
+            return Optional.empty();
+        }
+
+        // 2️⃣ careTimes 리스트 조회
+        List<MatchingCareTimeResponseDto> careTimes = queryFactory
+                .select(Projections.constructor(MatchingCareTimeResponseDto.class,
+                        careTime.dayOfWeek,
+                        careTime.startTime,
+                        careTime.endTime
+                ))
+                .from(careTime)
+                .where(careTime.matching.id.eq(matchingId))
+                .fetch();
+
+        // 3️⃣ careDetails 리스트 조회 (SeniorCareDetail Enum 변환)
+        List<SeniorCareDetail> careDetailEnums = queryFactory
+                .select(careDetail.careDetail)
+                .from(careDetail)
+                .where(careDetail.matching.id.eq(matchingId))
+                .fetch();
+
+        List<String> careDetails = careDetailEnums.stream()
+                .map(SeniorCareDetail::getDescription) // ✅ Enum → 한글 변환
+                .toList();
+
+        // 4️⃣ dementiaSymptoms 리스트 조회 (DementiaSymptom Enum 변환)
+        List<DementiaSymptom> dementiaSymptomEnums = queryFactory
+                .select(dementiaMapping.dementiaSymptom)
+                .from(dementiaMapping)
+                .where(dementiaMapping.seniorDisease.id.eq(seniorDisease.id))
+                .fetch();
+
+        List<String> dementiaSymptoms = dementiaSymptomEnums.stream()
+                .map(DementiaSymptom::getDescription) // ✅ Enum → 한글 변환
+                .distinct() // 중복 제거
+                .toList();
+
+        // 6️⃣ 변환된 한글 값 적용
+        seniorDetail = new SeniorMatchingDetailResponseDto(
+                seniorDetail.getName(),
+                seniorDetail.getBirthDate(),
+                seniorDetail.getGender() != null
+                        ? Gender.valueOf(seniorDetail.getGender()).getDescription()
+                        : null,
+                seniorDetail.getAge(),
+                seniorDetail.getWeight(),
+                seniorDetail.getBenefits(),
+                seniorDetail.getResidence(),
+                seniorDetail.getGradeType() != null
+                        ? GradeType.valueOf(seniorDetail.getGradeType()).getDescription()  // ✅ Enum 변환 후 한글 반환
+                        : null,
+                seniorDetail.getResidenceType() != null
+                        ? ResidenceType.valueOf(seniorDetail.getResidenceType()).getDescription()  // ✅ Enum 변환 후 한글 반환
+                        : null,
+                seniorDetail.getProfileImageUrl(),
+                seniorDetail.getStaffContact()
+        );
+
+        // 7️⃣ DTO에 리스트 추가
+        seniorDetail.updateCareTimes(careTimes);
+        seniorDetail.updateCareDetails(careDetails);
+        seniorDetail.updateDementiaSymptoms(dementiaSymptoms);
+
+        return Optional.of(seniorDetail);
     }
 }

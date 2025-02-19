@@ -3,6 +3,7 @@ package com.ongi.backend.domain.matching.controller;
 import com.ongi.backend.common.response.CommonResponse;
 import com.ongi.backend.domain.matching.dto.request.MatchingAdjustRequestDto;
 import com.ongi.backend.domain.matching.dto.response.MatchingThumbnailResponseDto;
+import com.ongi.backend.domain.matching.dto.response.SeniorMatchingDetailResponseDto;
 import com.ongi.backend.domain.matching.entity.enums.MatchingStatus;
 import com.ongi.backend.domain.matching.service.MatchingService;
 import jakarta.validation.Valid;
@@ -27,6 +28,12 @@ public class CaregiverMatchingController {
     ) {
         Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return CommonResponse.success(matchingService.findAllMatchingThumbnailsByCaregiverAndStatus(caregiverId, statuses));
+    }
+
+    @GetMapping("/{matchingId}")
+    public CommonResponse<SeniorMatchingDetailResponseDto> findSeniorMatchingDetail(@PathVariable("matchingId") Long matchingId) {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return CommonResponse.success(matchingService.findSeniorMatchingDetail(matchingId));
     }
 
     @GetMapping("unread-count")

@@ -7,6 +7,7 @@ import com.ongi.backend.domain.matching.dto.request.MatchingAdjustRequestDto;
 import com.ongi.backend.domain.matching.dto.request.MatchingRequestDto;
 import com.ongi.backend.domain.matching.dto.response.MatchingCaregiverInfoResponseDto;
 import com.ongi.backend.domain.matching.dto.response.MatchingThumbnailResponseDto;
+import com.ongi.backend.domain.matching.dto.response.SeniorMatchingDetailResponseDto;
 import com.ongi.backend.domain.matching.entity.Matching;
 import com.ongi.backend.domain.matching.entity.MatchingAdjustment;
 import com.ongi.backend.domain.matching.entity.enums.MatchingStatus;
@@ -65,6 +66,11 @@ public class MatchingService {
 
     public void findMatchingDetail(Long matchingId) {
 
+    }
+
+    public SeniorMatchingDetailResponseDto findSeniorMatchingDetail(Long matchingId) {
+        return matchingRepository.findSeniorMatchingDetailByMatchingId(matchingId)
+                .orElseThrow(() -> new ApplicationException(MatchingErrorCase.SENIOR_MATCHING_DETAIL_NOT_FOUNT));
     }
 
     public Long findCaregiverUnReadMatchingCount(Long caregiverId) {

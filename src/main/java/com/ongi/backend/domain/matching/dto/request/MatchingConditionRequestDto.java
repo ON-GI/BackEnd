@@ -25,7 +25,9 @@ public record MatchingConditionRequestDto(
     Integer minPayAmount,
 
     @NotNull(message = "최대 시급은 필수입니다.")
-    Integer maxPayAmount
+    Integer maxPayAmount,
+
+    Integer peopleCount
 ) {
     public record CareRegionDto(
             @NotBlank(message = "시/도를 입력하세요.") String city,
