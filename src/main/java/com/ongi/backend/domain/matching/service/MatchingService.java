@@ -35,6 +35,14 @@ public class MatchingService {
                 .orElseThrow(() -> new ApplicationException(MatchingErrorCase.MATCHING_NOT_FOUND));
     }
 
+    private void checkMatchingAndCenter(Long matchingId, Long centerId) {
+        boolean checkResult = matchingRepository.existsByMatchingIdAndCenterId(matchingId, centerId);
+
+        if (!checkResult) {
+            throw new ApplicationException(MatchingErrorCase.MATCHING_CENTER_UNMATCHED);
+        }
+    }
+
     public void registerMatching(MatchingRequestDto matchingRequestDto, Long centerId) {
 
         Senior senior = seniorService.findSeniorEntity(matchingRequestDto.seniorId(), centerId);
@@ -51,10 +59,6 @@ public class MatchingService {
         return matchingRepository.findAllMatchingThumbnailsByCenterAndStatus(centerId, statuses);
     }
 
-    public void findMatchingByCenter(Long centerId) {
-
-    }
-
     public void findMatchingByCaregiver(Long caregiverId) {
 
     }
@@ -63,7 +67,8 @@ public class MatchingService {
 
     }
 
-    public void requestMatching(Long matchingId, Long caregiverId) {
+    public void requestMatchingToCaregiver(Long matchingId, Long caregiverId, Long centerId) {
+        checkMatchingAndCenter(matchingId, centerId);
         Caregiver caregiver = caregiverService.findCaregiverById(caregiverId);
 
         Matching matching = findMatchingEntity(matchingId);

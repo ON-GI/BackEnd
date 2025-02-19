@@ -27,6 +27,23 @@ public class MatchingRepositoryImpl implements MatchingRepositoryCustom{
     }
 
     @Override
+    public boolean existsByMatchingIdAndCenterId(Long matchingId, Long centerId) {
+        QMatching matching = QMatching.matching;
+        QSenior senior = QSenior.senior;
+
+        // 매칭 ID와 센터 ID가 일치하는 매칭이 존재하는지 확인
+        Integer fetchOne = queryFactory
+                .selectOne()
+                .from(matching)
+                .join(matching.senior, senior)
+                .where(matching.id.eq(matchingId)
+                        .and(senior.center.id.eq(centerId)))
+                .fetchFirst();
+
+        return fetchOne != null;
+    }
+
+    @Override
     public List<MatchingThumbnailResponseDto> findAllMatchingThumbnailsByCenterAndStatus(Long centerId, List<MatchingStatus> statuses) {
         QMatching matching = QMatching.matching;
         QSenior senior = QSenior.senior;

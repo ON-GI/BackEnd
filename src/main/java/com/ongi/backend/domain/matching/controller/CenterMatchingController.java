@@ -38,11 +38,12 @@ public class CenterMatchingController {
     }
 
     @PostMapping("/{matchingId}/request-caregiver")
-    public CommonResponse<String> requestCaregiver(
-            @PathVariable Long matchingId,
-            @RequestParam Long caregiverId) {
+    public CommonResponse<String> requestMatchingToCaregiver(
+            @PathVariable("matchingId") Long matchingId,
+            @RequestParam("caregiverId") Long caregiverId) {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-        //matchingService.requestCaregiver(matchingId, caregiverId, centerId);
+
+        matchingService.requestMatchingToCaregiver(matchingId, caregiverId, centerId);
         return CommonResponse.success("요양 보호사에게 매칭 요청을 보냈습니다.");
     }
 }
