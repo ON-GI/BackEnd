@@ -1,29 +1,26 @@
 package com.ongi.backend.domain.matching.repository;
 
 import com.ongi.backend.common.enums.Gender;
-import com.ongi.backend.domain.caregiver.entity.QCaregiver;
+import com.ongi.backend.domain.caregiver.entity.*;
 import com.ongi.backend.domain.matching.dto.response.*;
 import com.ongi.backend.domain.matching.entity.MatchingCareTime;
 import com.ongi.backend.domain.matching.entity.QMatching;
 import com.ongi.backend.domain.matching.entity.QMatchingCareDetail;
 import com.ongi.backend.domain.matching.entity.QMatchingCareTime;
 import com.ongi.backend.domain.matching.entity.enums.MatchingStatus;
-import com.ongi.backend.domain.senior.entity.QDiseaseDementiaMapping;
-import com.ongi.backend.domain.senior.entity.QSenior;
-import com.ongi.backend.domain.senior.entity.QSeniorDisease;
-import com.ongi.backend.domain.senior.entity.enums.DementiaSymptom;
-import com.ongi.backend.domain.senior.entity.enums.GradeType;
-import com.ongi.backend.domain.senior.entity.enums.ResidenceType;
-import com.ongi.backend.domain.senior.entity.enums.SeniorCareDetail;
+import com.ongi.backend.domain.senior.entity.*;
+import com.ongi.backend.domain.senior.entity.enums.*;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class MatchingRepositoryImpl implements MatchingRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
@@ -301,5 +298,180 @@ public class MatchingRepositoryImpl implements MatchingRepositoryCustom{
         seniorDetail.updateDementiaSymptoms(dementiaSymptoms);
 
         return Optional.of(seniorDetail);
+    }
+
+    @Override
+    public List<CaregiverMatchingResponseDto> findMatchingCaregivers(Long seniorId) {
+        Senior senior = findSeniorById(seniorId);
+
+        // ✅ 1. 모든 보호사를 가져오기 (필터링 제거)
+        List<Caregiver> caregivers = getAllCaregivers();
+
+        log.info("전체 보호사 수: {}", caregivers.size());
+
+        // ✅ 2. 점수 계산
+        return caregivers.stream()
+                .map(caregiver -> CaregiverMatchingResponseDto.fromEntity(
+                        caregiver.getId(),
+                        maskName(caregiver.getName()),
+                        getMatchingWorkTimes(senior, caregiver),
+                        caregiver.getWorkCondition() != null ? caregiver.getWorkCondition().getPayAmount() : Integer.MAX_VALUE, // ✅ 근무 조건 없으면 최대값 설정
+                        caregiver.getCaregiverInformation() != null
+                                ? caregiver.getCaregiverInformation().getLicenses().stream()
+                                .map(license -> license.getLicenseName().getDescription())
+                                .collect(Collectors.toList())
+                                : List.of(), // ✅ `null`이면 빈 리스트 반환
+                        getMatchingRegions(senior, caregiver),
+                        caregiver.getCaregiverInformation() != null && caregiver.getCaregiverInformation().isHasDementiaTraining(),
+                        calculateMatchingScore(senior, caregiver)
+                ))
+                .filter(dto -> dto.getScore() > 0.0)
+                .sorted((a, b) -> {
+                    // ✅ 1. 어르신 등급이 GRADE_5 or GRADE_SUPPORT일 때 치매 교육 여부 먼저 비교
+                    if (isCognitiveSupport(senior)) {
+                        if (b.getHasDementiaTraining() != a.getHasDementiaTraining()) {
+                            return Boolean.compare(b.getHasDementiaTraining(), a.getHasDementiaTraining());
+                        }
+                    }
+
+                    // ✅ 2. 매칭 점수 기준으로 내림차순 정렬 (큰 값이 먼저 오도록)
+                    int scoreComparison = Double.compare(b.getScore(), a.getScore());
+                    if (scoreComparison != 0) {
+                        return scoreComparison;
+                    }
+
+                    // ✅ 3. 시급은 기본적으로 오름차순 정렬 (낮은 급여가 먼저 오도록)
+                    return Integer.compare(a.getPayAmount(), b.getPayAmount());
+                })
+                .collect(Collectors.toList());
+    }
+
+    // ✅ 모든 보호사 가져오기 (필터링 제거)
+    private List<Caregiver> getAllCaregivers() {
+        QCaregiver caregiver = QCaregiver.caregiver;
+        return queryFactory
+                .selectFrom(caregiver)
+                .fetch();
+    }
+
+    // ✅ 2. 지역 일치율 계산
+    private double calculateRegionMatchScore(Senior senior, Caregiver caregiver) {
+        if (caregiver.getWorkCondition() == null || caregiver.getWorkCondition().getCaregiverWorkRegions().isEmpty()) {
+            return 0.0; // ✅ 근무 지역 정보가 없으면 0점 처리
+        }
+
+        long matchingCount = caregiver.getWorkCondition().getCaregiverWorkRegions().stream()
+                .filter(region -> isRegionMatching(senior.getResidence(), region))
+                .count();
+        log.info("지역 일치 수: {}", matchingCount);
+
+        return (double) matchingCount / caregiver.getWorkCondition().getCaregiverWorkRegions().size();
+    }
+
+    private boolean isRegionMatching(Residence seniorResidence, CaregiverWorkRegion caregiverRegion) {
+        if (!caregiverRegion.getCity().equals(seniorResidence.getCity())) return false;
+
+        boolean districtMatches = caregiverRegion.getDistrict() == null
+                || caregiverRegion.getDistrict().equals(seniorResidence.getDistrict());
+
+        boolean townMatches = caregiverRegion.getTown() == null
+                || caregiverRegion.getTown().equals(seniorResidence.getTown());
+
+        return districtMatches && townMatches;
+    }
+
+    // ✅ 3. 시간 일치율 계산
+    private double calculateTimeMatchScore(Senior senior, Caregiver caregiver) {
+        if (caregiver.getWorkCondition() == null || caregiver.getWorkCondition().getCaregiverWorkTimes().isEmpty()) {
+            log.warn("시간 일치율 계산 불가: 보호사의 근무 시간이 없음");
+            return 0.0; // ✅ 근무 시간이 없으면 0점 처리
+        }
+
+        long totalSeniorTimes = senior.getMatchingTimes().size();
+        if (totalSeniorTimes == 0) {
+            log.warn("시간 일치율 계산 불가: 어르신의 매칭 시간이 없음");
+            return 0.0;
+        }
+
+        long matchingCount = senior.getMatchingTimes().stream()
+                .filter(seniorTime -> caregiver.getWorkCondition().getCaregiverWorkTimes().stream()
+                        .anyMatch(caregiverTime -> isTimeMatching(seniorTime, caregiverTime)))
+                .count();
+
+        log.info("시간 일치 율 : {}", (double) matchingCount / totalSeniorTimes);
+        return (double) matchingCount / totalSeniorTimes;
+    }
+
+    private boolean isTimeMatching(SeniorMatchingTime seniorTime, CaregiverWorkTime caregiverTime) {
+        return seniorTime.getDayOfWeek() == caregiverTime.getDayOfWeek() &&
+                !seniorTime.getEndTime().isBefore(caregiverTime.getStartTime()) &&
+                !seniorTime.getStartTime().isAfter(caregiverTime.getEndTime());
+    }
+
+    // ✅ 점수 계산 방식 개선
+    private double calculateMatchingScore(Senior senior, Caregiver caregiver) {
+        double timeMatch = calculateTimeMatchScore(senior, caregiver);
+        double regionMatch = calculateRegionMatchScore(senior, caregiver);
+        double dementiaTrainingScore = calculateDementiaTrainingScore(senior, caregiver);
+
+        double finalScore = (timeMatch * 0.4) + (regionMatch * 0.3) + (dementiaTrainingScore * 0.1);
+
+        log.info("보호사 ID: {} | 최종 점수: {}", caregiver.getId(), finalScore);
+        return finalScore;
+    }
+
+    // ✅ 치매 교육 여부 점수 추가
+    private double calculateDementiaTrainingScore(Senior senior, Caregiver caregiver) {
+        if (isCognitiveSupport(senior) && caregiver.getCaregiverInformation() != null) {
+            return caregiver.getCaregiverInformation().isHasDementiaTraining() ? 1.0 : 0.0;
+        }
+        return 0.0;
+    }
+
+    // 이름 마스킹
+    private String maskName(String name) {
+        return name.charAt(0) + "O" + name.substring(2);
+    }
+
+    // ✅ 6. 어르신이 5등급 or 인지 지원 등급인지 확인
+    private boolean isCognitiveSupport(Senior senior) {
+        return senior.getGradeType() == GradeType.GRADE_5 || senior.getGradeType() == GradeType.GRADE_SUPPORT;
+    }
+
+    // ✅ 7. 보호사와 어르신의 일치하는 근무 시간 반환
+    private List<CaregiverWorkTimeResponseDto> getMatchingWorkTimes(Senior senior, Caregiver caregiver) {
+        if (caregiver.getWorkCondition() == null) {
+            return List.of(); // ✅ 근무 조건이 없으면 빈 리스트 반환
+        }
+
+        return caregiver.getWorkCondition().getCaregiverWorkTimes().stream()
+                .filter(caregiverTime -> senior.getMatchingTimes().stream()
+                        .anyMatch(seniorTime -> isTimeMatching(seniorTime, caregiverTime)))
+                .map(caregiverWorkTime ->
+                        CaregiverWorkTimeResponseDto.fromEntity(
+                                caregiverWorkTime.getDayOfWeek(),
+                                caregiverWorkTime.getStartTime(),
+                                caregiverWorkTime.getEndTime()))  // DTO로 변환
+                .collect(Collectors.toList());
+    }
+
+    // ✅ 8. 보호사와 어르신의 일치하는 지역 반환
+    private String getMatchingRegions(Senior senior, Caregiver caregiver) {
+        if (caregiver.getWorkCondition() == null) {
+            return ""; // ✅ 근무 조건이 없으면 빈 문자열 반환
+        }
+
+        return caregiver.getWorkCondition().getCaregiverWorkRegions().stream()
+                .filter(region -> isRegionMatching(senior.getResidence(), region))
+                .map(region -> region.getCity() + " " + (region.getDistrict() != null ? region.getDistrict() : "") +
+                        " " + (region.getTown() != null ? region.getTown() : ""))
+                .collect(Collectors.joining(", "));
+    }
+
+    private Senior findSeniorById(Long seniorId) {
+        return queryFactory
+                .selectFrom(QSenior.senior)
+                .where(QSenior.senior.id.eq(seniorId))
+                .fetchOne();
     }
 }

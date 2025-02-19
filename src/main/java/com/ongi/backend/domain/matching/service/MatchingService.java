@@ -5,6 +5,7 @@ import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.service.CaregiverService;
 import com.ongi.backend.domain.matching.dto.request.MatchingAdjustRequestDto;
 import com.ongi.backend.domain.matching.dto.request.MatchingRequestDto;
+import com.ongi.backend.domain.matching.dto.response.CaregiverMatchingResponseDto;
 import com.ongi.backend.domain.matching.dto.response.MatchingCaregiverInfoResponseDto;
 import com.ongi.backend.domain.matching.dto.response.MatchingThumbnailResponseDto;
 import com.ongi.backend.domain.matching.dto.response.SeniorMatchingDetailResponseDto;
@@ -64,8 +65,8 @@ public class MatchingService {
         matchingRepository.save(matching);
     }
 
-    public void findMatchingDetail(Long matchingId) {
-
+    public List<CaregiverMatchingResponseDto> findMatchingCaregivers(Long seniorId) {
+        return matchingRepository.findMatchingCaregivers(seniorId);
     }
 
     public SeniorMatchingDetailResponseDto findSeniorMatchingDetail(Long matchingId) {
