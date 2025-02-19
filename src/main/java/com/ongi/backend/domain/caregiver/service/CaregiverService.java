@@ -3,10 +3,7 @@ package com.ongi.backend.domain.caregiver.service;
 import com.ongi.backend.common.exception.ApplicationException;
 import com.ongi.backend.common.service.FileUploadService;
 import com.ongi.backend.domain.caregiver.dto.request.*;
-import com.ongi.backend.domain.caregiver.dto.response.CaregiverResponseDto;
-import com.ongi.backend.domain.caregiver.dto.response.CaregiverSignupResponse;
-import com.ongi.backend.domain.caregiver.dto.response.InformationResponseDto;
-import com.ongi.backend.domain.caregiver.dto.response.OptionalResponseDto;
+import com.ongi.backend.domain.caregiver.dto.response.*;
 import com.ongi.backend.domain.caregiver.entity.Caregiver;
 import com.ongi.backend.domain.caregiver.entity.CaregiverInformation;
 import com.ongi.backend.domain.caregiver.entity.CaregiverLicense;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +59,11 @@ public class CaregiverService {
 
         String imageUrl = fileUploadService.uploadFileToS3(profileImage);
         caregiver.updateProfileImageUrl(imageUrl);
+    }
+
+    public ProfileUrlResponseDto getProfileUrl(Long caregiverId) {
+        Caregiver caregiver = findCaregiverById(caregiverId);
+        return new ProfileUrlResponseDto(caregiver.getProfileImageUrl());
     }
 
     public Caregiver findByLoginId(String loginId) {
@@ -154,13 +155,13 @@ public class CaregiverService {
     }
 
     @Transactional(readOnly = true)
-    private Caregiver findCaregiverById(Long caregiverId) {
+    public Caregiver findCaregiverById(Long caregiverId) {
         return caregiverRepository.findById(caregiverId)
                 .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.CAREGIVER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
-    private Caregiver findCaregiverByIdJoinInfo(Long caregiverId) {
+    public Caregiver findCaregiverByIdJoinInfo(Long caregiverId) {
         return caregiverRepository.findByIdJoinInfo(caregiverId)
                 .orElseThrow(() -> new ApplicationException(CaregiverErrorCase.CAREGIVER_NOT_FOUND));
     }

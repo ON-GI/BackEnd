@@ -1,6 +1,7 @@
 package com.ongi.backend.domain.senior.controller;
 
 import com.ongi.backend.common.response.CommonResponse;
+import com.ongi.backend.domain.senior.dto.request.SeniorMatchingConditionRequestDto;
 import com.ongi.backend.domain.senior.dto.request.SeniorRequestDto;
 import com.ongi.backend.domain.senior.dto.response.SeniorResponseDto;
 import com.ongi.backend.domain.senior.service.SeniorService;
@@ -48,8 +49,16 @@ public class SeniorController {
     public CommonResponse<String> updateSenior(@Valid @RequestBody SeniorRequestDto seniorRequestDto, @PathVariable("seniorId") Long seniorId) {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
-        seniorService.updateSenior(seniorId, seniorRequestDto, centerId);
+        seniorService.updateSeniorBasicInfo(seniorId, seniorRequestDto, centerId);
         return CommonResponse.success("어르신 정보를 성공적으로 수정했습니다.");
+    }
+
+    @PostMapping("/{seniorId}/matching")
+    public CommonResponse<String> updateSeniorMatchingInfo(@Valid @RequestBody SeniorMatchingConditionRequestDto requestDto, @PathVariable("seniorId") Long seniorId) {
+        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+
+        seniorService.updateSeniorMatchingInfo(seniorId, requestDto, centerId);
+        return CommonResponse.success("어르신 매칭 정보를 성공적으로 수정했습니다.");
     }
 
     @PostMapping("/{seniorId}/profile")
