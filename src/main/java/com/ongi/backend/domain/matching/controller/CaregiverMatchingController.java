@@ -35,6 +35,15 @@ public class CaregiverMatchingController {
         return CommonResponse.success(matchingService.findCaregiverUnReadMatchingCount(caregiverId));
     }
 
+    @PostMapping("/{matchingId}/read")
+    public CommonResponse<String> readMatching(@PathVariable("matchingId") Long matchingId) {
+        Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        matchingService.readMatching(matchingId, caregiverId);
+
+        return CommonResponse.success("매칭 확인을 완료했습니다.");
+    }
+
+
     @PostMapping("/{matchingId}/reject")
     public CommonResponse<String> rejectMatching(@PathVariable("matchingId") Long matchingId) {
         Long caregiverId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -82,6 +82,13 @@ public class MatchingService {
 
     }
 
+    public void readMatching(Long matchingId, Long caregiverId) {
+        checkMatchingAndCaregiver(matchingId, caregiverId);
+
+        Matching matching = findMatchingEntity(matchingId);
+        matching.updateMatchingStatus(MatchingStatus.PENDING_READ);
+    }
+
     public void rejectMatching(Long matchingId, Long caregiverId) {
         checkMatchingAndCaregiver(matchingId, caregiverId);
 
