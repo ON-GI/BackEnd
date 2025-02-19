@@ -7,6 +7,7 @@ import com.ongi.backend.domain.center.entity.Center;
 import com.ongi.backend.domain.center.service.CenterService;
 import com.ongi.backend.domain.senior.dto.request.SeniorCareConditionRequestDto;
 import com.ongi.backend.domain.senior.dto.request.SeniorDiseaseRequestDto;
+import com.ongi.backend.domain.senior.dto.request.SeniorMatchingConditionRequestDto;
 import com.ongi.backend.domain.senior.dto.request.SeniorRequestDto;
 import com.ongi.backend.domain.senior.dto.response.SeniorResponseDto;
 import com.ongi.backend.domain.senior.entity.*;
@@ -87,7 +88,7 @@ public class SeniorService {
     }
 
     @Transactional
-    public void updateSenior(Long seniorId, SeniorRequestDto request, Long centerId) {
+    public void updateSeniorBasicInfo(Long seniorId, SeniorRequestDto request, Long centerId) {
         Center center = findCenterEntity(centerId);
 
         Senior senior = seniorRepository.findById(seniorId)
@@ -97,6 +98,20 @@ public class SeniorService {
             senior.updateBasicInfo(request);
             updateCareCondition(request.careCondition(), senior);
             updateDisease(request.diseaseCondition(), senior);
+        } else{
+            throw new ApplicationException(SeniorErrorCase.SENIOR_CENTER_UNMATCHED);
+        }
+    }
+
+    @Transactional
+    public void updateSeniorMatchingInfo(Long seniorId, SeniorMatchingConditionRequestDto requestDto, Long centerId) {
+        Center center = findCenterEntity(centerId);
+
+        Senior senior = seniorRepository.findById(seniorId)
+                .orElseThrow(() -> new ApplicationException(SeniorErrorCase.SENIOR_NOT_FOUND));
+
+        if (senior.getCenter().equals(center)) {
+            senior.updateMatchingCondition(requestDto, senior);
         } else{
             throw new ApplicationException(SeniorErrorCase.SENIOR_CENTER_UNMATCHED);
         }

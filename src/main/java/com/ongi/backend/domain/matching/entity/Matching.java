@@ -41,44 +41,40 @@ public class Matching extends BaseEntity {
     private MatchingStatus matchingStatus;
 
     @Embedded
-    private MatchingCondition matchingCondition;    // 근무 조건
+    private MatchingCondition matchingCondition;
+
+    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MatchingCareDetail> matchingCareDetails = new ArrayList<>();
+
+    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MatchingCareTime> matchingTimes = new ArrayList<>();
 
     @Embedded
     private MatchingAdjustment matchingAdjustment;  // 매칭 조율 사항
+    public static Matching from(MatchingRequestDto requestDto, Senior senior, Caregiver caregiver) {
 
-    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MatchingCareDetail> matchingCareDetails = new ArrayList<>();   // 캐어 항목
-
-    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MatchingCareTime> matchingCareTimes = new ArrayList<>();   // 캐어 시간
-
-    public static Matching from(MatchingRequestDto requestDto, Senior senior) {
-
-        Matching matching =  Matching.builder()
+        Matching matching = Matching.builder()
                 .senior(senior)
-                .matchingStatus(MatchingStatus.CREATED)
+                .caregiver(caregiver)
                 .matchingCondition(MatchingCondition.from(requestDto.matchingConditionRequestDto()))
+                .matchingStatus(MatchingStatus.PENDING_UNREAD)
                 .matchingCareDetails(new ArrayList<>())
-                .matchingCareTimes(new ArrayList<>())
+                .matchingTimes(new ArrayList<>())
                 .build();
 
-        List<MatchingCareTime> careTimes = requestDto.careTimes().stream()
-                .map(careTimeRequestDto -> MatchingCareTime.from(careTimeRequestDto, matching))
+        List<MatchingCareTime> matchingCareTimes = requestDto.careTimes().stream()
+                .map(matchingCareTimeRequestDto -> MatchingCareTime.from(matchingCareTimeRequestDto, matching))
+                .toList();
+        matching.getMatchingTimes().addAll(matchingCareTimes);
+
+        List<MatchingCareDetail> matchingDetails = requestDto.careDetails().stream()
+                .map(detail -> MatchingCareDetail.from(matching, SeniorCareDetail.valueOf(detail))) // ✅ String → Enum 변환
                 .toList();
 
-        matching.getMatchingCareTimes().addAll(careTimes);
-
-        List<MatchingCareDetail> careDetails = requestDto.careDetails().stream()
-                .map(detail -> MatchingCareDetail.from(matching, SeniorCareDetail.valueOf(detail)))
-                .toList();
-
-        matching.getMatchingCareDetails().addAll(careDetails);
+        matching.getMatchingCareDetails().addAll(matchingDetails);
 
         return matching;
-    }
 
-    public void updateCaregiver(Caregiver caregiver) {
-        this.caregiver = caregiver;
     }
 
     public void updateMatchingStatus(MatchingStatus status) {

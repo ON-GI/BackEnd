@@ -56,7 +56,8 @@ public class MatchingService {
     public void registerMatching(MatchingRequestDto matchingRequestDto, Long centerId) {
 
         Senior senior = seniorService.findSeniorEntity(matchingRequestDto.seniorId(), centerId);
-        Matching matching = Matching.from(matchingRequestDto, senior);
+        Caregiver caregiver = caregiverService.findCaregiverById(matchingRequestDto.caregiverId());
+        Matching matching = Matching.from(matchingRequestDto, senior, caregiver);
 
         matchingRepository.save(matching);
     }
@@ -79,15 +80,6 @@ public class MatchingService {
 
     public void findOptimalCaregivers(Long matchingId) {
 
-    }
-
-    public void requestMatchingToCaregiver(Long matchingId, Long caregiverId, Long centerId) {
-        checkMatchingAndCenter(matchingId, centerId);
-        Caregiver caregiver = caregiverService.findCaregiverById(caregiverId);
-
-        Matching matching = findMatchingEntity(matchingId);
-        matching.updateCaregiver(caregiver);
-        matching.updateMatchingStatus(MatchingStatus.PENDING_UNREAD);
     }
 
     public void rejectMatching(Long matchingId, Long caregiverId) {

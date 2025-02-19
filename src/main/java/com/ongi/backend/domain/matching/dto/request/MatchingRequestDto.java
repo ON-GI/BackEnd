@@ -10,6 +10,9 @@ public record MatchingRequestDto (
         @NotNull(message = "어르신 ID는 필수입니다.")
         Long seniorId,
 
+        @NotNull(message = "어르신 ID는 필수입니다.")
+        Long caregiverId,
+
         MatchingConditionRequestDto matchingConditionRequestDto,
 
         @NotNull(message = "캐어 항목은 최소 1개 이상 선택해야 합니다.")

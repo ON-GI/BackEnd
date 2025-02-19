@@ -1,6 +1,5 @@
 package com.ongi.backend.domain.matching.dto.response;
 
-import com.ongi.backend.domain.matching.entity.Matching;
 import com.ongi.backend.domain.matching.entity.MatchingCareRegion;
 import com.ongi.backend.domain.matching.entity.enums.MatchingStatus;
 import com.querydsl.core.annotations.QueryProjection;

@@ -18,7 +18,7 @@ public class MatchingAdjustment {
     @Column
     private String additionalRequest;
 
-    @Column(nullable = false)
+    @Column()
     private Boolean showCaregiverContact;
 
     public static MatchingAdjustment from(MatchingAdjustRequestDto requestDto) {

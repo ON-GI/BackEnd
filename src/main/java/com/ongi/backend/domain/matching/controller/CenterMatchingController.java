@@ -30,21 +30,11 @@ public class CenterMatchingController {
     }
 
     @PostMapping("/register")
-    public CommonResponse<String> registerSenior(@Valid @RequestBody MatchingRequestDto matchingRequestDto) {
+    public CommonResponse<String> registerMatching(@Valid @RequestBody MatchingRequestDto matchingRequestDto) {
         Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
         matchingService.registerMatching(matchingRequestDto, centerId);
-        return CommonResponse.success("센터 정보를 성공적으로 등록했습니다.");
-    }
-
-    @PostMapping("/{matchingId}/request-caregiver")
-    public CommonResponse<String> requestMatchingToCaregiver(
-            @PathVariable("matchingId") Long matchingId,
-            @RequestParam("caregiverId") Long caregiverId) {
-        Long centerId = (Long) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-
-        matchingService.requestMatchingToCaregiver(matchingId, caregiverId, centerId);
-        return CommonResponse.success("요양 보호사에게 매칭 요청을 보냈습니다.");
+        return CommonResponse.success("매칭을 성공적으로 등록했습니다.");
     }
 
     @PostMapping("/{matchingId}/confirm")
