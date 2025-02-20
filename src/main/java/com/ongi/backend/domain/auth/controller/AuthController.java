@@ -55,7 +55,7 @@ public class AuthController {
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         Cookie cookie = new Cookie("refresh_token", refreshToken);
         cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        cookie.setSecure(false);
         cookie.setPath("/");
         cookie.setAttribute("SameSite", "None");
         cookie.setMaxAge((int) (REFRESH_TOKEN_EXPIRATION / 1000));
@@ -65,8 +65,9 @@ public class AuthController {
     private void deleteRefreshTokenCookie(HttpServletResponse response) {
         Cookie refreshTokenCookie = new Cookie("refresh_token", null);
         refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setSecure(false);
         refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setAttribute("SameSite", "None");
         refreshTokenCookie.setMaxAge(0); // 쿠키 만료
         response.addCookie(refreshTokenCookie);
     }
